@@ -1,0 +1,82 @@
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup SSH key
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.HETZNER_SSH_KEY }}
+
+    - name: Deploy to server
+      env:
+        HETZNER_IP: ${{ secrets.HETZNER_IP }}
+        HETZNER_USER: ${{ secrets.HETZNER_USER }}
+        APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+      run: |
+        echo "🚀 Deploying to Hetzner server..."
+        
+        # Add server to known hosts
+        ssh-keyscan -H $HETZNER_IP >> ~/.ssh/known_hosts
+        
+        # Deploy to server
+        ssh $HETZNER_USER@$HETZNER_IP << 'EOF'
+          set -e
+          
+          echo "📁 Preparing deployment directory..."
+          cd ~/vsc-deploy
+          
+          # Backup existing deployment
+          if [ -d "vsc-hetzner-deploy" ]; then
+            echo "💾 Backing up existing deployment..."
+            cp -r vsc-hetzner-deploy ~/backups/vsc-backup-$(date +%Y%m%d_%H%M%S) || true
+          fi
+          
+          echo "📥 Pulling latest code..."
+          if [ -d "vsc-hetzner-deploy" ]; then
+            cd vsc-hetzner-deploy
+            git pull origin main
+          else
+            git clone ${{ github.server_url }}/${{ github.repository }}.git
+            cd vsc-hetzner-deploy
+          fi
+          
+          echo "⚙️  Setting up environment..."
+          cat > .env << 'ENVEOF'
+        APP_PASSWORD=${{ secrets.APP_PASSWORD }}
+        APP_PORT=3000
+        DOMAIN_CRADLE=cradlesystems.xyz
+        DOMAIN_MEZZPRO=mezzpro.xyz
+        DOMAIN_MINQRO=minqro.xyz
+        ENVEOF
+          
+          echo "🐳 Deploying with Docker..."
+          cd app
+          docker-compose down || true
+          docker-compose up --build -d
+          
+          echo "⏳ Waiting for services to start..."
+          sleep 30
+          
+          echo "🔍 Checking deployment health..."
+          if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200\|302"; then
+            echo "✅ Deployment successful!"
+          else
+            echo "❌ Deployment may have failed - check logs"
+            docker-compose logs --tail=50
+            exit 1
+          fi
+        EOF
+        
+        echo "🎉 Deployment completed successfully!"

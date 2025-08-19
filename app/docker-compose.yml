@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  vsc-hetzner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vsc-hetzner-app
+    ports:
+      - "3000:3000"    # Proxy server port
+      - "8080:8080"    # Code-server port (for direct access if needed)
+    volumes:
+      - vscode-data:/home/coder/.local/share/code-server
+      - workspace-admin:/home/coder/workspace-admin
+      - workspace-mezzpro:/home/coder/workspace-mezzpro  
+      - workspace-minqro:/home/coder/workspace-minqro
+    environment:
+      - PASSWORD=${APP_PASSWORD:-hetzner123}
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - vsc-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  vsc-network:
+    driver: bridge
+
+volumes:
+  vscode-data:
+    driver: local
+  workspace-admin:
+    driver: local
+  workspace-mezzpro:
+    driver: local
+  workspace-minqro:
+    driver: local
