@@ -4,11 +4,11 @@
         {
             "label": "Auto Open Terminal Right",
             "type": "shell",
-            "command": "echo",
-            "args": ["Terminal ready on the right!"],
+            "command": "bash",
+            "args": ["-c", "echo 'Terminal ready on the right!' && exec bash"],
             "group": "build",
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "always",
                 "focus": false,
                 "panel": "dedicated",
@@ -19,6 +19,7 @@
             "runOptions": {
                 "runOn": "folderOpen"
             },
+            "isBackground": true,
             "problemMatcher": []
         }
     ]

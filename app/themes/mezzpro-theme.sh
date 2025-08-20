@@ -15,6 +15,7 @@ cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
   "workbench.sideBar.location": "left",
   "workbench.panel.defaultLocation": "right",
   "workbench.panel.opensMaximized": false,
+  "workbench.panel.defaultSize.right": 400,
   "window.menuBarVisibility": "compact",
   "window.commandCenter": true,
   "editor.minimap.enabled": true,
