@@ -46,7 +46,11 @@ cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
     "terminal.integrated.showLinkHover": false,
     "terminal.integrated.profiles.linux": {
       "Gemini AI": {
-        "path": "gemini",
+        "path": "/bin/bash",
+        "args": [
+          "-c",
+          "gemini"
+        ],
         "icon": "robot",
         "overrideName": true
       },
@@ -58,7 +62,8 @@ cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
     },
     "terminal.integrated.defaultProfile.linux": "Gemini AI",
     "terminal.integrated.automationProfile.linux": {
-      "path": "gemini"
+      "path": "/bin/bash",
+      "args": ["-c", "gemini"]
     },
     "terminal.integrated.showOnStartup": "startupProject",
     "terminal.integrated.focusAfterOpen": true,

@@ -55,7 +55,11 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "terminal.integrated.focusAfterOpen": true,
     "terminal.integrated.profiles.linux": {
       "Gemini AI": {
-        "path": "gemini",
+        "path": "/bin/bash",
+        "args": [
+          "-c",
+          "gemini"
+        ],
         "icon": "robot",
         "overrideName": true
       },
@@ -67,7 +71,8 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     },
     "terminal.integrated.defaultProfile.linux": "Gemini AI",
     "terminal.integrated.automationProfile.linux": {
-      "path": "gemini"
+      "path": "/bin/bash",
+      "args": ["-c", "gemini"]
     },
     "debug.console.closeOnEnd": true,
     "debug.openDebug": "neverOpen",
