@@ -23,7 +23,7 @@ const DEFAULT_WORKSPACE = '/home/coder/workspace-admin';
 // Code-server runs on port 8080
 const CODE_SERVER_PORT = 8080;
 
-// Middleware to handle domain-based redirects
+// Store domain mapping in request for proxy rewrite
 app.use('/', (req, res, next) => {
     const hostname = req.get('host') || '';
     const folderParam = req.query.folder;
@@ -44,37 +44,14 @@ app.use('/', (req, res, next) => {
         return next();
     }
     
-    // If user accessed URL with folder parameter, redirect to clean URL
-    if (folderParam && (req.path === '/' || req.path.startsWith('/login'))) {
-        const cleanUrl = `${req.protocol}://${hostname}${req.path}`;
-        console.log(`🧹 Cleaning URL: removing folder parameter`);
-        return res.redirect(301, cleanUrl);
-    }
-    
-    // If folder parameter already exists, just proxy to code-server
-    if (folderParam) {
-        console.log(`✅ Folder param exists, proxying to code-server`);
-        return next();
-    }
-    
-    // Only redirect root path and workspace paths
-    if (req.path !== '/' && !req.path.startsWith('/login')) {
-        console.log(`🔧 Non-root path, proxying directly`);
-        return next();
-    }
-    
-    // Get workspace for current domain
+    // Store workspace info for proxy rewrite
     const targetWorkspace = DOMAIN_WORKSPACE_MAP[hostname.toLowerCase()] || DEFAULT_WORKSPACE;
+    req.targetWorkspace = targetWorkspace;
+    req.needsFolderParam = !folderParam && (req.path === '/' || req.path.startsWith('/login'));
     
-    // Add folder parameter internally without showing to user
-    req.url = req.url.includes('?') 
-        ? `${req.url}&folder=${encodeURIComponent(targetWorkspace)}`
-        : `${req.url}?folder=${encodeURIComponent(targetWorkspace)}`;
+    console.log(`🔄 Domain routing: ${hostname} → ${targetWorkspace}`);
     
-    console.log(`🔄 Internal routing ${hostname} → ${targetWorkspace}`);
-    console.log(`📍 Modified URL: ${req.url}`);
-    
-    // Continue to proxy without redirect
+    // Continue to proxy
     return next();
 });
 
@@ -93,7 +70,16 @@ const proxyOptions = {
         }
     },
     onProxyReq: (proxyReq, req, res) => {
-        console.log(`🔄 Proxying: ${req.method} ${req.url} → code-server`);
+        // Add folder parameter if needed for workspace routing
+        if (req.needsFolderParam && req.targetWorkspace) {
+            const originalPath = proxyReq.path;
+            const separator = originalPath.includes('?') ? '&' : '?';
+            const newPath = `${originalPath}${separator}folder=${encodeURIComponent(req.targetWorkspace)}`;
+            proxyReq.path = newPath;
+            console.log(`🔄 Proxying with workspace: ${req.method} ${originalPath} → ${newPath}`);
+        } else {
+            console.log(`🔄 Proxying: ${req.method} ${req.url} → code-server`);
+        }
     },
     onProxyRes: (proxyRes, req, res) => {
         console.log(`✅ Code-server response: ${proxyRes.statusCode} for ${req.url}`);
