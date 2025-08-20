@@ -6,7 +6,7 @@ echo "🎨 Applying Cradle clean white theme..."
 # Create VS Code User settings directory
 mkdir -p /home/coder/.local/share/code-server/User
 
-cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
+cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Light+",
   "workbench.iconTheme": null,

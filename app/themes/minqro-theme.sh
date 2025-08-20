@@ -6,7 +6,7 @@ echo "🎨 Applying MinQro blue tech theme..."
 # Create VS Code User settings directory
 mkdir -p /home/coder/.local/share/code-server/User
 
-cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
+cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "vs-seti",
@@ -165,6 +165,6 @@ cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
 EOF
 
 # Set proper ownership
-chown -R coder:coder /home/coder/.local/share/code-server/User
+chown -R coder:coder /home/coder/workspace-minqro/.vscode
 
 echo "✅ MinQro blue tech theme applied"

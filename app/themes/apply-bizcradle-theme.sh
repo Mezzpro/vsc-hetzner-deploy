@@ -11,103 +11,169 @@ mkdir -p /home/coder/.local/share/code-server/User
 # VS Code User Settings - Clean interface with orange theme
 cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
 {
-    "workbench.colorTheme": "Default Light+",
-    "workbench.iconTheme": "vs-seti",
-    "workbench.activityBar.visible": false,
-    "workbench.statusBar.visible": false,
-    "workbench.sideBar.location": "right",
-    "workbench.panel.defaultLocation": "bottom",
-    "window.menuBarVisibility": "compact",
-    "window.commandCenter": true,
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.iconTheme": null,
+    "workbench.activityBar.visible": true,
+    "workbench.statusBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "workbench.panel.defaultLocation": "left",
+    "window.menuBarVisibility": "classic",
+    "window.commandCenter": false,
+    "window.titleBarStyle": "native",
     "editor.minimap.enabled": false,
-    "editor.lineNumbers": "off",
+    "editor.lineNumbers": "on",
+    "editor.renderWhitespace": "none",
+    "editor.renderLineHighlight": "line",
+    "editor.bracketPairColorization.enabled": false,
+    "editor.guides.bracketPairs": "never",
     "editor.folding": false,
     "editor.glyphMargin": false,
     "breadcrumbs.enabled": false,
-    "editor.fontSize": 16,
-    "editor.fontFamily": "'Segoe UI', 'Arial', sans-serif",
-    "editor.fontWeight": "400",
-    "editor.lineHeight": 1.6,
-    "editor.letterSpacing": 0.3,
-    "editor.cursorBlinking": "smooth",
-    "editor.cursorStyle": "line",
-    "editor.cursorWidth": 2,
-    "editor.smoothScrolling": true,
+    "editor.scrollbar.horizontal": "visible",
+    "editor.scrollbar.vertical": "visible",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'IBM Plex Mono', 'Courier New', 'Lucida Console', monospace",
+    "editor.fontWeight": "normal",
+    "editor.lineHeight": 1.2,
+    "editor.letterSpacing": 0,
+    "editor.cursorBlinking": "blink",
+    "editor.cursorStyle": "underline",
+    "editor.cursorWidth": 1,
+    "editor.smoothScrolling": false,
+    "editor.cursorSmoothCaretAnimation": "off",
+    "workbench.list.smoothScrolling": false,
     "terminal.integrated.fontSize": 14,
-    "terminal.integrated.fontFamily": "'Consolas', monospace",
+    "terminal.integrated.fontFamily": "'IBM Plex Mono', 'Courier New', monospace",
+    "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "underline",
+    "terminal.integrated.tabs.enabled": false,
+    "debug.console.closeOnEnd": true,
+    "debug.openDebug": "neverOpen",
+    "extensions.ignoreRecommendations": true,
+    "git.decorations.enabled": false,
+    "scm.diffDecorations": "none",
     "workbench.colorCustomizations": {
-        "editor.background": "#fff8f0",
-        "editor.foreground": "#d2691e",
-        "editorCursor.foreground": "#ff6f00",
-        "editor.selectionBackground": "#ffe0b3",
-        "editor.lineHighlightBackground": "#fff3e6",
-        "sideBar.background": "#fff8f0",
-        "sideBar.foreground": "#cc5500",
-        "activityBar.background": "#ffcc80",
-        "activityBar.foreground": "#d2691e",
-        "panel.background": "#fff8f0",
-        "panel.border": "#ff9800",
-        "statusBar.background": "#ff9800",
-        "statusBar.foreground": "#ffffff",
-        "titleBar.activeBackground": "#ff9800",
-        "titleBar.activeForeground": "#ffffff",
-        "tab.activeBackground": "#ffe0b3",
-        "tab.activeForeground": "#d2691e",
-        "tab.inactiveBackground": "#fff8f0",
-        "tab.inactiveForeground": "#cc7a00",
-        "terminal.background": "#fff8f0",
-        "terminal.foreground": "#d2691e"
+        "editor.background": "#2b1810",
+        "editor.foreground": "#ffb000",
+        "editorCursor.foreground": "#ffb000",
+        "editor.selectionBackground": "#4d2f1a",
+        "editor.lineHighlightBackground": "#3d251a",
+        "editor.wordHighlightBackground": "#4d2f1a",
+        "sideBar.background": "#1f1208",
+        "sideBar.foreground": "#cc8800",
+        "activityBar.background": "#1a0f06",
+        "activityBar.foreground": "#ffb000",
+        "panel.background": "#2b1810",
+        "panel.border": "#ffb000",
+        "panelTitle.activeForeground": "#ffb000",
+        "panelTitle.inactiveForeground": "#cc8800",
+        "statusBar.background": "#1a0f06",
+        "statusBar.foreground": "#ffb000",
+        "statusBar.border": "#ffb000",
+        "titleBar.activeBackground": "#2b1810",
+        "titleBar.activeForeground": "#ffb000",
+        "tab.activeBackground": "#3d251a",
+        "tab.activeForeground": "#ffb000",
+        "tab.inactiveBackground": "#1f1208",
+        "tab.inactiveForeground": "#cc8800",
+        "tab.border": "#4d2f1a",
+        "terminal.background": "#1a0f06",
+        "terminal.foreground": "#ffb000",
+        "terminalCursor.background": "#ffb000",
+        "terminalCursor.foreground": "#1a0f06",
+        "scrollbar.shadow": "#000000",
+        "scrollbarSlider.background": "#4d2f1a",
+        "scrollbarSlider.hoverBackground": "#664020",
+        "scrollbarSlider.activeBackground": "#805028",
+        "editorLineNumber.foreground": "#996600",
+        "editorLineNumber.activeForeground": "#ffb000",
+        "editorBracketMatch.background": "#4d2f1a",
+        "editorBracketMatch.border": "#ffb000",
+        "editorRuler.foreground": "#4d2f1a",
+        "button.background": "#ffb000",
+        "button.foreground": "#1a0f06",
+        "input.background": "#3d251a",
+        "input.foreground": "#ffb000",
+        "input.border": "#ffb000"
     },
     "editor.tokenColorCustomizations": {
         "textMateRules": [
             {
                 "scope": ["comment"],
                 "settings": {
-                    "foreground": "#ff9800",
+                    "foreground": "#996600",
                     "fontStyle": "italic"
                 }
             },
             {
                 "scope": ["string"],
                 "settings": {
-                    "foreground": "#ff6f00"
+                    "foreground": "#cc8800"
                 }
             },
             {
                 "scope": ["keyword", "storage.type"],
                 "settings": {
-                    "foreground": "#d2691e",
+                    "foreground": "#ffb000",
                     "fontStyle": "bold"
                 }
             },
             {
                 "scope": ["variable", "support.variable"],
                 "settings": {
-                    "foreground": "#cc5500"
+                    "foreground": "#e6a000"
                 }
             },
             {
                 "scope": ["function", "entity.name.function"],
                 "settings": {
-                    "foreground": "#e65100",
-                    "fontStyle": "bold"
+                    "foreground": "#ffcc33",
+                    "fontStyle": "normal"
                 }
             },
             {
                 "scope": ["constant.numeric"],
                 "settings": {
-                    "foreground": "#ff8f00"
+                    "foreground": "#ffcc33"
+                }
+            },
+            {
+                "scope": ["entity.name.class", "entity.name.type"],
+                "settings": {
+                    "foreground": "#cc8800",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": ["punctuation"],
+                "settings": {
+                    "foreground": "#b38600"
                 }
             }
         ]
     },
-    "files.autoSave": "afterDelay",
+    "files.autoSave": "off",
+    "editor.formatOnSave": false,
+    "editor.rulers": [80],
+    "editor.wordWrap": "off",
+    "editor.tabSize": 8,
+    "editor.insertSpaces": false,
+    "workbench.tree.indent": 8,
+    "workbench.tree.renderIndentGuides": "none",
+    "workbench.hover.delay": 1000,
+    "git.autofetch": false,
+    "git.confirmSync": true,
+    "git.enableSmartCommit": false,
     "workbench.startupEditor": "none",
-    "workbench.tips.enabled": false,
-    "workbench.welcomePage.walkthroughs.openOnInstall": false,
     "telemetry.telemetryLevel": "off",
-    "window.title": "Bizcradle Business Platform",
-    "explorer.openEditors.visible": 0,
+    "update.showReleaseNotes": false,
+    "extensions.showRecommendationsOnlyOnDemand": true,
+    "editor.suggest.showIcons": false,
+    "editor.parameterHints.enabled": false,
+    "editor.quickSuggestions": false,
+    "editor.wordBasedSuggestions": false,
+    "editor.acceptSuggestionOnCommitCharacter": false,
     "files.exclude": {
         "**/.*": true,
         "**/.git": true,

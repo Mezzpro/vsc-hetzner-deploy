@@ -6,7 +6,7 @@ echo "🎨 Applying MezzPro matrix green theme..."
 # Create VS Code User settings directory
 mkdir -p /home/coder/.local/share/code-server/User
 
-cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
+cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "vs-minimal",
@@ -153,6 +153,6 @@ cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
 EOF
 
 # Set proper ownership
-chown -R coder:coder /home/coder/.local/share/code-server/User
+chown -R coder:coder /home/coder/workspace-mezzpro/.vscode
 
 echo "✅ MezzPro matrix green theme applied"
