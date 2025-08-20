@@ -5,7 +5,7 @@
             "label": "Auto Terminal Secondary Sidebar",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "echo 'Terminal ready! Move me to secondary sidebar (right) for best experience.' && exec bash"],
+            "args": ["-c", "echo \"Terminal ready! Move me to secondary sidebar (right) for best experience.\" && exec bash"],
             "group": "build",
             "presentation": {
                 "echo": false,
