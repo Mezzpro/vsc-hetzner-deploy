@@ -43,6 +43,28 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "terminal.integrated.fontWeight": "normal",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.showExitAlert": false,
+  "terminal.integrated.splitCwd": "workspaceRoot",
+  "terminal.integrated.lineHeight": 1.2,
+  "terminal.integrated.showLinkHover": false,
+  "terminal.integrated.profiles.linux": {
+    "Gemini AI": {
+      "path": "gemini",
+      "icon": "robot",
+      "overrideName": true
+    },
+    "Bash": {
+      "path": "/bin/bash",
+      "args": ["-l"],
+      "icon": "terminal-bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "Gemini AI",
+  "terminal.integrated.automationProfile.linux": {
+    "path": "gemini"
+  },
+  "terminal.integrated.showOnStartup": "startupProject",
+  "terminal.integrated.focusAfterOpen": true,
   "debug.console.closeOnEnd": true,
   "debug.openDebug": "openOnSessionStart",
   "extensions.ignoreRecommendations": false,
