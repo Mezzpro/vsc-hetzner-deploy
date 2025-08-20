@@ -2,16 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Auto Open Terminal",
+            "label": "Auto Open Terminal Right",
             "type": "shell",
             "command": "echo",
-            "args": ["Welcome!"],
+            "args": ["Terminal ready on the right!"],
             "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "new",
+                "panel": "dedicated",
                 "showReuseMessage": false,
                 "clear": false,
                 "revealProblems": "never"

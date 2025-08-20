@@ -15,6 +15,7 @@ echo "🧹 Clearing global VS Code settings..."
 sudo rm -rf /home/coder/.local/share/code-server/User 2>/dev/null || true
 sudo rm -rf /home/coder/.local/share/code-server/logs 2>/dev/null || true
 sudo rm -rf /home/coder/.local/share/code-server/caches 2>/dev/null || true
+sudo rm -rf /home/coder/.local/share/code-server/workspaceStorage 2>/dev/null || true
 
 # Fix permissions for code-server directories
 echo "🔧 Fixing permissions..."
