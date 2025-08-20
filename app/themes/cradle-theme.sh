@@ -3,7 +3,10 @@
 # Cradle Systems Clean White Theme
 echo "🎨 Applying Cradle clean white theme..."
 
-cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
+# Create VS Code User settings directory
+mkdir -p /home/coder/.local/share/code-server/User
+
+cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Light+",
   "workbench.iconTheme": null,
@@ -108,11 +111,19 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
   "workbench.editor.limit.value": 3,
   "workbench.editor.limit.perEditorGroup": true,
   "files.exclude": {
-    "**/.vscode": true,
+    "**/.*": true,
     "**/.git": true,
-    "**/node_modules": true
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.vscode": true
   }
 }
 EOF
+
+# Set proper ownership
+chown -R coder:coder /home/coder/.local/share/code-server/User
 
 echo "✅ Cradle clean white theme applied"

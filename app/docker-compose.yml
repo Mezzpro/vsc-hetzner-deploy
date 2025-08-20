@@ -13,6 +13,8 @@ services:
       - workspace-admin:/home/coder/workspace-admin
       - workspace-mezzpro:/home/coder/workspace-mezzpro  
       - workspace-minqro:/home/coder/workspace-minqro
+      - workspace-sobuai:/home/coder/workspace-sobuai
+      - workspace-bizcradle:/home/coder/workspace-bizcradle
     environment:
       - PASSWORD=${APP_PASSWORD:-hetzner123}
       - PORT=3000
@@ -38,4 +40,8 @@ volumes:
   workspace-mezzpro:
     driver: local
   workspace-minqro:
+    driver: local
+  workspace-sobuai:
+    driver: local
+  workspace-bizcradle:
     driver: local

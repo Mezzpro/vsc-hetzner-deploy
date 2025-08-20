@@ -3,11 +3,14 @@
 # MezzPro Matrix Green Theme
 echo "🎨 Applying MezzPro matrix green theme..."
 
-cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
+# Create VS Code User settings directory
+mkdir -p /home/coder/.local/share/code-server/User
+
+cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "vs-minimal",
-  "workbench.activityBar.visible": true,
+  "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
   "workbench.sideBar.location": "left",
   "workbench.panel.defaultLocation": "top",
@@ -135,8 +138,21 @@ cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
   "telemetry.telemetryLevel": "off",
   "update.showReleaseNotes": false,
   "extensions.showRecommendationsOnlyOnDemand": true,
-  "window.title": "MezzPro Blockchain Platform"
+  "window.title": "MezzPro Blockchain Platform",
+  "files.exclude": {
+    "**/.*": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.vscode": true
+  }
 }
 EOF
+
+# Set proper ownership
+chown -R coder:coder /home/coder/.local/share/code-server/User
 
 echo "✅ MezzPro matrix green theme applied"

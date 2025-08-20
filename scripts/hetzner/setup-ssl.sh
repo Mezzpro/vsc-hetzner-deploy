@@ -90,7 +90,11 @@ sudo certbot certonly --standalone \
     -d "$DOMAIN_MEZZPRO" \
     -d "www.$DOMAIN_MEZZPRO" \
     -d "$DOMAIN_MINQRO" \
-    -d "www.$DOMAIN_MINQRO"
+    -d "www.$DOMAIN_MINQRO" \
+    -d "$DOMAIN_SOBUAI" \
+    -d "www.$DOMAIN_SOBUAI" \
+    -d "$DOMAIN_BIZCRADLE" \
+    -d "www.$DOMAIN_BIZCRADLE"
 
 echo "✅ SSL certificates generated!"
 

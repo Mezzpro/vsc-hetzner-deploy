@@ -10,6 +10,10 @@ const DOMAIN_WORKSPACE_MAP = {
     'www.mezzpro.xyz': '/home/coder/workspace-mezzpro',
     'minqro.xyz': '/home/coder/workspace-minqro',
     'www.minqro.xyz': '/home/coder/workspace-minqro',
+    'sobuai.xyz': '/home/coder/workspace-sobuai',
+    'www.sobuai.xyz': '/home/coder/workspace-sobuai',
+    'bizcradle.xyz': '/home/coder/workspace-bizcradle',
+    'www.bizcradle.xyz': '/home/coder/workspace-bizcradle',
     'localhost': '/home/coder/workspace-admin'
 };
 

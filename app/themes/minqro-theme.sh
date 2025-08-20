@@ -3,11 +3,14 @@
 # MinQro Blue Tech Theme
 echo "🎨 Applying MinQro blue tech theme..."
 
-cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
+# Create VS Code User settings directory
+mkdir -p /home/coder/.local/share/code-server/User
+
+cat > /home/coder/.local/share/code-server/User/settings.json <<'EOF'
 {
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "vs-seti",
-  "workbench.activityBar.visible": true,
+  "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
   "workbench.sideBar.location": "right",
   "workbench.panel.defaultLocation": "bottom",
@@ -147,8 +150,21 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "window.title": "MinQro Analytics Platform",
   "workbench.view.extensions.state.hidden": false,
   "problems.visibility": true,
-  "editor.inlayHints.enabled": "on"
+  "editor.inlayHints.enabled": "on",
+  "files.exclude": {
+    "**/.*": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.vscode": true
+  }
 }
 EOF
+
+# Set proper ownership
+chown -R coder:coder /home/coder/.local/share/code-server/User
 
 echo "✅ MinQro blue tech theme applied"

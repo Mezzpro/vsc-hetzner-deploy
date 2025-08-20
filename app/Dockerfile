@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /home/coder/workspace-admin \
     /home/coder/workspace-mezzpro \
     /home/coder/workspace-minqro \
+    /home/coder/workspace-sobuai \
+    /home/coder/workspace-bizcradle \
     && chown -R coder:coder /home/coder
 
 # Copy application files

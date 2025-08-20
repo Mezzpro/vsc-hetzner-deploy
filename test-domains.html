@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VSC Domain Test Links</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .domain-card { 
+            border: 2px solid #ddd; 
+            margin: 20px 0; 
+            padding: 20px; 
+            border-radius: 8px; 
+        }
+        .admin { border-color: #333; background: #f8f8f8; }
+        .mezzpro { border-color: #007acc; background: #f0f8ff; }
+        .minqro { border-color: #28a745; background: #f0fff0; }
+        a { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            margin: 5px; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-weight: bold;
+        }
+        .direct-link { background: #007acc; color: white; }
+        .test-link { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <h1>🌐 VSC Hetzner Domain Testing</h1>
+    
+    <div class="domain-card admin">
+        <h2>🏢 Cradlesystems (Admin Theme)</h2>
+        <p><strong>Domain:</strong> cradlesystems.xyz</p>
+        <p><strong>Workspace:</strong> /home/coder/workspace-admin</p>
+        <a href="http://157.180.18.242:3000" class="direct-link" target="_blank">Test Direct Access</a>
+        <p><em>Once DNS propagates: https://cradlesystems.xyz</em></p>
+    </div>
+
+    <div class="domain-card mezzpro">
+        <h2>💼 Mezzpro (Blue Theme)</h2>
+        <p><strong>Domain:</strong> mezzpro.xyz</p>
+        <p><strong>Workspace:</strong> /home/coder/workspace-mezzpro</p>
+        <a href="http://157.180.18.242:3000" class="direct-link" target="_blank">Test Direct Access</a>
+        <p><em>Once DNS propagates: https://mezzpro.xyz</em></p>
+    </div>
+
+    <div class="domain-card minqro">
+        <h2>🚀 Minqro (Green Theme)</h2>
+        <p><strong>Domain:</strong> minqro.xyz</p>
+        <p><strong>Workspace:</strong> /home/coder/workspace-minqro</p>
+        <a href="http://157.180.18.242:3000" class="direct-link" target="_blank">Test Direct Access</a>
+        <p><em>Once DNS propagates: https://minqro.xyz</em></p>
+    </div>
+
+    <hr>
+    
+    <h2>📋 Testing Instructions</h2>
+    <ol>
+        <li><strong>Current Access:</strong> <a href="http://157.180.18.242:3000" class="direct-link" target="_blank">http://157.180.18.242:3000</a></li>
+        <li><strong>Password:</strong> <code>vsc123</code></li>
+        <li><strong>Domain Routing:</strong> The proxy automatically routes based on the domain used</li>
+        <li><strong>Once DNS propagates:</strong> Direct domain access will work with themes</li>
+    </ol>
+
+    <h2>🔧 Manual Domain Testing (Advanced)</h2>
+    <p>To test domain routing now, add to your hosts file temporarily:</p>
+    <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px;">
+# Add to C:\Windows\System32\drivers\etc\hosts (as Administrator)
+157.180.18.242 cradlesystems.xyz
+157.180.18.242 mezzpro.xyz  
+157.180.18.242 minqro.xyz
+    </pre>
+    
+    <p><strong>⚠️ Remember to remove these after DNS propagates!</strong></p>
+
+    <h2>📊 Current Status</h2>
+    <ul>
+        <li>✅ Application deployed and running</li>
+        <li>✅ Domain routing configured</li>
+        <li>⏳ DNS propagation in progress</li>
+        <li>⏳ SSL certificates pending DNS</li>
+    </ul>
+</body>
+</html>
