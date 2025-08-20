@@ -7,17 +7,29 @@ echo "📁 Setting up workspaces..."
 mkdir -p /home/coder/workspace-admin/.vscode
 mkdir -p /home/coder/workspace-mezzpro/.vscode
 mkdir -p /home/coder/workspace-minqro/.vscode
+mkdir -p /home/coder/workspace-sobuai/.vscode
+mkdir -p /home/coder/workspace-bizcradle/.vscode
+
+# Fix permissions for code-server directories
+echo "🔧 Fixing permissions..."
+sudo mkdir -p /home/coder/.local/share/code-server/User
+sudo chown -R coder:coder /home/coder/.local
+sudo chmod -R 755 /home/coder/.local
 
 # Apply workspace-specific themes
 echo "🎨 Applying workspace themes..."
 bash /home/coder/themes/cradle-theme.sh
 bash /home/coder/themes/mezzpro-theme.sh
 bash /home/coder/themes/minqro-theme.sh
+bash /home/coder/themes/apply-sobuai-theme.sh
+bash /home/coder/themes/apply-bizcradle-theme.sh
 
 # Hide .vscode folders from user view
 chmod 700 /home/coder/workspace-admin/.vscode
 chmod 700 /home/coder/workspace-mezzpro/.vscode
 chmod 700 /home/coder/workspace-minqro/.vscode
+chmod 700 /home/coder/workspace-sobuai/.vscode
+chmod 700 /home/coder/workspace-bizcradle/.vscode
 
 echo "✅ Workspaces configured!"
 
