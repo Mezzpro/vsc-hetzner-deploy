@@ -3,8 +3,8 @@
 # Cradle Systems Clean White Theme
 echo "🎨 Applying Cradle clean white theme..."
 
-# Create VS Code User settings directory
-mkdir -p /home/coder/.local/share/code-server/User
+# Create workspace .vscode directory
+mkdir -p /home/coder/workspace-admin/.vscode
 
 cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
 {
@@ -124,6 +124,6 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
 EOF
 
 # Set proper ownership
-chown -R coder:coder /home/coder/.local/share/code-server/User
+chown -R coder:coder /home/coder/workspace-admin/.vscode
 
 echo "✅ Cradle clean white theme applied"

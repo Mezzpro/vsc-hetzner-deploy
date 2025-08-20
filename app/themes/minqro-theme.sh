@@ -3,8 +3,8 @@
 # MinQro Blue Tech Theme
 echo "🎨 Applying MinQro blue tech theme..."
 
-# Create VS Code User settings directory
-mkdir -p /home/coder/.local/share/code-server/User
+# Create workspace .vscode directory
+mkdir -p /home/coder/workspace-minqro/.vscode
 
 cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
 {
@@ -143,7 +143,7 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "git.decorations.enabled": true,
-  "workbench.startupEditor": "welcomePage",
+  "workbench.startupEditor": "none",
   "telemetry.telemetryLevel": "off",
   "update.showReleaseNotes": false,
   "extensions.showRecommendationsOnlyOnDemand": false,

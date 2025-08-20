@@ -44,6 +44,13 @@ app.use('/', (req, res, next) => {
         return next();
     }
     
+    // If user accessed URL with folder parameter, redirect to clean URL
+    if (folderParam && (req.path === '/' || req.path.startsWith('/login'))) {
+        const cleanUrl = `${req.protocol}://${hostname}${req.path}`;
+        console.log(`🧹 Cleaning URL: removing folder parameter`);
+        return res.redirect(301, cleanUrl);
+    }
+    
     // If folder parameter already exists, just proxy to code-server
     if (folderParam) {
         console.log(`✅ Folder param exists, proxying to code-server`);
@@ -59,14 +66,16 @@ app.use('/', (req, res, next) => {
     // Get workspace for current domain
     const targetWorkspace = DOMAIN_WORKSPACE_MAP[hostname.toLowerCase()] || DEFAULT_WORKSPACE;
     
-    // Build redirect URL with folder parameter
-    const redirectUrl = `${req.protocol}://${hostname}${req.path}?folder=${encodeURIComponent(targetWorkspace)}`;
+    // Add folder parameter internally without showing to user
+    req.url = req.url.includes('?') 
+        ? `${req.url}&folder=${encodeURIComponent(targetWorkspace)}`
+        : `${req.url}?folder=${encodeURIComponent(targetWorkspace)}`;
     
-    console.log(`🔄 Redirecting ${hostname} → ${targetWorkspace}`);
-    console.log(`📍 Redirect URL: ${redirectUrl}`);
+    console.log(`🔄 Internal routing ${hostname} → ${targetWorkspace}`);
+    console.log(`📍 Modified URL: ${req.url}`);
     
-    // Issue HTTP 302 redirect
-    return res.redirect(302, redirectUrl);
+    // Continue to proxy without redirect
+    return next();
 });
 
 // Proxy all requests to code-server

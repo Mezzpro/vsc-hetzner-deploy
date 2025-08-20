@@ -3,8 +3,8 @@
 # MezzPro Matrix Green Theme
 echo "🎨 Applying MezzPro matrix green theme..."
 
-# Create VS Code User settings directory
-mkdir -p /home/coder/.local/share/code-server/User
+# Create workspace .vscode directory
+mkdir -p /home/coder/workspace-mezzpro/.vscode
 
 cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
 {
