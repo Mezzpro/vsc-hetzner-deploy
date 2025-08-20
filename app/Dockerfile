@@ -35,9 +35,6 @@ RUN chmod +x /home/coder/start.sh \
 # Switch back to coder user
 USER coder
 
-# Copy workspace configurations
-COPY --chown=coder:coder ../config/workspaces/ /home/coder/workspaces/
-
 # Set working directory
 WORKDIR /home/coder
 
