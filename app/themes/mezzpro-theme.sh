@@ -161,7 +161,11 @@ cp /home/coder/tasks/tasks.json /home/coder/workspace-mezzpro/.vscode/tasks.json
 # Copy keybindings for secondary sidebar terminal
 cp /home/coder/keybindings/keybindings.json /home/coder/workspace-mezzpro/.vscode/keybindings.json
 
+# Set up workspace environment variables  
+echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-mezzpro/.bashrc
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-mezzpro/.vscode
+chown coder:coder /home/coder/workspace-mezzpro/.bashrc
 
-echo "✅ MezzPro matrix green theme applied with auto-terminal"
+echo "✅ MezzPro matrix green theme applied with auto-terminal and Gemini API"

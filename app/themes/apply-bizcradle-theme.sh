@@ -191,7 +191,11 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-bizcradle/.vscode/tasks.json
 
+# Set up workspace environment variables (hardcoded for testing)
+echo 'export GEMINI_API_KEY="AIzaSyCuvxmglLYKsaFq4JWXudl3Ugol8_5eReU"' >> /home/coder/workspace-bizcradle/.bashrc
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-bizcradle/.vscode
+chown coder:coder /home/coder/workspace-bizcradle/.bashrc
 
-echo "✅ Bizcradle orange theme applied with auto-terminal!"
+echo "✅ Bizcradle orange theme applied with auto-terminal and Gemini API!"

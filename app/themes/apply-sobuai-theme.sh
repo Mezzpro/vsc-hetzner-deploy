@@ -242,7 +242,11 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-sobuai/.vscode/tasks.json
 
+# Set up workspace environment variables
+echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-sobuai/.bashrc
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-sobuai/.vscode
+chown coder:coder /home/coder/workspace-sobuai/.bashrc
 
-echo "✅ Sobuai pink theme applied with auto-terminal!"
+echo "✅ Sobuai pink theme applied with auto-terminal and Gemini API!"
