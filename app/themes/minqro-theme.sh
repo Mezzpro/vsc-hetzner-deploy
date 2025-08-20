@@ -197,8 +197,101 @@ cp /home/coder/tasks/tasks.json /home/coder/workspace-minqro/.vscode/tasks.json
 # Set up workspace environment variables
 echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-minqro/.bashrc
 
+# Install Live Preview extension
+code-server --install-extension ms-vscode.live-server --user-data-dir /home/coder/workspace-minqro/.local/share/code-server
+
+# Create basic HTML files
+cat > /home/coder/workspace-minqro/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to MinQro</title>
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0a0f1c, #1565c0);
+            color: #64b5f6;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #42a5f5;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #90caf9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to MinQro</h1>
+    <p>Analytics Platform Ready for Action!</p>
+</body>
+</html>
+EOF
+
+cat > /home/coder/workspace-minqro/download.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinQro Downloads</title>
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0a0f1c, #1565c0);
+            color: #64b5f6;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #42a5f5;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #90caf9;
+        }
+        a {
+            color: #ffffff;
+            background: rgba(66, 165, 245, 0.2);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            display: inline-block;
+            margin: 10px;
+            border: 1px solid #42a5f5;
+        }
+        a:hover {
+            background: rgba(66, 165, 245, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>MinQro Downloads</h1>
+    <p>Following is the download link:</p>
+    <a href="https://fake-download.minqro.com/analytics-suite.zip">Download Analytics Suite</a>
+    <br><br>
+    <a href="https://fake-download.minqro.com/minqro-installer.exe">Download MinQro Installer</a>
+</body>
+</html>
+EOF
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-minqro/.vscode
 chown coder:coder /home/coder/workspace-minqro/.bashrc
+chown coder:coder /home/coder/workspace-minqro/index.html
+chown coder:coder /home/coder/workspace-minqro/download.html
 
-echo "✅ MinQro blue tech theme applied with auto-terminal and Gemini API"
+echo "✅ MinQro blue tech theme applied with auto-terminal, Gemini API, and Live Preview"

@@ -225,8 +225,96 @@ echo 'export NVM_DIR="/home/coder/.nvm"' >> /home/coder/workspace-bizcradle/.bas
 echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/workspace-bizcradle/.bashrc
 echo 'export PATH=/home/coder/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/workspace-bizcradle/.bashrc
 
+# Install Live Preview extension
+code-server --install-extension ms-vscode.live-server --user-data-dir /home/coder/workspace-bizcradle/.local/share/code-server
+
+# Create basic HTML files
+cat > /home/coder/workspace-bizcradle/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Bizcradle</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Bizcradle</h1>
+    <p>Your Business Platform is Ready!</p>
+</body>
+</html>
+EOF
+
+cat > /home/coder/workspace-bizcradle/download.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizcradle Downloads</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        a {
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            display: inline-block;
+            margin: 10px;
+        }
+        a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Bizcradle Downloads</h1>
+    <p>Following is the download link:</p>
+    <a href="https://fake-download.bizcradle.com/app.zip">Download Bizcradle App</a>
+    <br><br>
+    <a href="https://fake-download.bizcradle.com/setup.exe">Download Setup File</a>
+</body>
+</html>
+EOF
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-bizcradle/.vscode
 chown coder:coder /home/coder/workspace-bizcradle/.bashrc
+chown coder:coder /home/coder/workspace-bizcradle/index.html
+chown coder:coder /home/coder/workspace-bizcradle/download.html
 
-echo "✅ Bizcradle orange theme applied with auto-terminal and Gemini API!"
+echo "✅ Bizcradle orange theme applied with auto-terminal, Gemini API, and Live Preview!"
