@@ -188,7 +188,10 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
 }
 EOF
 
+# Copy auto-terminal tasks.json
+cp /home/coder/tasks/tasks.json /home/coder/workspace-bizcradle/.vscode/tasks.json
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-bizcradle/.vscode
 
-echo "✅ Bizcradle orange theme applied!"
+echo "✅ Bizcradle orange theme applied with auto-terminal!"

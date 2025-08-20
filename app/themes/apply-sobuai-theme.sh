@@ -239,7 +239,10 @@ cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
 }
 EOF
 
+# Copy auto-terminal tasks.json
+cp /home/coder/tasks/tasks.json /home/coder/workspace-sobuai/.vscode/tasks.json
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-sobuai/.vscode
 
-echo "✅ Sobuai pink theme applied!"
+echo "✅ Sobuai pink theme applied with auto-terminal!"

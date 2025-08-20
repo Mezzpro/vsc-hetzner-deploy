@@ -123,7 +123,10 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
 }
 EOF
 
+# Copy auto-terminal tasks.json
+cp /home/coder/tasks/tasks.json /home/coder/workspace-admin/.vscode/tasks.json
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-admin/.vscode
 
-echo "✅ Cradle clean white theme applied"
+echo "✅ Cradle clean white theme applied with auto-terminal"

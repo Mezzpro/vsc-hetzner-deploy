@@ -164,7 +164,10 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
 }
 EOF
 
+# Copy auto-terminal tasks.json
+cp /home/coder/tasks/tasks.json /home/coder/workspace-minqro/.vscode/tasks.json
+
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-minqro/.vscode
 
-echo "✅ MinQro blue tech theme applied"
+echo "✅ MinQro blue tech theme applied with auto-terminal"
