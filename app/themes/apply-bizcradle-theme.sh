@@ -53,27 +53,6 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "terminal.integrated.showLinkHover": false,
     "terminal.integrated.showOnStartup": "startupProject",
     "terminal.integrated.focusAfterOpen": true,
-    "terminal.integrated.profiles.linux": {
-      "Gemini AI": {
-        "path": "/bin/bash",
-        "args": [
-          "-c",
-          "gemini"
-        ],
-        "icon": "robot",
-        "overrideName": true
-      },
-      "Bash": {
-        "path": "/bin/bash",
-        "args": ["-l"],
-        "icon": "terminal-bash"
-      }
-    },
-    "terminal.integrated.defaultProfile.linux": "Gemini AI",
-    "terminal.integrated.automationProfile.linux": {
-      "path": "/bin/bash",
-      "args": ["-c", "gemini"]
-    },
     "debug.console.closeOnEnd": true,
     "debug.openDebug": "neverOpen",
     "extensions.ignoreRecommendations": true,
@@ -238,11 +217,7 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-bizcradle/.vscode/tasks.json
 
-# Set up workspace environment variables and Gemini CLI PATH
-echo 'export GEMINI_API_KEY="AIzaSyCuvxmglLYKsaFq4JWXudl3Ugol8_5eReU"' >> /home/coder/workspace-bizcradle/.bashrc
-echo 'export NVM_DIR="/home/coder/.nvm"' >> /home/coder/workspace-bizcradle/.bashrc
-echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/workspace-bizcradle/.bashrc
-echo 'export PATH=/home/coder/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/workspace-bizcradle/.bashrc
+# No additional environment variables needed
 
 # Install Live Preview extension
 echo "📦 Installing Live Preview extension..."
@@ -333,8 +308,7 @@ EOF
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-bizcradle/.vscode
-chown coder:coder /home/coder/workspace-bizcradle/.bashrc
 chown coder:coder /home/coder/workspace-bizcradle/index.html
 chown coder:coder /home/coder/workspace-bizcradle/download.html
 
-echo "✅ Bizcradle orange theme applied with auto-terminal, Gemini API, and Live Preview!"
+echo "✅ Bizcradle orange theme applied with auto-terminal and Live Preview!"

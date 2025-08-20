@@ -58,27 +58,6 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.showLinkHover": false,
-  "terminal.integrated.profiles.linux": {
-    "Gemini AI": {
-      "path": "/bin/bash",
-      "args": [
-        "-c",
-        "gemini"
-      ],
-      "icon": "robot",
-      "overrideName": true
-    },
-    "Bash": {
-      "path": "/bin/bash",
-      "args": ["-l"],
-      "icon": "terminal-bash"
-    }
-  },
-  "terminal.integrated.defaultProfile.linux": "Gemini AI",
-  "terminal.integrated.automationProfile.linux": {
-    "path": "/bin/bash",
-    "args": ["-c", "gemini"]
-  },
   "terminal.integrated.showOnStartup": "startupProject",
   "terminal.integrated.focusAfterOpen": true,
   "debug.console.closeOnEnd": true,
@@ -155,11 +134,8 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-admin/.vscode/tasks.json
 
-# Set up workspace environment variables
-echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-admin/.bashrc
+# No additional environment variables needed
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-admin/.vscode
-chown coder:coder /home/coder/workspace-admin/.bashrc
-
-echo "✅ Cradle clean white theme applied with auto-terminal and Gemini API"
+echo "✅ Cradle clean white theme applied with auto-terminal"

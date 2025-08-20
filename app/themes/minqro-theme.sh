@@ -47,27 +47,6 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "terminal.integrated.splitCwd": "workspaceRoot",
   "terminal.integrated.lineHeight": 1.2,
   "terminal.integrated.showLinkHover": false,
-  "terminal.integrated.profiles.linux": {
-    "Gemini AI": {
-      "path": "/bin/bash",
-      "args": [
-        "-c",
-        "gemini"
-      ],
-      "icon": "robot",
-      "overrideName": true
-    },
-    "Bash": {
-      "path": "/bin/bash",
-      "args": ["-l"],
-      "icon": "terminal-bash"
-    }
-  },
-  "terminal.integrated.defaultProfile.linux": "Gemini AI",
-  "terminal.integrated.automationProfile.linux": {
-    "path": "/bin/bash",
-    "args": ["-c", "gemini"]
-  },
   "terminal.integrated.showOnStartup": "startupProject",
   "terminal.integrated.focusAfterOpen": true,
   "debug.console.closeOnEnd": true,
@@ -213,8 +192,7 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-minqro/.vscode/tasks.json
 
-# Set up workspace environment variables
-echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-minqro/.bashrc
+# No additional environment variables needed
 
 # Install Live Preview extension
 echo "📦 Installing Live Preview extension..."
@@ -310,8 +288,7 @@ EOF
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-minqro/.vscode
-chown coder:coder /home/coder/workspace-minqro/.bashrc
 chown coder:coder /home/coder/workspace-minqro/index.html
 chown coder:coder /home/coder/workspace-minqro/download.html
 
-echo "✅ MinQro blue tech theme applied with auto-terminal, Gemini API, and Live Preview"
+echo "✅ MinQro blue tech theme applied with auto-terminal and Live Preview"
