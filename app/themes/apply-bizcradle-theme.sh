@@ -11,18 +11,102 @@ mkdir -p /home/coder/.local/share/code-server/User
 # VS Code User Settings - Clean interface with orange theme
 cat > /home/coder/.local/share/code-server/User/settings.json << 'EOF'
 {
-    "workbench.colorTheme": "Default Light Modern",
-    "workbench.startupEditor": "none",
-    "workbench.tips.enabled": false,
-    "workbench.welcomePage.walkthroughs.openOnInstall": false,
-    "files.autoSave": "afterDelay",
+    "workbench.colorTheme": "Default Light+",
+    "workbench.iconTheme": "vs-seti",
+    "workbench.activityBar.visible": false,
+    "workbench.statusBar.visible": false,
+    "workbench.sideBar.location": "right",
+    "workbench.panel.defaultLocation": "bottom",
+    "window.menuBarVisibility": "compact",
+    "window.commandCenter": true,
     "editor.minimap.enabled": false,
     "editor.lineNumbers": "off",
     "editor.folding": false,
     "editor.glyphMargin": false,
-    "workbench.activityBar.visible": false,
-    "workbench.statusBar.visible": false,
-    "workbench.sideBar.location": "right",
+    "breadcrumbs.enabled": false,
+    "editor.fontSize": 16,
+    "editor.fontFamily": "'Segoe UI', 'Arial', sans-serif",
+    "editor.fontWeight": "400",
+    "editor.lineHeight": 1.6,
+    "editor.letterSpacing": 0.3,
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorStyle": "line",
+    "editor.cursorWidth": 2,
+    "editor.smoothScrolling": true,
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "'Consolas', monospace",
+    "workbench.colorCustomizations": {
+        "editor.background": "#fff8f0",
+        "editor.foreground": "#d2691e",
+        "editorCursor.foreground": "#ff6f00",
+        "editor.selectionBackground": "#ffe0b3",
+        "editor.lineHighlightBackground": "#fff3e6",
+        "sideBar.background": "#fff8f0",
+        "sideBar.foreground": "#cc5500",
+        "activityBar.background": "#ffcc80",
+        "activityBar.foreground": "#d2691e",
+        "panel.background": "#fff8f0",
+        "panel.border": "#ff9800",
+        "statusBar.background": "#ff9800",
+        "statusBar.foreground": "#ffffff",
+        "titleBar.activeBackground": "#ff9800",
+        "titleBar.activeForeground": "#ffffff",
+        "tab.activeBackground": "#ffe0b3",
+        "tab.activeForeground": "#d2691e",
+        "tab.inactiveBackground": "#fff8f0",
+        "tab.inactiveForeground": "#cc7a00",
+        "terminal.background": "#fff8f0",
+        "terminal.foreground": "#d2691e"
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": ["comment"],
+                "settings": {
+                    "foreground": "#ff9800",
+                    "fontStyle": "italic"
+                }
+            },
+            {
+                "scope": ["string"],
+                "settings": {
+                    "foreground": "#ff6f00"
+                }
+            },
+            {
+                "scope": ["keyword", "storage.type"],
+                "settings": {
+                    "foreground": "#d2691e",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": ["variable", "support.variable"],
+                "settings": {
+                    "foreground": "#cc5500"
+                }
+            },
+            {
+                "scope": ["function", "entity.name.function"],
+                "settings": {
+                    "foreground": "#e65100",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": ["constant.numeric"],
+                "settings": {
+                    "foreground": "#ff8f00"
+                }
+            }
+        ]
+    },
+    "files.autoSave": "afterDelay",
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "workbench.welcomePage.walkthroughs.openOnInstall": false,
+    "telemetry.telemetryLevel": "off",
+    "window.title": "Bizcradle Business Platform",
     "explorer.openEditors.visible": 0,
     "files.exclude": {
         "**/.*": true,
@@ -33,26 +117,7 @@ cat > /home/coder/.local/share/code-server/User/settings.json << 'EOF'
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/.vscode": true
-    },
-    "workbench.tree.renderIndentGuides": "none",
-    "workbench.colorCustomizations": {
-        "titleBar.activeBackground": "#FF9800",
-        "titleBar.activeForeground": "#FFFFFF",
-        "titleBar.inactiveBackground": "#FFF3E0",
-        "titleBar.inactiveForeground": "#E65100",
-        "activityBar.background": "#FFCC80",
-        "activityBar.foreground": "#E65100",
-        "sideBar.background": "#FFF3E0",
-        "sideBar.foreground": "#E65100",
-        "editor.background": "#FFFFFF",
-        "panel.background": "#FFF3E0",
-        "statusBar.background": "#FF9800",
-        "statusBar.foreground": "#FFFFFF"
-    },
-    "window.title": "Bizcradle Workspace",
-    "breadcrumbs.enabled": false,
-    "workbench.editor.showTabs": true,
-    "workbench.editor.tabCloseButton": "off"
+    }
 }
 EOF
 
