@@ -25,6 +25,7 @@ COPY package.json /home/coder/package.json
 COPY proxy-server.js /home/coder/proxy-server.js
 COPY start-services.sh /home/coder/start.sh
 COPY themes/ /home/coder/themes/
+COPY login-themes/ /home/coder/login-themes/
 
 # Install Node.js dependencies
 RUN cd /home/coder && npm install --production

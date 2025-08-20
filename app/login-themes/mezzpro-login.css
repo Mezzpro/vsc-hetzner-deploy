@@ -1,0 +1,117 @@
+/* MezzPro Login Page Custom Styling */
+/* Green-themed login page to match MezzPro workspace */
+
+body {
+    background: linear-gradient(135deg, #2E8B57, #3CB371) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.login-title, .login-text {
+    color: #2E8B57 !important;
+    text-align: center;
+    font-weight: 600 !important;
+}
+
+.login-title {
+    font-size: 28px !important;
+    margin-bottom: 10px !important;
+}
+
+.login-title:before {
+    content: "🌱 ";
+    font-size: 32px;
+}
+
+.login-title:after {
+    content: " MezzPro";
+    color: #3CB371;
+    font-weight: 700;
+}
+
+.login-text {
+    color: #5F9EA0 !important;
+    margin-bottom: 25px !important;
+}
+
+.login-form input[type="password"] {
+    border: 2px solid #3CB371 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #2E8B57 !important;
+    transition: all 0.3s ease !important;
+}
+
+.login-form input[type="password"]:focus {
+    border-color: #2E8B57 !important;
+    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2) !important;
+    outline: none !important;
+}
+
+.login-form input[type="password"]::placeholder {
+    color: #90EE90 !important;
+    opacity: 0.8;
+}
+
+.login-submit {
+    background: linear-gradient(135deg, #3CB371, #2E8B57) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: white !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    padding: 12px 24px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.login-submit:hover {
+    background: linear-gradient(135deg, #2E8B57, #228B22) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3) !important;
+}
+
+.login-submit:active {
+    transform: translateY(0) !important;
+}
+
+/* Custom branding */
+.login-container:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3CB371, #2E8B57);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .login-container {
+        margin: 20px !important;
+        padding: 30px 20px !important;
+    }
+    
+    .login-title {
+        font-size: 24px !important;
+    }
+}

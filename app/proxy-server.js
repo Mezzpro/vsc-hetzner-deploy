@@ -1,5 +1,7 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 // Domain to workspace folder mapping
@@ -22,6 +24,15 @@ const DEFAULT_WORKSPACE = '/home/coder/workspace-admin';
 
 // Code-server runs on port 8080
 const CODE_SERVER_PORT = 8080;
+
+// Domain to login theme mapping
+const LOGIN_THEMES = {
+    'mezzpro.xyz': 'mezzpro-login.css',
+    'www.mezzpro.xyz': 'mezzpro-login.css'
+};
+
+// Serve custom login CSS files
+app.use('/login-themes', express.static(path.join(__dirname, 'login-themes')));
 
 // Middleware to handle domain-based redirects
 app.use('/', (req, res, next) => {
@@ -88,6 +99,37 @@ const proxyOptions = {
     },
     onProxyRes: (proxyRes, req, res) => {
         console.log(`✅ Code-server response: ${proxyRes.statusCode} for ${req.url}`);
+        
+        // Check if this is an HTML response (likely the login page)
+        const contentType = proxyRes.headers['content-type'] || '';
+        const hostname = req.get('host') || '';
+        const isLoginPage = req.url === '/' && proxyRes.statusCode === 200 && contentType.includes('text/html');
+        
+        if (isLoginPage && LOGIN_THEMES[hostname.toLowerCase()]) {
+            const themeCss = LOGIN_THEMES[hostname.toLowerCase()];
+            console.log(`🎨 Injecting login theme: ${themeCss} for ${hostname}`);
+            
+            // Modify the response to inject custom CSS
+            delete proxyRes.headers['content-length'];
+            proxyRes.headers['content-encoding'] = 'identity';
+            
+            let body = '';
+            proxyRes.on('data', (chunk) => {
+                body += chunk.toString();
+            });
+            
+            proxyRes.on('end', () => {
+                // Inject custom CSS before closing </head> tag
+                const customCssLink = `<link rel="stylesheet" href="/login-themes/${themeCss}">`;
+                const modifiedBody = body.replace('</head>', `${customCssLink}\n</head>`);
+                
+                res.setHeader('Content-Length', Buffer.byteLength(modifiedBody));
+                res.end(modifiedBody);
+            });
+            
+            // Don't let the original response reach the client
+            return;
+        }
     },
     onProxyReqWs: (proxyReq, req, socket, options, head) => {
         console.log(`🔌 WebSocket proxy request: ${req.url}`);
