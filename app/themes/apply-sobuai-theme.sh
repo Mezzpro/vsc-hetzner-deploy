@@ -9,7 +9,7 @@ echo "🎨 Applying Sobuai pink theme..."
 mkdir -p /home/coder/.local/share/code-server/User
 
 # VS Code User Settings - Clean interface with pink theme
-cat > /home/coder/.local/share/code-server/User/settings.json << 'EOF'
+cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
 {
     "workbench.colorTheme": "Default Light+",
     "workbench.iconTheme": "vs-minimal",
@@ -122,6 +122,6 @@ cat > /home/coder/.local/share/code-server/User/settings.json << 'EOF'
 EOF
 
 # Set proper ownership
-chown -R coder:coder /home/coder/.local/share/code-server/User
+chown -R coder:coder /home/coder/workspace-sobuai/.vscode
 
 echo "✅ Sobuai pink theme applied!"
