@@ -59,7 +59,7 @@ APP_PORT=${APP_PORT:-3000}
 DOMAIN_CRADLE=${DOMAIN_CRADLE:-cradlesystems.xyz}
 DOMAIN_MEZZPRO=${DOMAIN_MEZZPRO:-mezzpro.xyz}
 DOMAIN_MINQRO=${DOMAIN_MINQRO:-minqro.xyz}
-GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyCuvxmglLYKsaFq4JWXudl3Ugol8_5eReU}
+GEMINI_API_KEY=${GEMINI_API_KEY:-}
 ENVEOF
 
 echo "🐳 Starting Docker containers..."
