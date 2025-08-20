@@ -10,9 +10,15 @@ mkdir -p /home/coder/workspace-minqro/.vscode
 mkdir -p /home/coder/workspace-sobuai/.vscode
 mkdir -p /home/coder/workspace-bizcradle/.vscode
 
+# Clear any global VS Code settings that might interfere with workspace-specific themes
+echo "🧹 Clearing global VS Code settings..."
+sudo rm -rf /home/coder/.local/share/code-server/User 2>/dev/null || true
+sudo rm -rf /home/coder/.local/share/code-server/logs 2>/dev/null || true
+sudo rm -rf /home/coder/.local/share/code-server/caches 2>/dev/null || true
+
 # Fix permissions for code-server directories
 echo "🔧 Fixing permissions..."
-sudo mkdir -p /home/coder/.local/share/code-server/User
+sudo mkdir -p /home/coder/.local/share/code-server
 sudo chown -R coder:coder /home/coder/.local
 sudo chmod -R 755 /home/coder/.local
 

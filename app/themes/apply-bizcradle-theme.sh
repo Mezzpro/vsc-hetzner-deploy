@@ -5,8 +5,8 @@
 
 echo "🎨 Applying Bizcradle orange theme..."
 
-# Create VS Code settings directory
-mkdir -p /home/coder/.local/share/code-server/User
+# Create workspace-specific VS Code settings directory
+mkdir -p /home/coder/workspace-bizcradle/.vscode
 
 # VS Code User Settings - Clean interface with orange theme
 cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'

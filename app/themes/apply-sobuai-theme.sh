@@ -5,8 +5,8 @@
 
 echo "🎨 Applying Sobuai pink theme..."
 
-# Create VS Code settings directory
-mkdir -p /home/coder/.local/share/code-server/User
+# Create workspace-specific VS Code settings directory
+mkdir -p /home/coder/workspace-sobuai/.vscode
 
 # VS Code User Settings - Clean interface with pink theme
 cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
