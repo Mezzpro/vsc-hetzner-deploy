@@ -198,7 +198,8 @@ cp /home/coder/tasks/tasks.json /home/coder/workspace-minqro/.vscode/tasks.json
 echo 'export GEMINI_API_KEY="$GEMINI_API_KEY"' >> /home/coder/workspace-minqro/.bashrc
 
 # Install Live Preview extension
-code-server --install-extension ms-vscode.live-server --user-data-dir /home/coder/workspace-minqro/.local/share/code-server
+echo "📦 Installing Live Preview extension..."
+code-server --install-extension ms-vscode.live-server --force
 
 # Create basic HTML files
 cat > /home/coder/workspace-minqro/index.html << 'EOF'

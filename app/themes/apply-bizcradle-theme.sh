@@ -226,7 +226,8 @@ echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/workspace
 echo 'export PATH=/home/coder/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/workspace-bizcradle/.bashrc
 
 # Install Live Preview extension
-code-server --install-extension ms-vscode.live-server --user-data-dir /home/coder/workspace-bizcradle/.local/share/code-server
+echo "📦 Installing Live Preview extension..."
+code-server --install-extension ms-vscode.live-server --force
 
 # Create basic HTML files
 cat > /home/coder/workspace-bizcradle/index.html << 'EOF'
