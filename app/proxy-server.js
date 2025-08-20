@@ -2,28 +2,28 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 
-// Domain to workspace folder mapping
+// Domain to workspace mapping with clean URL paths
 const DOMAIN_WORKSPACE_MAP = {
-    'cradlesystems.xyz': '/home/coder/workspace-admin',
-    'www.cradlesystems.xyz': '/home/coder/workspace-admin',
-    'mezzpro.xyz': '/home/coder/workspace-mezzpro',
-    'www.mezzpro.xyz': '/home/coder/workspace-mezzpro',
-    'minqro.xyz': '/home/coder/workspace-minqro',
-    'www.minqro.xyz': '/home/coder/workspace-minqro',
-    'sobuai.xyz': '/home/coder/workspace-sobuai',
-    'www.sobuai.xyz': '/home/coder/workspace-sobuai',
-    'bizcradle.xyz': '/home/coder/workspace-bizcradle',
-    'www.bizcradle.xyz': '/home/coder/workspace-bizcradle',
-    'localhost': '/home/coder/workspace-admin'
+    'cradlesystems.xyz': { path: '/admin', workspace: '/home/coder/workspace-admin' },
+    'www.cradlesystems.xyz': { path: '/admin', workspace: '/home/coder/workspace-admin' },
+    'mezzpro.xyz': { path: '/mezzpro', workspace: '/home/coder/workspace-mezzpro' },
+    'www.mezzpro.xyz': { path: '/mezzpro', workspace: '/home/coder/workspace-mezzpro' },
+    'minqro.xyz': { path: '/minqro', workspace: '/home/coder/workspace-minqro' },
+    'www.minqro.xyz': { path: '/minqro', workspace: '/home/coder/workspace-minqro' },
+    'sobuai.xyz': { path: '/sobuai', workspace: '/home/coder/workspace-sobuai' },
+    'www.sobuai.xyz': { path: '/sobuai', workspace: '/home/coder/workspace-sobuai' },
+    'bizcradle.xyz': { path: '/bizcradle', workspace: '/home/coder/workspace-bizcradle' },
+    'www.bizcradle.xyz': { path: '/bizcradle', workspace: '/home/coder/workspace-bizcradle' },
+    'localhost': { path: '/admin', workspace: '/home/coder/workspace-admin' }
 };
 
 // Default workspace for unknown domains
-const DEFAULT_WORKSPACE = '/home/coder/workspace-admin';
+const DEFAULT_CONFIG = { path: '/admin', workspace: '/home/coder/workspace-admin' };
 
 // Code-server runs on port 8080
 const CODE_SERVER_PORT = 8080;
 
-// Store domain mapping in request for proxy rewrite
+// Handle domain-specific URL paths and workspace routing
 app.use('/', (req, res, next) => {
     const hostname = req.get('host') || '';
     const folderParam = req.query.folder;
@@ -44,15 +44,29 @@ app.use('/', (req, res, next) => {
         return next();
     }
     
-    // Store workspace info for proxy rewrite
-    const targetWorkspace = DOMAIN_WORKSPACE_MAP[hostname.toLowerCase()] || DEFAULT_WORKSPACE;
-    req.targetWorkspace = targetWorkspace;
-    req.needsFolderParam = !folderParam && (req.path === '/' || req.path.startsWith('/login'));
+    // Get domain configuration
+    const domainConfig = DOMAIN_WORKSPACE_MAP[hostname.toLowerCase()] || DEFAULT_CONFIG;
+    const expectedPath = domainConfig.path;
+    const workspace = domainConfig.workspace;
     
-    console.log(`🔄 Domain routing: ${hostname} → ${targetWorkspace}`);
+    // If user accesses root path, redirect to domain-specific path
+    if (req.path === '/') {
+        const redirectUrl = `${req.protocol}://${hostname}${expectedPath}`;
+        console.log(`🔄 Root redirect: ${hostname}${req.path} → ${expectedPath}`);
+        return res.redirect(302, redirectUrl);
+    }
     
-    // Continue to proxy
-    return next();
+    // If user is on the correct domain-specific path, add workspace routing
+    if (req.path === expectedPath || req.path.startsWith(expectedPath + '/') || req.path.startsWith('/login')) {
+        req.targetWorkspace = workspace;
+        req.needsFolderParam = !folderParam;
+        console.log(`🔄 Domain routing: ${hostname}${req.path} → ${workspace}`);
+        return next();
+    }
+    
+    // If user is on wrong path for this domain, redirect to correct path
+    console.log(`🔄 Path correction: ${hostname}${req.path} → ${expectedPath}`);
+    return res.redirect(302, `${req.protocol}://${hostname}${expectedPath}`);
 });
 
 // Proxy all requests to code-server
@@ -114,8 +128,8 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 VSC Hetzner Proxy Server running on port ${PORT}`);
     console.log(`🔗 Code-server target: http://localhost:${CODE_SERVER_PORT}`);
     console.log(`🌐 Domain mappings:`);
-    Object.entries(DOMAIN_WORKSPACE_MAP).forEach(([domain, workspace]) => {
-        console.log(`   ${domain} → ${workspace}`);
+    Object.entries(DOMAIN_WORKSPACE_MAP).forEach(([domain, config]) => {
+        console.log(`   ${domain}${config.path} → ${config.workspace}`);
     });
 });
 
