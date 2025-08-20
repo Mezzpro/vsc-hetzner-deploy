@@ -27,6 +27,7 @@ COPY start-services.sh /home/coder/start.sh
 COPY themes/ /home/coder/themes/
 COPY login-themes/ /home/coder/login-themes/
 COPY tasks/ /home/coder/tasks/
+COPY keybindings/ /home/coder/keybindings/
 
 # Install Node.js dependencies
 RUN cd /home/coder && npm install --production

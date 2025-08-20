@@ -13,9 +13,9 @@ cat > /home/coder/workspace-mezzpro/.vscode/settings.json <<'EOF'
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
   "workbench.sideBar.location": "left",
-  "workbench.panel.defaultLocation": "right",
+  "workbench.auxiliaryBar.location": "right",
+  "workbench.panel.defaultLocation": "bottom",
   "workbench.panel.opensMaximized": false,
-  "workbench.panel.defaultSize.right": 400,
   "window.menuBarVisibility": "compact",
   "window.commandCenter": true,
   "editor.minimap.enabled": true,
@@ -156,6 +156,9 @@ EOF
 
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-mezzpro/.vscode/tasks.json
+
+# Copy keybindings for secondary sidebar terminal
+cp /home/coder/keybindings/keybindings.json /home/coder/workspace-mezzpro/.vscode/keybindings.json
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-mezzpro/.vscode

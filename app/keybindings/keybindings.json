@@ -1,0 +1,18 @@
+[
+    {
+        "key": "ctrl+shift+`",
+        "command": "workbench.action.terminal.moveToAuxiliaryPanel",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+t",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.terminal.new",
+                "workbench.action.toggleAuxiliaryBar",
+                "workbench.action.terminal.moveToAuxiliaryPanel"
+            ]
+        }
+    }
+]

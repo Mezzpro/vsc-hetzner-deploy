@@ -2,16 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Auto Open Terminal Right",
+            "label": "Auto Terminal Secondary Sidebar",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "echo 'Terminal ready on the right!' && exec bash"],
+            "args": ["-c", "echo 'Terminal ready! Move me to secondary sidebar (right) for best experience.' && exec bash"],
             "group": "build",
             "presentation": {
                 "echo": false,
                 "reveal": "always",
                 "focus": false,
-                "panel": "dedicated",
+                "panel": "new",
                 "showReuseMessage": false,
                 "clear": false,
                 "revealProblems": "never"
