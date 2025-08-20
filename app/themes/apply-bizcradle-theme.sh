@@ -48,6 +48,11 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.cursorStyle": "underline",
     "terminal.integrated.tabs.enabled": false,
+    "terminal.integrated.showExitAlert": false,
+    "terminal.integrated.splitCwd": "workspaceRoot",
+    "terminal.integrated.showLinkHover": false,
+    "terminal.integrated.showOnStartup": "startupProject",
+    "terminal.integrated.focusAfterOpen": true,
     "debug.console.closeOnEnd": true,
     "debug.openDebug": "neverOpen",
     "extensions.ignoreRecommendations": true,
@@ -165,7 +170,9 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "git.autofetch": false,
     "git.confirmSync": true,
     "git.enableSmartCommit": false,
-    "workbench.startupEditor": "none",
+    "workbench.startupEditor": "terminal",
+    "workbench.panel.openOnSessionStart": true,
+    "workbench.view.terminal.visible": true,
     "telemetry.telemetryLevel": "off",
     "update.showReleaseNotes": false,
     "extensions.showRecommendationsOnlyOnDemand": true,
@@ -191,8 +198,11 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-bizcradle/.vscode/tasks.json
 
-# Set up workspace environment variables (hardcoded for testing)
+# Set up workspace environment variables and Gemini CLI PATH
 echo 'export GEMINI_API_KEY="AIzaSyCuvxmglLYKsaFq4JWXudl3Ugol8_5eReU"' >> /home/coder/workspace-bizcradle/.bashrc
+echo 'export NVM_DIR="/home/coder/.nvm"' >> /home/coder/workspace-bizcradle/.bashrc
+echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/workspace-bizcradle/.bashrc
+echo 'export PATH=/home/coder/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/workspace-bizcradle/.bashrc
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-bizcradle/.vscode
