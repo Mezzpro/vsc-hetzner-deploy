@@ -57,7 +57,7 @@ WORKDIR /home/coder
 # Environment variables
 ENV PORT=3000
 ENV SHELL=/bin/bash
-ENV GEMINI_API_KEY="AIzaSyCuvxmglLYKsaFq4JWXudl3Ugol8_5eReU"
+ENV GEMINI_API_KEY=""
 
 # Start services
 ENTRYPOINT ["/home/coder/start.sh"]
