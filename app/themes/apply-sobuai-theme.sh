@@ -16,7 +16,7 @@ cat > /home/coder/workspace-sobuai/.vscode/settings.json << 'EOF'
     "workbench.activityBar.visible": true,
     "workbench.statusBar.visible": true,
     "workbench.sideBar.location": "left",
-    "workbench.panel.defaultLocation": "bottom",
+    "workbench.panel.defaultLocation": "right",
     "window.menuBarVisibility": "compact",
     "window.commandCenter": true,
     "editor.minimap.enabled": true,

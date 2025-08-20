@@ -13,7 +13,7 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": false,
   "workbench.sideBar.location": "left",
-  "workbench.panel.defaultLocation": "bottom",
+  "workbench.panel.defaultLocation": "right",
   "workbench.panel.opensMaximized": "never",
   "window.menuBarVisibility": "toggle",
   "window.commandCenter": false,

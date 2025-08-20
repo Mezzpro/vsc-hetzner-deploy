@@ -16,7 +16,7 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "workbench.activityBar.visible": true,
     "workbench.statusBar.visible": true,
     "workbench.sideBar.location": "left",
-    "workbench.panel.defaultLocation": "left",
+    "workbench.panel.defaultLocation": "right",
     "window.menuBarVisibility": "classic",
     "window.commandCenter": false,
     "window.titleBarStyle": "native",

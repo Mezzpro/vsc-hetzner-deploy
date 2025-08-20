@@ -13,7 +13,7 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
   "workbench.sideBar.location": "right",
-  "workbench.panel.defaultLocation": "bottom",
+  "workbench.panel.defaultLocation": "right",
   "window.menuBarVisibility": "compact",
   "window.commandCenter": true,
   "editor.minimap.enabled": true,
