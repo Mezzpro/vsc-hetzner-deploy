@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install nvm, Node.js 20, and Gemini CLI globally
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash \
-    && export NVM_DIR="/home/coder/.nvm" \
+    && export NVM_DIR="/root/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
     && nvm install 20 \
     && nvm use 20 \
@@ -44,9 +44,9 @@ COPY scripts/ /home/coder/scripts/
 RUN cd /home/coder && npm install --production
 
 # Configure PATH for gemini CLI and set ownership
-RUN echo 'export NVM_DIR="/home/coder/.nvm"' >> /home/coder/.bashrc \
+RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
     && echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/.bashrc \
-    && echo 'export PATH=/home/coder/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/.bashrc \
+    && echo 'export PATH=/root/.nvm/versions/node/v20.19.4/bin:$PATH' >> /home/coder/.bashrc \
     && chmod +x /home/coder/start.sh \
     && chmod +x /home/coder/themes/*.sh \
     && chmod +x /home/coder/scripts/*.js \
