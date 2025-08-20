@@ -174,6 +174,7 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "editor.quickSuggestions": false,
     "editor.wordBasedSuggestions": false,
     "editor.acceptSuggestionOnCommitCharacter": false,
+    "window.title": "Bizcradle Business Platform - ${activeEditorShort}",
     "files.exclude": {
         "**/.*": true,
         "**/.git": true,
