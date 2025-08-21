@@ -2,10 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Auto Terminal Secondary Sidebar",
+            "label": "Auto Gemini Terminal with Fallback",
             "type": "shell",
-            "command": "bash",
-            "args": ["-c", "echo \"Terminal opened in secondary sidebar automatically!\" && exec bash"],
+            "command": "gemini || bash",
             "group": "build",
             "presentation": {
                 "echo": false,
