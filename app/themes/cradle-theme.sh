@@ -138,8 +138,14 @@ EOF
 # Copy auto-terminal tasks.json
 cp /home/coder/tasks/tasks.json /home/coder/workspace-admin/.vscode/tasks.json
 
+# Copy Gemini installation script to admin workspace
+cp /home/coder/scripts/install-gemini.sh /home/coder/workspace-admin/install-gemini.sh
+chmod +x /home/coder/workspace-admin/install-gemini.sh
+
 # No additional environment variables needed
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-admin/.vscode
-echo "✅ Cradle clean white theme applied with auto-terminal"
+chown coder:coder /home/coder/workspace-admin/install-gemini.sh
+
+echo "✅ Cradle clean white theme applied with auto-terminal and Gemini installer"
