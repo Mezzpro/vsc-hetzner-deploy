@@ -123,7 +123,7 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
   "window.titleSeparator": " • ",
   "workbench.activityBar.iconClickBehavior": "hide",
   "problems.visibility": false,
-  "workbench.sideBar.visible": false,
+  "workbench.sideBar.visible": true,
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.value": 3,
   "workbench.editor.limit.perEditorGroup": true,
