@@ -3,6 +3,7 @@
   "displayName": "Cradle Business Suite",
   "description": "Multi-tab business interface with fairies.ai styling for Cradle Systems",
   "version": "1.0.0",
+  "publisher": "cradle-systems",
   "engines": {
     "vscode": "^1.74.0"
   },
