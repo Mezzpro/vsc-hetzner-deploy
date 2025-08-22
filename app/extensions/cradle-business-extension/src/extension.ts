@@ -26,6 +26,8 @@ export async function activate(context: vscode.ExtensionContext) {
         
         console.log('🏢 Current venture:', currentVenture);
         console.log('⚙️ Venture config loaded:', config.name);
+        console.log('🧭 Config navigation:', (config as any).navigation);
+        console.log('🎨 Config theme:', config.theme);
         
         // Set theme
         themeManager.setTheme(config.theme);
@@ -37,14 +39,23 @@ export async function activate(context: vscode.ExtensionContext) {
         // Initialize tab manager
         const tabManager = new TabManager(context, themeManager);
         
-        // Create business navigation
-        const navigationItems = (config as any).navigation || [
+        // Create business navigation with debugging
+        const configNavigation = (config as any).navigation;
+        console.log('🔍 Config navigation exists:', !!configNavigation);
+        console.log('🔍 Config navigation length:', configNavigation?.length);
+        
+        const navigationItems = configNavigation || [
             { label: '🏢 Business Dashboard', command: 'cradle.dashboard', icon: 'dashboard', description: 'View business metrics and overview' },
             { label: '📊 Analytics Center', command: 'cradle.analytics', icon: 'graph', description: 'Business analytics and insights' },
             { label: '📥 Download Center', command: 'cradle.downloads', icon: 'cloud-download', description: 'Download business applications and files' },
             { label: '🔧 Business Tools', command: 'cradle.tools', icon: 'tools', description: 'Essential business utilities' },
             { label: '💬 Chat Assistant', command: 'cradle.chatbot', icon: 'comment', description: 'AI-powered business assistant' }
         ];
+        
+        console.log('📋 Final navigation items:');
+        navigationItems.forEach((item, index) => {
+            console.log(`  ${index + 1}. ${item.label} -> ${item.command}`);
+        });
         
         const businessNavigationProvider = new BusinessNavigationProvider(navigationItems);
         
@@ -177,25 +188,37 @@ export async function activate(context: vscode.ExtensionContext) {
         })));
         
         if (workspaceFolders) {
-            const hasAdminWorkspace = workspaceFolders.some(folder => {
-                const hasAdmin = folder.uri.path.includes('workspace-admin');
-                console.log(`📁 Checking folder: ${folder.uri.path} - Contains admin: ${hasAdmin}`);
-                return hasAdmin;
+            const hasAdminWorkspace = workspaceFolders.some(folder => folder.uri.path.includes('workspace-admin'));
+            const hasMezzProWorkspace = workspaceFolders.some(folder => folder.uri.path.includes('workspace-mezzpro'));
+            
+            workspaceFolders.forEach(folder => {
+                console.log(`📁 Checking folder: ${folder.uri.path} - Admin: ${folder.uri.path.includes('workspace-admin')}, MezzPro: ${folder.uri.path.includes('workspace-mezzpro')}`);
             });
             
             if (hasAdminWorkspace) {
-                console.log('✅ Admin workspace detected, creating dashboard in 3 seconds...');
+                console.log('✅ Admin workspace detected, creating dashboard...');
                 vscode.window.showInformationMessage('Cradle Systems workspace detected! Opening business dashboard...', 'Open Dashboard', 'Skip')
                     .then(selection => {
                         if (selection === 'Open Dashboard') {
                             setTimeout(() => {
-                                console.log('🚀 Auto-executing dashboard command...');
+                                console.log('🚀 Auto-executing cradle dashboard command...');
                                 vscode.commands.executeCommand('cradle.dashboard');
                             }, 1000);
                         }
                     });
+            } else if (hasMezzProWorkspace) {
+                console.log('✅ MezzPro workspace detected, creating blockchain dashboard...');
+                vscode.window.showInformationMessage('MezzPro Blockchain Platform detected! Opening blockchain dashboard...', 'Open Dashboard', 'Skip')
+                    .then(selection => {
+                        if (selection === 'Open Dashboard') {
+                            setTimeout(() => {
+                                console.log('🚀 Auto-executing mezzpro dashboard command...');
+                                vscode.commands.executeCommand('mezzpro.dashboard');
+                            }, 1000);
+                        }
+                    });
             } else {
-                console.log('ℹ️ Non-admin workspace detected');
+                console.log('ℹ️ Non-venture workspace detected');
                 vscode.window.showInformationMessage('Cradle Business Suite loaded - Use sidebar navigation or Command Palette');
             }
         } else {
