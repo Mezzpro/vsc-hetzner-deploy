@@ -1,0 +1,49 @@
+{
+  "name": "Cradle Systems",
+  "workspace": "workspace-admin",
+  "theme": {
+    "primary": "#000000",
+    "secondary": "#495057",
+    "background": "#FFFFFF",
+    "text": "#000000",
+    "accent": "#E9ECEF"
+  },
+  "tabs": ["dashboard", "analytics", "downloads", "tools", "chatbot"],
+  "chatbot": {
+    "position": "rightmost",
+    "toggleable": true,
+    "simulation": true
+  },
+  "navigation": [
+    {
+      "label": "🏢 Business Dashboard",
+      "command": "cradle.dashboard",
+      "icon": "dashboard",
+      "description": "View business metrics and overview"
+    },
+    {
+      "label": "📊 Analytics Center",
+      "command": "cradle.analytics", 
+      "icon": "graph",
+      "description": "Business analytics and insights"
+    },
+    {
+      "label": "📥 Download Center",
+      "command": "cradle.downloads",
+      "icon": "cloud-download", 
+      "description": "Download business applications and files"
+    },
+    {
+      "label": "🔧 Business Tools",
+      "command": "cradle.tools",
+      "icon": "tools",
+      "description": "Essential business utilities"
+    },
+    {
+      "label": "💬 Chat Assistant",
+      "command": "cradle.chatbot",
+      "icon": "comment",
+      "description": "AI-powered business assistant"
+    }
+  ]
+}

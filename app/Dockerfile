@@ -44,12 +44,12 @@ COPY extensions/ /home/coder/extensions/
 # Install Node.js dependencies and build extension
 RUN cd /home/coder && npm install --production
 
-# Build Fairies Business Interface Extension
-RUN cd /home/coder/extensions/fairies-business-interface \
+# Build Cradle Business Extension  
+RUN cd /home/coder/extensions/cradle-business-extension \
     && npm install \
     && npm run compile \
     && mkdir -p /home/coder/.local/share/code-server/extensions \
-    && cp -r /home/coder/extensions/fairies-business-interface /home/coder/.local/share/code-server/extensions/
+    && cp -r /home/coder/extensions/cradle-business-extension /home/coder/.local/share/code-server/extensions/
 
 # Configure PATH for gemini CLI and set ownership
 RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
@@ -58,7 +58,7 @@ RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
     && chmod +x /home/coder/start.sh \
     && chmod +x /home/coder/themes/*.sh \
     && chmod +x /home/coder/scripts/*.js \
-    && chmod +x /home/coder/extensions/fairies-business-interface/build.sh || true \
+    && chmod +x /home/coder/extensions/cradle-business-extension/build.sh || true \
     && chown -R coder:coder /home/coder
 
 # Switch back to coder user
