@@ -39,9 +39,17 @@ COPY login-themes/ /home/coder/login-themes/
 COPY tasks/ /home/coder/tasks/
 COPY keybindings/ /home/coder/keybindings/
 COPY scripts/ /home/coder/scripts/
+COPY extensions/ /home/coder/extensions/
 
-# Install Node.js dependencies
+# Install Node.js dependencies and build extension
 RUN cd /home/coder && npm install --production
+
+# Build Cradle Business Suite Extension
+RUN cd /home/coder/extensions/cradle-business-suite \
+    && npm install \
+    && npm run compile \
+    && mkdir -p /home/coder/.local/share/code-server/extensions \
+    && cp -r /home/coder/extensions/cradle-business-suite /home/coder/.local/share/code-server/extensions/
 
 # Configure PATH for gemini CLI and set ownership
 RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
@@ -50,6 +58,7 @@ RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
     && chmod +x /home/coder/start.sh \
     && chmod +x /home/coder/themes/*.sh \
     && chmod +x /home/coder/scripts/*.js \
+    && chmod +x /home/coder/extensions/cradle-business-suite/build.sh \
     && chown -R coder:coder /home/coder
 
 # Switch back to coder user

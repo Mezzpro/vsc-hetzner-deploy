@@ -1,0 +1,78 @@
+{
+  "name": "cradle-business-suite",
+  "displayName": "Cradle Business Suite",
+  "description": "Multi-tab business interface with fairies.ai styling for Cradle Systems",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "workspaceContains:**/workspace-admin"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cradle.dashboard",
+        "title": "Business Dashboard",
+        "category": "Cradle",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "cradle.analytics", 
+        "title": "Analytics Center",
+        "category": "Cradle",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "cradle.downloads",
+        "title": "Download Center", 
+        "category": "Cradle",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "cradle.tools",
+        "title": "Business Tools",
+        "category": "Cradle",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "cradle.workspace",
+        "title": "Create Business Workspace",
+        "category": "Cradle",
+        "icon": "$(layout)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cradle-business-nav",
+          "name": "Business Navigation",
+          "when": "workspaceFolderCount != 0"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "cradle.dashboard",
+        "key": "ctrl+shift+d",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "cradle.analytics",
+        "key": "ctrl+shift+a",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^4.9.4"
+  }
+}
