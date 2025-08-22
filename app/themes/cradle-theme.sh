@@ -140,8 +140,7 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
 }
 EOF
 
-# Copy auto-terminal tasks.json
-cp /home/coder/tasks/tasks.json /home/coder/workspace-admin/.vscode/tasks.json
+# No auto-terminal tasks - clean business interface only
 
 # Copy Gemini installation script to admin workspace
 cp /home/coder/scripts/install-gemini.sh /home/coder/workspace-admin/install-gemini.sh

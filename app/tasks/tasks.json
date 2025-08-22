@@ -1,26 +1,4 @@
 {
     "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Auto Gemini Terminal with Fallback",
-            "type": "shell",
-            "command": "gemini || bash",
-            "group": "build",
-            "presentation": {
-                "echo": false,
-                "reveal": "always",
-                "focus": false,
-                "panel": "new",
-                "showReuseMessage": false,
-                "clear": false,
-                "revealProblems": "never",
-                "group": "terminalInSidebar"
-            },
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
-            "isBackground": true,
-            "problemMatcher": []
-        }
-    ]
+    "tasks": []
 }

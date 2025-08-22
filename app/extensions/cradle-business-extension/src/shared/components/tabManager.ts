@@ -60,7 +60,7 @@ export class TabManager implements ITabManager {
         const panel = vscode.window.createWebviewPanel(
             'cradle-analytics',
             '📊 Analytics Center',
-            vscode.ViewColumn.Two,
+            vscode.ViewColumn.Active,
             {
                 enableScripts: true,
                 retainContextWhenHidden: true
@@ -82,7 +82,7 @@ export class TabManager implements ITabManager {
         const panel = vscode.window.createWebviewPanel(
             'cradle-downloads',
             '📥 Download Center',
-            vscode.ViewColumn.Three,
+            vscode.ViewColumn.Active,
             {
                 enableScripts: true,
                 retainContextWhenHidden: true
@@ -126,7 +126,7 @@ export class TabManager implements ITabManager {
         const panel = vscode.window.createWebviewPanel(
             'cradle-chatbot',
             '💬 Chat Assistant',
-            vscode.ViewColumn.Beside,
+            vscode.ViewColumn.Two,
             {
                 enableScripts: true,
                 retainContextWhenHidden: true
