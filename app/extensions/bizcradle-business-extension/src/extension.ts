@@ -1,0 +1,155 @@
+import * as vscode from 'vscode';
+import { ThemeManager } from './core/themeManager';
+import { MarketingTabManager } from './tabs/marketingTabManager';
+import { MarketingNavProvider } from './navigation/marketingNavProvider';
+
+export async function activate(context: vscode.ExtensionContext) {
+    console.log('🚀 BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION STARTED!');
+    console.log('📍 Extension Context Path:', context.extensionPath);
+    
+    // Show activation notification
+    vscode.window.showInformationMessage('🚀 Bizcradle Marketing Platform Activated!');
+
+    try {
+        // Check if we're in Bizcradle workspace
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        const isBizcradleWorkspace = workspaceFolders?.some(folder => 
+            folder.uri.path.includes('workspace-bizcradle')
+        );
+
+        if (!isBizcradleWorkspace) {
+            console.log('ℹ️ Not in Bizcradle workspace, extension will remain dormant');
+            return;
+        }
+
+        console.log('✅ Bizcradle workspace detected, initializing marketing platform...');
+
+        // Initialize core managers
+        const themeManager = new ThemeManager();
+        const tabManager = new MarketingTabManager(context);
+        
+        // Configure VS Code UI for clean marketing interface
+        await configureMarketingUI();
+        
+        // Create marketing navigation
+        const marketingNavProvider = new MarketingNavProvider();
+        
+        console.log('🌳 Creating Bizcradle Marketing Navigation TreeView...');
+        const treeView = vscode.window.createTreeView('bizcradle-marketing-nav', {
+            treeDataProvider: marketingNavProvider,
+            showCollapseAll: false,
+            canSelectMany: false
+        });
+        
+        console.log('✅ Marketing Navigation TreeView created, visible:', treeView.visible);
+
+        // Register Bizcradle marketing commands
+        const disposables = [
+            // Marketing Dashboard command
+            vscode.commands.registerCommand('bizcradle.dashboard', () => {
+                console.log('📊 Marketing Dashboard command executed!');
+                vscode.window.showInformationMessage('Opening Marketing Dashboard...');
+                tabManager.openDashboard();
+            }),
+
+            // Campaign Manager command  
+            vscode.commands.registerCommand('bizcradle.campaigns', () => {
+                console.log('📢 Campaign Manager command executed!');
+                vscode.window.showInformationMessage('Opening Campaign Manager...');
+                tabManager.openCampaigns();
+            }),
+
+            // Content Studio command
+            vscode.commands.registerCommand('bizcradle.content', () => {
+                console.log('📝 Content Studio command executed!');
+                vscode.window.showInformationMessage('Opening Content Studio...');
+                tabManager.openContent();
+            }),
+
+            // Analytics Hub command
+            vscode.commands.registerCommand('bizcradle.analytics', () => {
+                console.log('📈 Analytics Hub command executed!');
+                vscode.window.showInformationMessage('Opening Analytics Hub...');
+                tabManager.openAnalytics();
+            }),
+
+            // Download Desktop command
+            vscode.commands.registerCommand('bizcradle.download', () => {
+                console.log('💻 Download Desktop command executed!');
+                vscode.window.showInformationMessage('Opening Download Center...');
+                tabManager.openDownload();
+            }),
+
+            // Web Portal command
+            vscode.commands.registerCommand('bizcradle.weblink', () => {
+                console.log('🔗 Open Web Portal command executed!');
+                vscode.window.showInformationMessage('Opening Web Portal...');
+                tabManager.openWebPortal();
+            })
+        ];
+
+        context.subscriptions.push(...disposables, treeView);
+        console.log('✅ All Bizcradle commands and TreeView registered successfully!');
+
+        // Auto-create marketing dashboard
+        console.log('✅ Bizcradle workspace detected, creating marketing dashboard...');
+        vscode.window.showInformationMessage('Bizcradle Marketing Platform detected! Opening dashboard...', 'Open Dashboard', 'Skip')
+            .then(selection => {
+                if (selection === 'Open Dashboard') {
+                    setTimeout(() => {
+                        console.log('🚀 Auto-executing marketing dashboard command...');
+                        vscode.commands.executeCommand('bizcradle.dashboard');
+                    }, 1000);
+                }
+            });
+        
+        console.log('✅ BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION COMPLETED!');
+
+    } catch (error) {
+        console.error('❌ Bizcradle extension activation failed:', error);
+        vscode.window.showErrorMessage(`Bizcradle Marketing Platform activation failed: ${error}`);
+    }
+}
+
+async function configureMarketingUI(): Promise<void> {
+    console.log('🎨 Configuring VS Code UI for marketing platform...');
+    
+    try {
+        const config = vscode.workspace.getConfiguration();
+        
+        // Hide unnecessary VS Code UI elements for clean marketing interface
+        await config.update('workbench.activityBar.visible', true, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.statusBar.visible', true, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.editor.showTabs', true, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.editor.tabCloseButton', 'right', vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.startupEditor', 'none', vscode.ConfigurationTarget.Workspace);
+        
+        // Hide outline, timeline, and terminal panel for clean interface
+        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('timeline.excludeSources', ['git-history', 'timeline-source'], vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.panel.defaultLocation', 'bottom', vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.panel.opensMaximized', 'never', vscode.ConfigurationTarget.Workspace);
+        
+        // Explorer and sidebar settings
+        await config.update('explorer.compactFolders', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.sideBar.location', 'left', vscode.ConfigurationTarget.Workspace);
+        
+        // Clean professional appearance settings
+        await config.update('workbench.tree.indent', 12, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.list.smoothScrolling', true, vscode.ConfigurationTarget.Workspace);
+        await config.update('editor.minimap.enabled', false, vscode.ConfigurationTarget.Workspace);
+        
+        // Enable multi-column editor layout support
+        await config.update('workbench.editor.enablePreview', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.editor.enablePreviewFromQuickOpen', false, vscode.ConfigurationTarget.Workspace);
+        
+        console.log('✅ VS Code UI configured for marketing platform');
+    } catch (error) {
+        console.error('❌ Failed to configure VS Code UI:', error);
+    }
+}
+
+export function deactivate() {
+    console.log('🚀 Bizcradle Marketing Platform Extension deactivated');
+}

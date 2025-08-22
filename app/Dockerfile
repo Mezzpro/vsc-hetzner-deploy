@@ -57,6 +57,12 @@ RUN cd /home/coder/extensions/mezzpro-blockchain-extension \
     && npm run compile \
     && cp -r /home/coder/extensions/mezzpro-blockchain-extension /home/coder/.local/share/code-server/extensions/
 
+# Build Bizcradle Business Extension
+RUN cd /home/coder/extensions/bizcradle-business-extension \
+    && npm install \
+    && npm run compile \
+    && cp -r /home/coder/extensions/bizcradle-business-extension /home/coder/.local/share/code-server/extensions/
+
 # Configure PATH for gemini CLI and set ownership
 RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
     && echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/.bashrc \
@@ -66,6 +72,7 @@ RUN echo 'export NVM_DIR="/root/.nvm"' >> /home/coder/.bashrc \
     && chmod +x /home/coder/scripts/*.js \
     && chmod +x /home/coder/extensions/cradle-business-extension/build.sh || true \
     && chmod +x /home/coder/extensions/mezzpro-blockchain-extension/build.sh || true \
+    && chmod +x /home/coder/extensions/bizcradle-business-extension/build.sh || true \
     && chown -R coder:coder /home/coder
 
 # Switch back to coder user

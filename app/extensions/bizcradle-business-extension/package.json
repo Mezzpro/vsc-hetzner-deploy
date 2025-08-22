@@ -1,0 +1,75 @@
+{
+    "name": "bizcradle-business-extension",
+    "displayName": "Bizcradle Marketing Platform",
+    "description": "Digital marketing and content creation automated platform for Bizcradle",
+    "version": "1.0.0",
+    "publisher": "bizcradle-systems",
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "main": "./out/extension.js",
+    "activationEvents": [
+        "*"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "bizcradle.dashboard",
+                "title": "📊 Marketing Dashboard",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.campaigns",
+                "title": "📢 Campaign Manager",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.content",
+                "title": "📝 Content Studio",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.analytics",
+                "title": "📈 Analytics Hub",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.download",
+                "title": "💻 Download Desktop",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.weblink",
+                "title": "🔗 Open Web Portal",
+                "category": "Bizcradle"
+            }
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "bizcradle-marketing-nav",
+                    "name": "🚀 Bizcradle Platform",
+                    "when": "true"
+                }
+            ]
+        },
+        "viewsWelcome": [
+            {
+                "view": "bizcradle-marketing-nav",
+                "contents": "Welcome to Bizcradle Marketing Platform!\n[📊 Open Dashboard](command:bizcradle.dashboard)"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.74.0",
+        "typescript": "^4.9.4"
+    }
+}
