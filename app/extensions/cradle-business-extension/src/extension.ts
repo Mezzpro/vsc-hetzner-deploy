@@ -120,6 +120,47 @@ export async function activate(context: vscode.ExtensionContext) {
                 setTimeout(() => {
                     tabManager.createOrFocusTab('tools', () => tabManager.createToolsTab());
                 }, 1500);
+            }),
+
+            // MezzPro Blockchain Commands
+            vscode.commands.registerCommand('mezzpro.dashboard', () => {
+                console.log('⛓️ MezzPro Dashboard command executed!');
+                vscode.window.showInformationMessage('Opening Blockchain Dashboard...');
+                tabManager.createOrFocusTab('dashboard', () => 
+                    tabManager.createDashboardTab()
+                );
+            }),
+
+            vscode.commands.registerCommand('mezzpro.analytics', () => {
+                console.log('📊 MezzPro Analytics command executed!');
+                vscode.window.showInformationMessage('Opening Analytics Hub...');
+                tabManager.createOrFocusTab('analytics', () =>
+                    tabManager.createAnalyticsTab()
+                );
+            }),
+
+            vscode.commands.registerCommand('mezzpro.network', () => {
+                console.log('🔗 MezzPro Network command executed!');
+                vscode.window.showInformationMessage('Opening Node Network...');
+                tabManager.createOrFocusTab('network', () =>
+                    tabManager.createDownloadsTab() // Reuse downloads tab for network management
+                );
+            }),
+
+            vscode.commands.registerCommand('mezzpro.contracts', () => {
+                console.log('⚡ MezzPro Contracts command executed!');
+                vscode.window.showInformationMessage('Opening Smart Contracts...');
+                tabManager.createOrFocusTab('contracts', () =>
+                    tabManager.createToolsTab() // Reuse tools tab for contract tools
+                );
+            }),
+
+            vscode.commands.registerCommand('mezzpro.chatbot', () => {
+                console.log('💬 MezzPro AI Assistant command executed!');
+                vscode.window.showInformationMessage('Opening Blockchain AI Assistant...');
+                tabManager.createOrFocusTab('chatbot', () =>
+                    tabManager.createChatbotTab()
+                );
             })
         ];
 

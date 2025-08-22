@@ -49,6 +49,36 @@
         "title": "Create Business Workspace",
         "category": "Cradle",
         "icon": "$(layout)"
+      },
+      {
+        "command": "mezzpro.dashboard",
+        "title": "Blockchain Dashboard",
+        "category": "MezzPro",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "mezzpro.analytics", 
+        "title": "Analytics Hub",
+        "category": "MezzPro",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "mezzpro.network",
+        "title": "Node Network", 
+        "category": "MezzPro",
+        "icon": "$(server)"
+      },
+      {
+        "command": "mezzpro.contracts",
+        "title": "Smart Contracts",
+        "category": "MezzPro",
+        "icon": "$(code)"
+      },
+      {
+        "command": "mezzpro.chatbot",
+        "title": "AI Assistant",
+        "category": "MezzPro",
+        "icon": "$(comment)"
       }
     ],
     "views": {

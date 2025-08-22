@@ -31,6 +31,16 @@ export class ThemeManager {
                 --cradle-shadow: rgba(0, 0, 0, 0.1);
                 --cradle-border: rgba(0, 0, 0, 0.1);
                 --cradle-hover: rgba(0, 0, 0, 0.05);
+                
+                /* MezzPro Blockchain Theme Variables */
+                --mezzpro-primary: ${theme.primary === '#00ff41' ? theme.primary : '#00ff41'};
+                --mezzpro-secondary: ${theme.secondary === '#006600' ? theme.secondary : '#006600'};
+                --mezzpro-background: ${theme.background === '#000000' ? theme.background : '#000000'};
+                --mezzpro-text: ${theme.text === '#00ff41' ? theme.text : '#00ff41'};
+                --mezzpro-accent: ${theme.accent === '#003300' ? theme.accent : '#003300'};
+                --mezzpro-glow: 0 0 10px var(--mezzpro-primary);
+                --mezzpro-border: rgba(0, 255, 65, 0.3);
+                --mezzpro-hover: rgba(0, 255, 65, 0.1);
             }
 
             body {
@@ -247,6 +257,70 @@ export class ThemeManager {
 
             .animate-fade-in {
                 animation: fadeInUp 0.3s ease;
+            }
+
+            /* MezzPro Blockchain Theme Styles */
+            .mezzpro-theme {
+                background: var(--mezzpro-background) !important;
+                color: var(--mezzpro-text) !important;
+            }
+            
+            .mezzpro-theme .card {
+                background: var(--mezzpro-background);
+                border: 1px solid var(--mezzpro-border);
+                box-shadow: var(--mezzpro-glow);
+            }
+            
+            .mezzpro-theme .download-btn {
+                background: var(--mezzpro-primary);
+                color: var(--mezzpro-background);
+                border: 1px solid var(--mezzpro-primary);
+                box-shadow: var(--mezzpro-glow);
+                text-shadow: 0 0 5px currentColor;
+            }
+            
+            .mezzpro-theme .download-btn:hover {
+                background: var(--mezzpro-secondary);
+                box-shadow: 0 0 20px var(--mezzpro-primary);
+                transform: translateY(-2px);
+            }
+            
+            .mezzpro-theme .header {
+                background: var(--mezzpro-background);
+                border-bottom: 2px solid var(--mezzpro-border);
+                box-shadow: 0 2px 10px var(--mezzpro-glow);
+            }
+            
+            .mezzpro-theme .metric {
+                border: 1px solid var(--mezzpro-border);
+                background: var(--mezzpro-accent);
+            }
+            
+            .mezzpro-theme .metric-value {
+                color: var(--mezzpro-primary);
+                text-shadow: var(--mezzpro-glow);
+            }
+            
+            .mezzpro-theme .message.user {
+                background: var(--mezzpro-primary);
+                color: var(--mezzpro-background);
+                box-shadow: var(--mezzpro-glow);
+            }
+            
+            .mezzpro-theme .message.assistant {
+                background: var(--mezzpro-accent);
+                color: var(--mezzpro-text);
+                border: 1px solid var(--mezzpro-border);
+            }
+            
+            /* Matrix-style animation */
+            @keyframes matrixGlow {
+                0%, 100% { text-shadow: 0 0 5px var(--mezzpro-primary); }
+                50% { text-shadow: 0 0 15px var(--mezzpro-primary), 0 0 25px var(--mezzpro-primary); }
+            }
+            
+            .mezzpro-theme .matrix-glow {
+                animation: matrixGlow 2s ease-in-out infinite;
             }
 
             /* Responsive */

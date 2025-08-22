@@ -1,0 +1,50 @@
+{
+  "name": "MezzPro Blockchain Platform",
+  "workspace": "workspace-mezzpro",
+  "theme": {
+    "primary": "#00ff41",
+    "secondary": "#006600", 
+    "background": "#000000",
+    "text": "#00ff41",
+    "accent": "#003300"
+  },
+  "tabs": ["dashboard", "analytics", "network", "contracts", "chatbot"],
+  "chatbot": {
+    "position": "rightmost",
+    "toggleable": true,
+    "simulation": true,
+    "systemPrompt": "You are an AI assistant for MezzPro Blockchain Platform. Help users with blockchain development, smart contracts, DeFi protocols, and cryptocurrency operations."
+  },
+  "navigation": [
+    {
+      "label": "⛓️ Blockchain Dashboard",
+      "command": "mezzpro.dashboard",
+      "icon": "pulse",
+      "description": "Network status and blockchain overview"
+    },
+    {
+      "label": "📊 Analytics Hub",
+      "command": "mezzpro.analytics", 
+      "icon": "graph",
+      "description": "Transaction analytics and network metrics"
+    },
+    {
+      "label": "🔗 Node Network",
+      "command": "mezzpro.network",
+      "icon": "server",
+      "description": "Node management and validator tools"
+    },
+    {
+      "label": "⚡ Smart Contracts",
+      "command": "mezzpro.contracts",
+      "icon": "code",
+      "description": "Contract deployment and testing tools"
+    },
+    {
+      "label": "💬 AI Assistant",
+      "command": "mezzpro.chatbot",
+      "icon": "comment",
+      "description": "Blockchain-focused AI assistant"
+    }
+  ]
+}
