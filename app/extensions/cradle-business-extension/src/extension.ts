@@ -126,32 +126,32 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.commands.registerCommand('mezzpro.dashboard', () => {
                 console.log('⛓️ MezzPro Dashboard command executed!');
                 vscode.window.showInformationMessage('Opening Blockchain Dashboard...');
-                tabManager.createOrFocusTab('dashboard', () => 
-                    tabManager.createDashboardTab()
+                tabManager.createOrFocusTab('mezzpro-dashboard', () => 
+                    tabManager.createMezzProDashboardTab()
                 );
             }),
 
             vscode.commands.registerCommand('mezzpro.analytics', () => {
                 console.log('📊 MezzPro Analytics command executed!');
                 vscode.window.showInformationMessage('Opening Analytics Hub...');
-                tabManager.createOrFocusTab('analytics', () =>
-                    tabManager.createAnalyticsTab()
+                tabManager.createOrFocusTab('mezzpro-analytics', () =>
+                    tabManager.createMezzProAnalyticsTab()
                 );
             }),
 
             vscode.commands.registerCommand('mezzpro.network', () => {
                 console.log('🔗 MezzPro Network command executed!');
                 vscode.window.showInformationMessage('Opening Node Network...');
-                tabManager.createOrFocusTab('network', () =>
-                    tabManager.createDownloadsTab() // Reuse downloads tab for network management
+                tabManager.createOrFocusTab('mezzpro-network', () =>
+                    tabManager.createMezzProNetworkTab()
                 );
             }),
 
             vscode.commands.registerCommand('mezzpro.contracts', () => {
                 console.log('⚡ MezzPro Contracts command executed!');
                 vscode.window.showInformationMessage('Opening Smart Contracts...');
-                tabManager.createOrFocusTab('contracts', () =>
-                    tabManager.createToolsTab() // Reuse tools tab for contract tools
+                tabManager.createOrFocusTab('mezzpro-contracts', () =>
+                    tabManager.createMezzProContractsTab()
                 );
             }),
 
