@@ -3,20 +3,20 @@ import * as vscode from 'vscode';
 export class BusinessItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
-        public readonly command: string,
+        public readonly commandName: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.None
     ) {
         super(label, collapsibleState);
         
         this.tooltip = `Open ${label}`;
         this.command = {
-            command: command,
+            command: commandName,
             title: label,
             arguments: [this]
         };
 
         // Set icons based on the command
-        switch (command) {
+        switch (commandName) {
             case 'cradle.dashboard':
                 this.iconPath = new vscode.ThemeIcon('dashboard');
                 break;
