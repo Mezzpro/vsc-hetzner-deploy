@@ -56,13 +56,18 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Auto-create dashboard on activation if in Cradle workspace
     const workspaceFolders = vscode.workspace.workspaceFolders;
+    console.log('Extension activated, checking workspace:', workspaceFolders?.map(f => f.uri.path));
+    
     if (workspaceFolders && workspaceFolders.some(folder => 
-        folder.name.includes('workspace-admin') || folder.uri.path.includes('workspace-admin')
+        folder.uri.path.includes('workspace-admin')
     )) {
+        console.log('Cradle workspace detected, creating dashboard...');
         // Delay to ensure VS Code is fully loaded
         setTimeout(() => {
             vscode.commands.executeCommand('cradle.dashboard');
-        }, 1000);
+        }, 2000);
+    } else {
+        console.log('Non-Cradle workspace or no workspace folders found');
     }
 }
 
