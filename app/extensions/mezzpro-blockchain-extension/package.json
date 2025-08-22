@@ -1,0 +1,90 @@
+{
+  "name": "mezzpro-blockchain-extension",
+  "displayName": "MezzPro Blockchain Platform",
+  "description": "Professional blockchain interface for MezzPro with matrix green theme",
+  "version": "1.0.0",
+  "publisher": "mezzpro-systems",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mezzpro.dashboard",
+        "title": "Blockchain Dashboard",
+        "category": "MezzPro",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "mezzpro.analytics", 
+        "title": "Analytics Hub",
+        "category": "MezzPro",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "mezzpro.network",
+        "title": "Node Network", 
+        "category": "MezzPro",
+        "icon": "$(server)"
+      },
+      {
+        "command": "mezzpro.contracts",
+        "title": "Smart Contracts",
+        "category": "MezzPro",
+        "icon": "$(code)"
+      },
+      {
+        "command": "mezzpro.chatbot",
+        "title": "AI Assistant",
+        "category": "MezzPro",
+        "icon": "$(comment)"
+      },
+      {
+        "command": "mezzpro.workspace",
+        "title": "Create Blockchain Workspace",
+        "category": "MezzPro",
+        "icon": "$(layout)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "mezzpro-blockchain-nav",
+          "name": "Blockchain Navigation",
+          "when": "workspaceFolderCount != 0"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "mezzpro.dashboard",
+        "key": "ctrl+shift+b",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mezzpro.analytics",
+        "key": "ctrl+shift+m",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mezzpro.chatbot",
+        "key": "ctrl+shift+z",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^4.9.4"
+  }
+}
