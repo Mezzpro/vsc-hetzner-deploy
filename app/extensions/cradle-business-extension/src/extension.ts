@@ -53,7 +53,7 @@ export async function activate(context: vscode.ExtensionContext) {
         ];
         
         console.log('📋 Final navigation items:');
-        navigationItems.forEach((item, index) => {
+        navigationItems.forEach((item: any, index: number) => {
             console.log(`  ${index + 1}. ${item.label} -> ${item.command}`);
         });
         
