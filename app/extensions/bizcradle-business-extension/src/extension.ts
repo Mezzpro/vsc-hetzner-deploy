@@ -7,8 +7,7 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('🚀 BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION STARTED!');
     console.log('📍 Extension Context Path:', context.extensionPath);
     
-    // Show activation notification
-    vscode.window.showInformationMessage('🚀 Bizcradle Marketing Platform Activated!');
+    // Extension activating silently
 
     try {
         // Check if we're in Bizcradle workspace
@@ -48,42 +47,36 @@ export async function activate(context: vscode.ExtensionContext) {
             // Marketing Dashboard command
             vscode.commands.registerCommand('bizcradle.dashboard', () => {
                 console.log('📊 Marketing Dashboard command executed!');
-                vscode.window.showInformationMessage('Opening Marketing Dashboard...');
                 tabManager.openDashboard();
             }),
 
             // Campaign Manager command  
             vscode.commands.registerCommand('bizcradle.campaigns', () => {
                 console.log('📢 Campaign Manager command executed!');
-                vscode.window.showInformationMessage('Opening Campaign Manager...');
                 tabManager.openCampaigns();
             }),
 
             // Content Studio command
             vscode.commands.registerCommand('bizcradle.content', () => {
                 console.log('📝 Content Studio command executed!');
-                vscode.window.showInformationMessage('Opening Content Studio...');
                 tabManager.openContent();
             }),
 
             // Analytics Hub command
             vscode.commands.registerCommand('bizcradle.analytics', () => {
                 console.log('📈 Analytics Hub command executed!');
-                vscode.window.showInformationMessage('Opening Analytics Hub...');
                 tabManager.openAnalytics();
             }),
 
             // Download Desktop command
             vscode.commands.registerCommand('bizcradle.download', () => {
                 console.log('💻 Download Desktop command executed!');
-                vscode.window.showInformationMessage('Opening Download Center...');
                 tabManager.openDownload();
             }),
 
             // Web Portal command
             vscode.commands.registerCommand('bizcradle.weblink', () => {
                 console.log('🔗 Open Web Portal command executed!');
-                vscode.window.showInformationMessage('Opening Web Portal...');
                 tabManager.openWebPortal();
             })
         ];
@@ -91,17 +84,12 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(...disposables, treeView);
         console.log('✅ All Bizcradle commands and TreeView registered successfully!');
 
-        // Auto-create marketing dashboard
-        console.log('✅ Bizcradle workspace detected, creating marketing dashboard...');
-        vscode.window.showInformationMessage('Bizcradle Marketing Platform detected! Opening dashboard...', 'Open Dashboard', 'Skip')
-            .then(selection => {
-                if (selection === 'Open Dashboard') {
-                    setTimeout(() => {
-                        console.log('🚀 Auto-executing marketing dashboard command...');
-                        vscode.commands.executeCommand('bizcradle.dashboard');
-                    }, 1000);
-                }
-            });
+        // Auto-open marketing dashboard
+        console.log('✅ Bizcradle workspace detected, auto-opening marketing dashboard...');
+        setTimeout(() => {
+            console.log('🚀 Auto-executing marketing dashboard command...');
+            vscode.commands.executeCommand('bizcradle.dashboard');
+        }, 1000);
         
         console.log('✅ BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION COMPLETED!');
 
@@ -118,11 +106,20 @@ async function configureMarketingUI(): Promise<void> {
         const config = vscode.workspace.getConfiguration();
         
         // Hide unnecessary VS Code UI elements for clean marketing interface
-        await config.update('workbench.activityBar.visible', true, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.statusBar.visible', true, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.activityBar.visible', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.statusBar.visible', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.editor.showTabs', true, vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.editor.tabCloseButton', 'right', vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.startupEditor', 'none', vscode.ConfigurationTarget.Workspace);
+        
+        // Hide outline, timeline, search
+        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.view.search.visible', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('explorer.openEditors.visible', 0, vscode.ConfigurationTarget.Workspace);
+        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Workspace);
         
         // Hide outline, timeline, and terminal panel for clean interface
         await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);

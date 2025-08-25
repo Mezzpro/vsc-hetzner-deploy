@@ -7,8 +7,7 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('⛓️ MEZZPRO BLOCKCHAIN EXTENSION ACTIVATION STARTED!');
     console.log('📍 Extension Context Path:', context.extensionPath);
     
-    // Show activation notification
-    vscode.window.showInformationMessage('⛓️ MezzPro Blockchain Platform Activated!');
+    // Extension activating silently
 
     try {
         // Check if we're in MezzPro workspace
@@ -81,7 +80,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Blockchain Dashboard command
             vscode.commands.registerCommand('mezzpro.dashboard', () => {
                 console.log('⛓️ Blockchain Dashboard command executed!');
-                vscode.window.showInformationMessage('Opening Blockchain Dashboard...');
                 tabManager.createOrFocusTab('dashboard', () => 
                     tabManager.createDashboardTab()
                 );
@@ -90,7 +88,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Analytics Hub command  
             vscode.commands.registerCommand('mezzpro.analytics', () => {
                 console.log('📊 Analytics Hub command executed!');
-                vscode.window.showInformationMessage('Opening Analytics Hub...');
                 tabManager.createOrFocusTab('analytics', () =>
                     tabManager.createAnalyticsTab()
                 );
@@ -99,7 +96,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Node Network command
             vscode.commands.registerCommand('mezzpro.network', () => {
                 console.log('🔗 Node Network command executed!');
-                vscode.window.showInformationMessage('Opening Node Network...');
                 tabManager.createOrFocusTab('network', () =>
                     tabManager.createNetworkTab()
                 );
@@ -108,7 +104,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Smart Contracts command
             vscode.commands.registerCommand('mezzpro.contracts', () => {
                 console.log('⚡ Smart Contracts command executed!');
-                vscode.window.showInformationMessage('Opening Smart Contracts...');
                 tabManager.createOrFocusTab('contracts', () =>
                     tabManager.createContractsTab()
                 );
@@ -117,7 +112,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // AI Assistant command
             vscode.commands.registerCommand('mezzpro.chatbot', () => {
                 console.log('💬 AI Assistant command executed!');
-                vscode.window.showInformationMessage('Opening Blockchain AI Assistant...');
                 tabManager.createOrFocusTab('chatbot', () =>
                     tabManager.createChatbotTab()
                 );
@@ -126,7 +120,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Blockchain Workspace layout command
             vscode.commands.registerCommand('mezzpro.workspace', () => {
                 console.log('⛓️ Blockchain Workspace layout command executed!');
-                vscode.window.showInformationMessage('Creating Blockchain Workspace Layout...');
                 
                 // Create all tabs in sequence
                 tabManager.createOrFocusTab('dashboard', () => tabManager.createDashboardTab());
@@ -145,17 +138,12 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(...disposables, treeView);
         console.log('✅ All MezzPro commands and TreeView registered successfully!');
 
-        // Auto-create blockchain dashboard
-        console.log('✅ MezzPro workspace detected, creating blockchain dashboard...');
-        vscode.window.showInformationMessage('MezzPro Blockchain Platform detected! Opening blockchain dashboard...', 'Open Dashboard', 'Skip')
-            .then(selection => {
-                if (selection === 'Open Dashboard') {
-                    setTimeout(() => {
-                        console.log('🚀 Auto-executing blockchain dashboard command...');
-                        vscode.commands.executeCommand('mezzpro.dashboard');
-                    }, 1000);
-                }
-            });
+        // Auto-open blockchain dashboard
+        console.log('✅ MezzPro workspace detected, auto-opening blockchain dashboard...');
+        setTimeout(() => {
+            console.log('🚀 Auto-executing blockchain dashboard command...');
+            vscode.commands.executeCommand('mezzpro.dashboard');
+        }, 1000);
         
         console.log('✅ MEZZPRO BLOCKCHAIN EXTENSION ACTIVATION COMPLETED!');
 
@@ -174,13 +162,21 @@ async function configureBlockchainUI(): Promise<void> {
         // Hide unnecessary VS Code UI elements for clean blockchain interface
         await config.update('workbench.activityBar.visible', false, vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.statusBar.visible', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.editor.showTabs', true, vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.editor.tabCloseButton', 'off', vscode.ConfigurationTarget.Workspace);
         await config.update('workbench.startupEditor', 'none', vscode.ConfigurationTarget.Workspace);
         
+        // Hide outline, timeline, search
+        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Workspace);
+        await config.update('workbench.view.search.visible', false, vscode.ConfigurationTarget.Workspace);
+        await config.update('explorer.openEditors.visible', 0, vscode.ConfigurationTarget.Workspace);
+        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Workspace);
+        
         // Explorer settings
         await config.update('explorer.compactFolders', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('timeline.excludeSources', ['git-history'], vscode.ConfigurationTarget.Workspace);
         
         // Clean blockchain appearance settings
         await config.update('workbench.tree.indent', 8, vscode.ConfigurationTarget.Workspace);

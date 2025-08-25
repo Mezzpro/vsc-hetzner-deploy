@@ -9,9 +9,19 @@ import { BusinessNavigationProvider } from './ventures/cradle/navigation/busines
 export async function activate(context: vscode.ExtensionContext) {
     console.log('🚀 CRADLE BUSINESS EXTENSION ACTIVATION STARTED!');
     console.log('📍 Extension Context Path:', context.extensionPath);
-    
-    // Show activation notification
-    vscode.window.showInformationMessage('🏢 Cradle Business Suite Activated!');
+
+    // Check if we're in Cradle workspace (workspace-admin)
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    const isCradleWorkspace = workspaceFolders?.some(folder => 
+        folder.uri.path.includes('workspace-admin')
+    );
+
+    if (!isCradleWorkspace) {
+        console.log('ℹ️ Not in Cradle workspace, extension will remain dormant');
+        return;
+    }
+
+    console.log('✅ Cradle workspace detected, initializing business interface...');
 
     try {
         // Initialize core managers
@@ -73,7 +83,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Dashboard command
             vscode.commands.registerCommand('cradle.dashboard', () => {
                 console.log('🏢 Dashboard command executed!');
-                vscode.window.showInformationMessage('Opening Business Dashboard...');
                 tabManager.createOrFocusTab('dashboard', () => 
                     tabManager.createDashboardTab()
                 );
@@ -82,7 +91,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Analytics command  
             vscode.commands.registerCommand('cradle.analytics', () => {
                 console.log('📊 Analytics command executed!');
-                vscode.window.showInformationMessage('Opening Analytics Center...');
                 tabManager.createOrFocusTab('analytics', () =>
                     tabManager.createAnalyticsTab()
                 );
@@ -91,7 +99,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Downloads command
             vscode.commands.registerCommand('cradle.downloads', () => {
                 console.log('📥 Downloads command executed!');
-                vscode.window.showInformationMessage('Opening Download Center...');
                 tabManager.createOrFocusTab('downloads', () =>
                     tabManager.createDownloadsTab()
                 );
@@ -100,7 +107,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Tools command
             vscode.commands.registerCommand('cradle.tools', () => {
                 console.log('🔧 Tools command executed!');
-                vscode.window.showInformationMessage('Opening Business Tools...');
                 tabManager.createOrFocusTab('tools', () =>
                     tabManager.createToolsTab()
                 );
@@ -109,7 +115,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Chatbot command
             vscode.commands.registerCommand('cradle.chatbot', () => {
                 console.log('💬 Chatbot command executed!');
-                vscode.window.showInformationMessage('Opening Chat Assistant...');
                 tabManager.createOrFocusTab('chatbot', () =>
                     tabManager.createChatbotTab()
                 );
@@ -118,7 +123,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Workspace layout command
             vscode.commands.registerCommand('cradle.workspace', () => {
                 console.log('🏢 Workspace layout command executed!');
-                vscode.window.showInformationMessage('Creating Business Workspace Layout...');
                 
                 // Create all tabs in sequence
                 tabManager.createOrFocusTab('dashboard', () => tabManager.createDashboardTab());
@@ -187,44 +191,12 @@ export async function activate(context: vscode.ExtensionContext) {
             scheme: f.uri.scheme
         })));
         
-        if (workspaceFolders) {
-            const hasAdminWorkspace = workspaceFolders.some(folder => folder.uri.path.includes('workspace-admin'));
-            const hasMezzProWorkspace = workspaceFolders.some(folder => folder.uri.path.includes('workspace-mezzpro'));
-            
-            workspaceFolders.forEach(folder => {
-                console.log(`📁 Checking folder: ${folder.uri.path} - Admin: ${folder.uri.path.includes('workspace-admin')}, MezzPro: ${folder.uri.path.includes('workspace-mezzpro')}`);
-            });
-            
-            if (hasAdminWorkspace) {
-                console.log('✅ Admin workspace detected, creating dashboard...');
-                vscode.window.showInformationMessage('Cradle Systems workspace detected! Opening business dashboard...', 'Open Dashboard', 'Skip')
-                    .then(selection => {
-                        if (selection === 'Open Dashboard') {
-                            setTimeout(() => {
-                                console.log('🚀 Auto-executing cradle dashboard command...');
-                                vscode.commands.executeCommand('cradle.dashboard');
-                            }, 1000);
-                        }
-                    });
-            } else if (hasMezzProWorkspace) {
-                console.log('✅ MezzPro workspace detected, creating blockchain dashboard...');
-                vscode.window.showInformationMessage('MezzPro Blockchain Platform detected! Opening blockchain dashboard...', 'Open Dashboard', 'Skip')
-                    .then(selection => {
-                        if (selection === 'Open Dashboard') {
-                            setTimeout(() => {
-                                console.log('🚀 Auto-executing mezzpro dashboard command...');
-                                vscode.commands.executeCommand('mezzpro.dashboard');
-                            }, 1000);
-                        }
-                    });
-            } else {
-                console.log('ℹ️ Non-venture workspace detected');
-                vscode.window.showInformationMessage('Cradle Business Suite loaded - Use sidebar navigation or Command Palette');
-            }
-        } else {
-            console.log('ℹ️ No workspace folders found');
-            vscode.window.showInformationMessage('Cradle Business Suite loaded - Open a workspace to get started');
-        }
+        // Auto-open business dashboard for Cradle workspace
+        console.log('✅ Cradle workspace detected, auto-opening business dashboard...');
+        setTimeout(() => {
+            console.log('🚀 Auto-executing cradle dashboard command...');
+            vscode.commands.executeCommand('cradle.dashboard');
+        }, 1000);
         
         console.log('✅ CRADLE BUSINESS EXTENSION ACTIVATION COMPLETED!');
 
