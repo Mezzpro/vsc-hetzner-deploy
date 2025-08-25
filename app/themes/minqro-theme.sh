@@ -47,7 +47,7 @@ cat > /home/coder/workspace-minqro/.vscode/settings.json <<'EOF'
   "terminal.integrated.splitCwd": "workspaceRoot",
   "terminal.integrated.lineHeight": 1.2,
   "terminal.integrated.showLinkHover": false,
-  "terminal.integrated.showOnStartup": "startupProject",
+  "terminal.integrated.showOnStartup": "never",
   "terminal.integrated.focusAfterOpen": true,
   "debug.console.closeOnEnd": true,
   "debug.openDebug": "openOnSessionStart",

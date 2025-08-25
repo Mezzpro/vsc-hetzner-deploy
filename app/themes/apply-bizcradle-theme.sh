@@ -77,7 +77,7 @@ cat > /home/coder/workspace-bizcradle/.vscode/settings.json << 'EOF'
     "terminal.integrated.showExitAlert": false,
     "terminal.integrated.splitCwd": "workspaceRoot",
     "terminal.integrated.showLinkHover": false,
-    "terminal.integrated.showOnStartup": "startupProject",
+    "terminal.integrated.showOnStartup": "never",
     "terminal.integrated.focusAfterOpen": true,
     "debug.console.closeOnEnd": true,
     "debug.openDebug": "neverOpen",

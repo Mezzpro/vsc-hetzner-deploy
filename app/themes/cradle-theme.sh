@@ -82,7 +82,7 @@ cat > /home/coder/workspace-admin/.vscode/settings.json <<'EOF'
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.showLinkHover": false,
-  "terminal.integrated.showOnStartup": "startupProject",
+  "terminal.integrated.showOnStartup": "never",
   "terminal.integrated.focusAfterOpen": true,
   "debug.console.closeOnEnd": true,
   "debug.openDebug": "neverOpen",
@@ -167,14 +167,9 @@ EOF
 
 # No auto-terminal tasks - clean business interface only
 
-# Copy Gemini installation script to admin workspace
-cp /home/coder/scripts/install-gemini.sh /home/coder/workspace-admin/install-gemini.sh
-chmod +x /home/coder/workspace-admin/install-gemini.sh
 
 # No additional environment variables needed
 
 # Set proper ownership
 chown -R coder:coder /home/coder/workspace-admin/.vscode
-chown coder:coder /home/coder/workspace-admin/install-gemini.sh
-
-echo "✅ Cradle clean white theme applied with auto-terminal and Gemini installer"
+echo "✅ Cradle clean white theme applied"

@@ -1,18 +1,50 @@
 [
     {
         "key": "ctrl+shift+`",
-        "command": "workbench.action.terminal.moveToAuxiliaryPanel",
-        "when": "terminalFocus"
+        "command": "-workbench.action.terminal.new"
     },
     {
-        "key": "ctrl+alt+t",
-        "command": "runCommands",
-        "args": {
-            "commands": [
-                "workbench.action.terminal.new",
-                "workbench.action.toggleAuxiliaryBar",
-                "workbench.action.terminal.moveToAuxiliaryPanel"
-            ]
-        }
+        "key": "ctrl+`",
+        "command": "-workbench.action.terminal.toggleTerminal"
+    },
+    {
+        "key": "ctrl+shift+p",
+        "command": "-workbench.action.showCommands"
+    },
+    {
+        "key": "ctrl+p",
+        "command": "-workbench.action.quickOpen"
+    },
+    {
+        "key": "ctrl+shift+f",
+        "command": "-workbench.action.findInFiles"
+    },
+    {
+        "key": "ctrl+shift+e",
+        "command": "-workbench.view.explorer"
+    },
+    {
+        "key": "ctrl+shift+x",
+        "command": "-workbench.view.extensions"
+    },
+    {
+        "key": "ctrl+shift+g",
+        "command": "-workbench.view.scm"
+    },
+    {
+        "key": "ctrl+shift+d",
+        "command": "-workbench.view.debug"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "-workbench.action.togglePanel"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "-workbench.action.toggleSidebarVisibility"
+    },
+    {
+        "key": "f11",
+        "command": "-workbench.action.toggleFullScreen"
     }
 ]

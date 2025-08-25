@@ -41,15 +41,6 @@ chmod 700 /home/coder/workspace-bizcradle/.vscode
 
 echo "✅ Workspaces configured!"
 
-# Check Gemini CLI setup
-echo "🤖 Gemini CLI status:"
-if [ -z "$GEMINI_API_KEY" ]; then
-    echo "   ⚠️  GEMINI_API_KEY not set - get your free API key at:"
-    echo "   🔗 https://makersuite.google.com/app/apikey"
-else
-    echo "   ✅ GEMINI_API_KEY configured"
-    echo "   💡 Usage: gemini 'your question here'"
-fi
 
 # Install Node.js dependencies
 echo "📦 Installing proxy dependencies..."
