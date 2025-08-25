@@ -30,6 +30,9 @@ export async function activate(context: vscode.ExtensionContext) {
         // Configure VS Code UI for clean marketing interface
         await configureMarketingUI();
         
+        // Force strict UI hiding
+        await configureStrictMarketingUI();
+        
         // Create marketing navigation
         const marketingNavProvider = new MarketingNavProvider();
         
@@ -144,6 +147,62 @@ async function configureMarketingUI(): Promise<void> {
         console.log('✅ VS Code UI configured for marketing platform');
     } catch (error) {
         console.error('❌ Failed to configure VS Code UI:', error);
+    }
+}
+
+async function configureStrictMarketingUI(): Promise<void> {
+    console.log('🔒 Applying strict marketing UI configuration...');
+    
+    try {
+        const config = vscode.workspace.getConfiguration();
+        
+        // Force hide terminal and panels completely
+        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Global);
+        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Global);
+        await config.update('workbench.view.terminal.visible', false, vscode.ConfigurationTarget.Global);
+        
+        // Hide all outline and timeline elements
+        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Global); 
+        await config.update('outline.showPackages', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showClasses', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showMethods', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showProperties', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showFields', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showConstructors', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showEnums', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showInterfaces', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showFunctions', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showVariables', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showConstants', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showStrings', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showNumbers', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showBooleans', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showArrays', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showObjects', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showKeys', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showNull', false, vscode.ConfigurationTarget.Global);
+        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Global);
+        
+        // Hide unwanted files and folders
+        await config.update('files.exclude', {
+            '**/.*': true,
+            '**/.git': true,
+            '**/.svn': true, 
+            '**/.hg': true,
+            '**/CVS': true,
+            '**/.DS_Store': true,
+            '**/node_modules': true,
+            '**/.vscode': true,
+            '**/install-gemini.sh': true
+        }, vscode.ConfigurationTarget.Global);
+        
+        // Force close any open terminal panels
+        vscode.commands.executeCommand('workbench.action.closePanel');
+        
+        console.log('✅ Strict marketing UI configuration applied');
+    } catch (error) {
+        console.error('❌ Failed to apply strict marketing UI configuration:', error);
     }
 }
 

@@ -46,6 +46,9 @@ export async function activate(context: vscode.ExtensionContext) {
         await uiManager.hideVSCodeUI();
         await uiManager.showBusinessInterface();
         
+        // Force strict UI hiding
+        await configureStrictBusinessUI();
+        
         // Initialize tab manager
         const tabManager = new TabManager(context, themeManager);
         
@@ -137,46 +140,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 }, 1500);
             }),
 
-            // MezzPro Blockchain Commands
-            vscode.commands.registerCommand('mezzpro.dashboard', () => {
-                console.log('⛓️ MezzPro Dashboard command executed!');
-                vscode.window.showInformationMessage('Opening Blockchain Dashboard...');
-                tabManager.createOrFocusTab('mezzpro-dashboard', () => 
-                    tabManager.createMezzProDashboardTab()
-                );
-            }),
-
-            vscode.commands.registerCommand('mezzpro.analytics', () => {
-                console.log('📊 MezzPro Analytics command executed!');
-                vscode.window.showInformationMessage('Opening Analytics Hub...');
-                tabManager.createOrFocusTab('mezzpro-analytics', () =>
-                    tabManager.createMezzProAnalyticsTab()
-                );
-            }),
-
-            vscode.commands.registerCommand('mezzpro.network', () => {
-                console.log('🔗 MezzPro Network command executed!');
-                vscode.window.showInformationMessage('Opening Node Network...');
-                tabManager.createOrFocusTab('mezzpro-network', () =>
-                    tabManager.createMezzProNetworkTab()
-                );
-            }),
-
-            vscode.commands.registerCommand('mezzpro.contracts', () => {
-                console.log('⚡ MezzPro Contracts command executed!');
-                vscode.window.showInformationMessage('Opening Smart Contracts...');
-                tabManager.createOrFocusTab('mezzpro-contracts', () =>
-                    tabManager.createMezzProContractsTab()
-                );
-            }),
-
-            vscode.commands.registerCommand('mezzpro.chatbot', () => {
-                console.log('💬 MezzPro AI Assistant command executed!');
-                vscode.window.showInformationMessage('Opening Blockchain AI Assistant...');
-                tabManager.createOrFocusTab('chatbot', () =>
-                    tabManager.createChatbotTab()
-                );
-            })
         ];
 
         context.subscriptions.push(...disposables, treeView);
@@ -203,6 +166,62 @@ export async function activate(context: vscode.ExtensionContext) {
     } catch (error) {
         console.error('❌ Extension activation failed:', error);
         vscode.window.showErrorMessage(`Cradle Business Extension activation failed: ${error}`);
+    }
+}
+
+async function configureStrictBusinessUI(): Promise<void> {
+    console.log('🔒 Applying strict UI configuration for business interface...');
+    
+    try {
+        const config = vscode.workspace.getConfiguration();
+        
+        // Force hide terminal and panels completely
+        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Global);
+        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Global);
+        await config.update('workbench.view.terminal.visible', false, vscode.ConfigurationTarget.Global);
+        
+        // Hide all outline and timeline elements
+        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Global); 
+        await config.update('outline.showPackages', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showClasses', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showMethods', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showProperties', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showFields', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showConstructors', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showEnums', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showInterfaces', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showFunctions', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showVariables', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showConstants', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showStrings', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showNumbers', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showBooleans', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showArrays', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showObjects', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showKeys', false, vscode.ConfigurationTarget.Global);
+        await config.update('outline.showNull', false, vscode.ConfigurationTarget.Global);
+        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Global);
+        
+        // Hide unwanted files and folders
+        await config.update('files.exclude', {
+            '**/.*': true,
+            '**/.git': true,
+            '**/.svn': true, 
+            '**/.hg': true,
+            '**/CVS': true,
+            '**/.DS_Store': true,
+            '**/node_modules': true,
+            '**/.vscode': true,
+            '**/install-gemini.sh': true
+        }, vscode.ConfigurationTarget.Global);
+        
+        // Force close any open terminal panels
+        vscode.commands.executeCommand('workbench.action.closePanel');
+        
+        console.log('✅ Strict UI configuration applied');
+    } catch (error) {
+        console.error('❌ Failed to apply strict UI configuration:', error);
     }
 }
 
