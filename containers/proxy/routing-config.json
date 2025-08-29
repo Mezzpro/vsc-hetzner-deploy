@@ -2,17 +2,17 @@
   "routes": [
     {
       "domain": "cradlesystems.xyz",
-      "target": "http://vsc-system-cradle:3001",
+      "target": "http://vsc-codeserver-base:8080",
       "workspace": "cradle"
     },
     {
       "domain": "mezzpro.xyz", 
-      "target": "http://vsc-venture-mezzpro:3002",
+      "target": "http://vsc-codeserver-base:8080",
       "workspace": "mezzpro"
     },
     {
       "domain": "bizcradle.xyz",
-      "target": "http://vsc-venture-bizcradle:3003", 
+      "target": "http://vsc-codeserver-base:8080", 
       "workspace": "bizcradle"
     }
   ],
