@@ -2,6 +2,7 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const routingConfig = require('./routing-config.json');
+const http = require('http');
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,24 @@ const getRouteForHost = (host) => {
   );
 };
 
+// Create a single proxy instance for VS Code server
+const vscodeProxy = createProxyMiddleware({
+  target: routingConfig.codeServer.url,
+  changeOrigin: true,
+  ws: true,
+  pathRewrite: {
+    '^/': '/'
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    const host = req.headers.host;
+    const route = getRouteForHost(host) || routingConfig.routes[0];
+    
+    // Add venture context headers
+    proxyReq.setHeader('X-Venture-Name', route.workspace);
+    proxyReq.setHeader('X-Venture-Domain', route.domain);
+  }
+});
+
 // Proxy middleware for venture routing
 app.use('/', (req, res, next) => {
   const host = req.headers.host;
@@ -40,25 +59,25 @@ app.use('/', (req, res, next) => {
     return res.redirect(`/?folder=${encodeURIComponent(workspaceFolder)}`);
   }
   
-  // Create proxy for VS Code server
-  const proxy = createProxyMiddleware({
-    target: route.target,
-    changeOrigin: true,
-    ws: true,
-    pathRewrite: {
-      '^/': '/'
-    },
-    onProxyReq: (proxyReq, req, res) => {
-      // Add venture context headers
-      proxyReq.setHeader('X-Venture-Name', route.workspace);
-      proxyReq.setHeader('X-Venture-Domain', route.domain);
-    }
-  });
-  
-  proxy(req, res, next);
+  // Use the single proxy instance
+  vscodeProxy(req, res, next);
 });
 
-app.listen(port, '0.0.0.0', () => {
+// Create HTTP server to handle WebSocket upgrades
+const server = http.createServer(app);
+
+// Handle WebSocket upgrades
+server.on('upgrade', (req, socket, head) => {
+  const host = req.headers.host;
+  const route = getRouteForHost(host) || routingConfig.routes[0];
+  
+  console.log(`🔌 WebSocket upgrade for ${host} to ${route.workspace} workspace`);
+  
+  // Use the proxy for WebSocket upgrades
+  vscodeProxy.upgrade(req, socket, head);
+});
+
+server.listen(port, '0.0.0.0', () => {
   console.log('🌐 VSCode Proxy Gateway started');
   console.log(`📡 Listening on port ${port}`);
   console.log('📋 Route Configuration:');
