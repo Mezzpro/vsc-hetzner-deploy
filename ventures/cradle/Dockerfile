@@ -8,9 +8,10 @@ WORKDIR /app
 COPY package.json .
 RUN npm install --production
 
-# Copy extension and workspace
+# Copy extension, workspace, and server
 COPY extension/ ./extension/
 COPY workspace/ ./workspace/
+COPY server.js .
 
 # Build extension
 WORKDIR /app/extension
