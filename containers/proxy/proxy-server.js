@@ -30,28 +30,17 @@ const getRouteForHost = (host) => {
 // Proxy middleware for venture routing
 app.use('/', (req, res, next) => {
   const host = req.headers.host;
-  const route = getRouteForHost(host);
+  const route = getRouteForHost(host) || routingConfig.routes[0]; // Default to cradle
   
-  if (!route) {
-    // Default to cradle system
-    const defaultRoute = routingConfig.routes[0];
-    console.log(`🔄 No route found for ${host}, defaulting to ${defaultRoute.domain}`);
-    
-    const proxy = createProxyMiddleware({
-      target: defaultRoute.target,
-      changeOrigin: true,
-      ws: true,
-      pathRewrite: {
-        '^/': '/'
-      }
-    });
-    
-    return proxy(req, res, next);
+  console.log(`🎯 Routing ${host} to ${route.workspace} workspace`);
+  
+  // Redirect root requests to workspace-specific folder
+  if (req.path === '/' && !req.query.folder) {
+    const workspaceFolder = `/home/coder/workspaces/${route.workspace}`;
+    return res.redirect(`/?folder=${encodeURIComponent(workspaceFolder)}`);
   }
-
-  console.log(`🎯 Routing ${host} to ${route.target} (${route.workspace})`);
   
-  // Create proxy for matched route
+  // Create proxy for VS Code server
   const proxy = createProxyMiddleware({
     target: route.target,
     changeOrigin: true,
