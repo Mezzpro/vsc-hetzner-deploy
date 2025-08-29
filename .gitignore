@@ -22,6 +22,9 @@ coverage/
 .vscode/
 .idea/
 
+# Allow workspace VSCode settings
+!ventures/*/workspace/.vscode/
+
 # OS
 .DS_Store
 Thumbs.db
