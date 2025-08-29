@@ -5,14 +5,20 @@ FROM codercom/code-server:4.103.0
 USER coder
 WORKDIR /home/coder
 
-# Install Node.js and npm
+# Install Node.js, npm, and sudo for permission fixes
 USER root
 RUN apt-get update && apt-get install -y \
     curl \
     git \
     nodejs \
     npm \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
+
+# Add coder user to sudo group for permission fixes
+RUN usermod -aG sudo coder
+# Configure sudo to work without password for coder user
+RUN echo "coder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Switch back to coder user
 USER coder
