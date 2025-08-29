@@ -135,9 +135,9 @@ services:
       - "443:3443"    # HTTPS port
     volumes:
       - vscode-data:/home/coder/.local/share/code-server
-      - workspace-admin:/home/coder/workspace-admin
-      - workspace-mezzpro:/home/coder/workspace-mezzpro  
-      - workspace-minqro:/home/coder/workspace-minqro
+      - workspace-cradle:/home/coder/workspaces/cradle
+      - workspace-mezzpro:/home/coder/workspaces/mezzpro  
+      - workspace-minqro:/home/coder/workspaces/minqro
       - /etc/ssl/vsc-certs:/etc/ssl/certs:ro
     environment:
       - PASSWORD=\${APP_PASSWORD:-hetzner123}
@@ -176,7 +176,7 @@ networks:
 volumes:
   vscode-data:
     driver: local
-  workspace-admin:
+  workspace-cradle:
     driver: local
   workspace-mezzpro:
     driver: local

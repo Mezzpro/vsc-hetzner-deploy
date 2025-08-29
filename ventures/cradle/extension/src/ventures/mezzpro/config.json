@@ -1,6 +1,6 @@
 {
   "name": "MezzPro Blockchain Platform",
-  "workspace": "workspace-mezzpro",
+  "workspace": "mezzpro",
   "theme": {
     "primary": "#00ff41",
     "secondary": "#006600", 

@@ -89,7 +89,7 @@ export class MarketingTabManager {
 
     public openWebPortal(): void {
         // Open native VS Code webview in new browser window
-        vscode.env.openExternal(vscode.Uri.parse('http://localhost:3000/?folder=%2Fhome%2Fcoder%2Fworkspace-bizcradle'));
+        vscode.env.openExternal(vscode.Uri.parse('http://localhost:3000/?folder=%2Fhome%2Fcoder%2Fworkspaces%2Fbizcradle'));
         vscode.window.showInformationMessage('🔗 Web Portal opened in external browser');
     }
 

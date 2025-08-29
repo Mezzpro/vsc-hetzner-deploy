@@ -1,6 +1,6 @@
 {
   "name": "Cradle Systems",
-  "workspace": "workspace-admin",
+  "workspace": "cradle",
   "theme": {
     "primary": "#000000",
     "secondary": "#495057",

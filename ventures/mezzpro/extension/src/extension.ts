@@ -13,7 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // Check if we're in MezzPro workspace
         const workspaceFolders = vscode.workspace.workspaceFolders;
         const isMezzProWorkspace = workspaceFolders?.some(folder => 
-            folder.uri.path.includes('workspace-mezzpro')
+            folder.uri.path.includes('mezzpro') || folder.name === 'mezzpro'
         );
 
         if (!isMezzProWorkspace) {

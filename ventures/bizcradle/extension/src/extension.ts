@@ -13,7 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // Check if we're in Bizcradle workspace
         const workspaceFolders = vscode.workspace.workspaceFolders;
         const isBizcradleWorkspace = workspaceFolders?.some(folder => 
-            folder.uri.path.includes('workspace-bizcradle')
+            folder.uri.path.includes('bizcradle') || folder.name === 'bizcradle'
         );
 
         if (!isBizcradleWorkspace) {

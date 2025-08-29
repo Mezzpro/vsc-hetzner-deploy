@@ -28,13 +28,13 @@ export class VentureManager {
             console.log('🔍 Detecting venture from workspace:', workspacePath);
             
             // Map workspace paths to ventures
-            if (workspacePath.includes('workspace-admin')) {
+            if (workspacePath.includes('cradle')) {
                 this.currentVenture = 'cradle';
-            } else if (workspacePath.includes('workspace-mezzpro')) {
+            } else if (workspacePath.includes('mezzpro')) {
                 this.currentVenture = 'mezzpro';
-            } else if (workspacePath.includes('workspace-minqro')) {
+            } else if (workspacePath.includes('minqro')) {
                 this.currentVenture = 'minqro';
-            } else if (workspacePath.includes('workspace-bizcradle')) {
+            } else if (workspacePath.includes('bizcradle')) {
                 this.currentVenture = 'bizcradle';
             } else {
                 this.currentVenture = 'cradle'; // default
@@ -66,7 +66,7 @@ export class VentureManager {
             // Fallback to default config
             this.config = {
                 name: 'Cradle Systems',
-                workspace: 'workspace-admin',
+                workspace: 'cradle',
                 theme: {
                     primary: '#000000',
                     secondary: '#495057',

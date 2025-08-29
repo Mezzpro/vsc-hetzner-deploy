@@ -10,10 +10,10 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('🚀 CRADLE BUSINESS EXTENSION ACTIVATION STARTED!');
     console.log('📍 Extension Context Path:', context.extensionPath);
 
-    // Check if we're in Cradle workspace (workspace-admin)
+    // Check if we're in Cradle workspace
     const workspaceFolders = vscode.workspace.workspaceFolders;
     const isCradleWorkspace = workspaceFolders?.some(folder => 
-        folder.uri.path.includes('workspace-admin')
+        folder.uri.path.includes('cradle') || folder.name === 'cradle'
     );
 
     if (!isCradleWorkspace) {
