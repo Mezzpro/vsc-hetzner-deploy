@@ -33,6 +33,9 @@ const vscodeProxy = createProxyMiddleware({
   target: routingConfig.codeServer.url,
   changeOrigin: true,
   ws: true,
+  secure: false,
+  xfwd: true,
+  logLevel: 'info',
   pathRewrite: {
     '^/': '/'
   },
@@ -40,9 +43,56 @@ const vscodeProxy = createProxyMiddleware({
     const host = req.headers.host;
     const route = getRouteForHost(host) || routingConfig.routes[0];
     
+    console.log(`🔄 Proxying: ${req.method} ${req.url} → code-server`);
+    
     // Add venture context headers
     proxyReq.setHeader('X-Venture-Name', route.workspace);
     proxyReq.setHeader('X-Venture-Domain', route.domain);
+  },
+  onProxyRes: (proxyRes, req, res) => {
+    console.log(`✅ Code-server response: ${proxyRes.statusCode} for ${req.url}`);
+  },
+  onError: (err, req, res) => {
+    console.error('❌ Proxy error:', err.message);
+    if (res && !res.headersSent) {
+      res.status(500).send('Code-server proxy error');
+    }
+  },
+  onProxyReqWs: (proxyReq, req, socket, options, head) => {
+    const host = req.headers.host;
+    const route = getRouteForHost(host) || routingConfig.routes[0];
+    
+    console.log(`🔌 WebSocket proxy request: ${req.url} for ${host} → ${route.workspace}`);
+    
+    // Set proper origin for VS Code server WebSocket security
+    proxyReq.setHeader('Origin', routingConfig.codeServer.url);
+    
+    // Forward cookies for authentication
+    if (req.headers.cookie) {
+      proxyReq.setHeader('Cookie', req.headers.cookie);
+      console.log(`🍪 Forwarding cookies for WebSocket: ${req.headers.cookie.substring(0, 50)}...`);
+    }
+    
+    // Forward other important headers
+    if (req.headers['user-agent']) {
+      proxyReq.setHeader('User-Agent', req.headers['user-agent']);
+    }
+    
+    proxyReq.on('error', (err) => {
+      console.error('❌ WebSocket proxy request error:', err.message);
+      socket.end();
+    });
+  },
+  onProxyResWs: (proxyRes, proxySocket, proxyHead) => {
+    console.log(`✅ WebSocket proxy response established`);
+    
+    proxySocket.on('error', (err) => {
+      console.error('❌ WebSocket proxy socket error:', err.message);
+    });
+    
+    proxySocket.on('close', (code, reason) => {
+      console.log(`🔌 WebSocket proxy socket closed: ${code} ${reason || 'no reason'}`);
+    });
   }
 });
 
@@ -72,9 +122,27 @@ server.on('upgrade', (req, socket, head) => {
   const route = getRouteForHost(host) || routingConfig.routes[0];
   
   console.log(`🔌 WebSocket upgrade for ${host} to ${route.workspace} workspace`);
+  console.log(`🔍 WebSocket URL: ${req.url}`);
+  console.log(`🔍 WebSocket Headers:`, {
+    host: req.headers.host,
+    origin: req.headers.origin,
+    'sec-websocket-protocol': req.headers['sec-websocket-protocol'],
+    'sec-websocket-version': req.headers['sec-websocket-version']
+  });
   
-  // Use the proxy for WebSocket upgrades
-  vscodeProxy.upgrade(req, socket, head);
+  // Handle socket errors
+  socket.on('error', (err) => {
+    console.error('❌ WebSocket upgrade socket error:', err.message);
+  });
+  
+  try {
+    // Use the proxy for WebSocket upgrades  
+    vscodeProxy.upgrade(req, socket, head);
+    console.log('✅ WebSocket upgrade delegated to proxy');
+  } catch (err) {
+    console.error('❌ WebSocket upgrade error:', err.message);
+    socket.end();
+  }
 });
 
 server.listen(port, '0.0.0.0', () => {
