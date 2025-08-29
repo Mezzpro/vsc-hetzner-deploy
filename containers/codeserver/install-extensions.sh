@@ -46,27 +46,8 @@ else
     echo "⚠️  Shared extensions directory not found: $SHARED_EXTENSIONS"
 fi
 
-# Update extensions.json
-cat > "$EXTENSIONS_DIR/extensions.json" << 'EOF'
-[
-    {
-        "identifier": { "id": "cradle-business-extension" },
-        "version": "1.0.0",
-        "location": { "$mid": 1, "path": "/home/coder/.local/share/code-server/extensions/cradle-business-extension" }
-    },
-    {
-        "identifier": { "id": "mezzpro-blockchain-extension" },
-        "version": "1.0.0", 
-        "location": { "$mid": 1, "path": "/home/coder/.local/share/code-server/extensions/mezzpro-blockchain-extension" }
-    },
-    {
-        "identifier": { "id": "bizcradle-business-extension" },
-        "version": "1.0.0",
-        "location": { "$mid": 1, "path": "/home/coder/.local/share/code-server/extensions/bizcradle-business-extension" }
-    }
-]
-EOF
-
+# Create empty extensions.json (VS Code will populate it automatically)
+echo "[]" > "$EXTENSIONS_DIR/extensions.json"
 chown coder:coder "$EXTENSIONS_DIR/extensions.json"
 
 echo "🎉 Extension installation completed!"
