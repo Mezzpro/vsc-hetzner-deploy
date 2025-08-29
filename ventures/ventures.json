@@ -1,0 +1,33 @@
+{
+  "ventures": [
+    {
+      "name": "cradle",
+      "displayName": "CradleSystem",
+      "domain": "cradlesystems.xyz",
+      "port": 3001,
+      "theme": "Dark Modern",
+      "description": "Business Administration Platform"
+    },
+    {
+      "name": "mezzpro",
+      "displayName": "MezzPro",
+      "domain": "mezzpro.xyz", 
+      "port": 3002,
+      "theme": "Dark High Contrast",
+      "description": "Blockchain Development Platform"
+    },
+    {
+      "name": "bizcradle",
+      "displayName": "Bizcradle",
+      "domain": "bizcradle.xyz",
+      "port": 3003,
+      "theme": "Light Modern",
+      "description": "Marketing Automation Platform"
+    }
+  ],
+  "system": {
+    "basePort": 3000,
+    "codeServerPort": 8080,
+    "proxyPort": 3000
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "vsc-venture-bizcradle",
+  "version": "1.0.0",
+  "description": "Bizcradle Venture Container",
+  "main": "server.js",
+  "scripts": {
+    "start": "./start.sh",
+    "health": "curl -f http://localhost:3003/health"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

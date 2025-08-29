@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Deploy Application to Hetzner Script
-# Deploys the VSC application to your Hetzner server
+# VSCode Microservice Architecture Deployment Script
+# Deploys clean containerized VSCode system to Hetzner server
 
 set -e  # Exit on any error
+
+echo "🏗️  VSCode Microservice Architecture Deployment"
+echo "================================================"
 
 # Load environment variables
 if [ -f ".env" ]; then
@@ -26,9 +29,9 @@ if [ -n "$HETZNER_SSH_KEY_PATH" ] && [ -f "$HETZNER_SSH_KEY_PATH" ]; then
     SSH_OPTS="$SSH_OPTS -i $HETZNER_SSH_KEY_PATH"
 fi
 
-echo "🚀 Deploying VSC application to Hetzner server..."
-echo "🖥️  Server: $HETZNER_USER@$HETZNER_IP"
+echo "🚀 Deploying to: $HETZNER_USER@$HETZNER_IP"
 echo "📦 Repository: $GITHUB_USERNAME/$GITHUB_REPO_NAME"
+echo ""
 
 # Deploy application
 ssh $SSH_OPTS $HETZNER_USER@$HETZNER_IP "bash -s" << EOF
@@ -38,9 +41,9 @@ set -e
 echo "📁 Preparing deployment directory..."
 cd ~/vsc-deploy
 
-# Backup existing deployment if it exists
+# Backup existing deployment
 if [ -d "vsc-hetzner-deploy" ]; then
-    echo "💾 Backing up existing deployment..."
+    echo "💾 Creating backup..."
     cp -r vsc-hetzner-deploy ~/backups/vsc-backup-\$(date +%Y%m%d_%H%M%S) || true
     rm -rf vsc-hetzner-deploy
 fi
@@ -49,55 +52,97 @@ echo "📥 Cloning repository..."
 git clone https://github.com/$GITHUB_USERNAME/$GITHUB_REPO_NAME.git
 cd vsc-hetzner-deploy
 
-echo "⚙️  Setting up environment..."
-# Create .env file from environment variables passed from local
+echo "⚙️  Creating environment configuration..."
 cat > .env << 'ENVEOF'
+# Server Configuration
 HETZNER_IP=$HETZNER_IP
 HETZNER_USER=$HETZNER_USER
 APP_PASSWORD=${APP_PASSWORD:-vscode123}
-APP_PORT=${APP_PORT:-3000}
+
+# Domain Configuration  
 DOMAIN_CRADLE=${DOMAIN_CRADLE:-cradlesystems.xyz}
 DOMAIN_MEZZPRO=${DOMAIN_MEZZPRO:-mezzpro.xyz}
-DOMAIN_MINQRO=${DOMAIN_MINQRO:-minqro.xyz}
-GEMINI_API_KEY=${GEMINI_API_KEY:-}
+DOMAIN_BIZCRADLE=${DOMAIN_BIZCRADLE:-bizcradle.xyz}
 ENVEOF
 
-echo "🐳 Starting Docker containers..."
-cd app
-docker-compose down || true
+echo "🐳 Starting microservice containers..."
+echo "   - vsc-codeserver-base (Core VS Code)"
+echo "   - vsc-system-cradle (Business Admin)"  
+echo "   - vsc-venture-mezzpro (Blockchain)"
+echo "   - vsc-venture-bizcradle (Marketing)"
+echo "   - vsc-proxy-gateway (Router)"
+echo ""
+
+# Stop existing containers
+docker-compose down --remove-orphans || true
+
+# Build and start containers
 docker-compose up --build -d
 
-echo "⏳ Waiting for services to start..."
-sleep 30
+echo "⏳ Waiting for container startup..."
+sleep 45
 
-echo "🔍 Checking service health..."
-if docker-compose ps | grep -q "Up"; then
-    echo "✅ Services are running!"
+echo "🔍 Validating container health..."
+CONTAINERS=("vsc-codeserver-base" "vsc-system-cradle" "vsc-venture-mezzpro" "vsc-venture-bizcradle" "vsc-proxy-gateway")
+ALL_HEALTHY=true
+
+for container in "\${CONTAINERS[@]}"; do
+    if docker inspect --format='{{.State.Health.Status}}' "\$container" 2>/dev/null | grep -q "healthy"; then
+        echo "   ✅ \$container: healthy"
+    else
+        echo "   ❌ \$container: unhealthy"
+        ALL_HEALTHY=false
+    fi
+done
+
+if [ "\$ALL_HEALTHY" = true ]; then
+    echo ""
+    echo "✅ All containers are healthy!"
     docker-compose ps
 else
-    echo "❌ Services failed to start!"
-    docker-compose logs
+    echo ""
+    echo "❌ Some containers are unhealthy!"
+    docker-compose logs --tail=50
     exit 1
 fi
 
-echo "🌐 Testing application..."
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200\|302"; then
-    echo "✅ Application is responding!"
+echo ""
+echo "🌐 Testing application endpoints..."
+sleep 10
+
+# Test proxy gateway
+if curl -s -f http://localhost:3000/health > /dev/null; then
+    echo "   ✅ Proxy Gateway: responding"
 else
-    echo "⚠️  Application may not be responding on port 3000"
-    echo "📋 Check logs: docker-compose logs"
+    echo "   ❌ Proxy Gateway: not responding"
 fi
 
+echo ""
 echo "🎉 Deployment completed successfully!"
-echo "🔗 Access your application:"
-echo "   http://$HETZNER_IP:3000"
-echo "   http://${DOMAIN_CRADLE:-cradlesystems.xyz}:3000"
-echo "   http://${DOMAIN_MEZZPRO:-mezzpro.xyz}:3000"
-echo "   http://${DOMAIN_MINQRO:-minqro.xyz}:3000"
+echo ""
+echo "🔗 Access Points:"
+echo "   • Cradle System: http://${DOMAIN_CRADLE:-cradlesystems.xyz}"
+echo "   • MezzPro: http://${DOMAIN_MEZZPRO:-mezzpro.xyz}" 
+echo "   • Bizcradle: http://${DOMAIN_BIZCRADLE:-bizcradle.xyz}"
+echo ""
+echo "🖥️  Direct Access: http://$HETZNER_IP:3000"
+echo ""
+echo "📊 Container Status:"
+docker-compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
 EOF
 
-echo "✅ Deployment script completed!"
-echo "📝 Next steps:"
-echo "   1. Check server status: ./scripts/hetzner/server-status.sh"
-echo "   2. Configure DNS to point your domains to: $HETZNER_IP"
-echo "   3. Test domain access after DNS propagation"
+echo ""
+echo "✅ Deployment completed!"
+echo ""
+echo "📋 Next Steps:"
+echo "   1. Configure DNS A records:"
+echo "      ${DOMAIN_CRADLE:-cradlesystems.xyz} → $HETZNER_IP"
+echo "      ${DOMAIN_MEZZPRO:-mezzpro.xyz} → $HETZNER_IP"
+echo "      ${DOMAIN_BIZCRADLE:-bizcradle.xyz} → $HETZNER_IP"
+echo ""
+echo "   2. Test venture isolation:"
+echo "      ./scripts/hetzner/test-ventures.sh"
+echo ""
+echo "   3. Monitor system health:"
+echo "      ./scripts/hetzner/server-status.sh"
+echo ""

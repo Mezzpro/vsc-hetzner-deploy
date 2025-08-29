@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # Code-Server Base Container
+  vsc-codeserver-base:
+    build:
+      context: ./containers/codeserver
+      dockerfile: Dockerfile
+    container_name: vsc-codeserver-base
+    volumes:
+      - codeserver-data:/home/coder/.local/share/code-server
+      - workspace-data:/home/coder/workspaces
+      - extensions-data:/home/coder/extensions
+    networks:
+      - vsc-network
+    restart: unless-stopped
+    environment:
+      - PASSWORD=${APP_PASSWORD:-vscode123}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Cradle System Container
+  vsc-system-cradle:
+    build:
+      context: ./ventures/cradle
+      dockerfile: Dockerfile
+    container_name: vsc-system-cradle
+    volumes:
+      - extensions-data:/app/extensions
+      - workspace-data:/app/workspaces
+    networks:
+      - vsc-network
+    restart: unless-stopped
+    depends_on:
+      vsc-codeserver-base:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MezzPro Venture Container
+  vsc-venture-mezzpro:
+    build:
+      context: ./ventures/mezzpro
+      dockerfile: Dockerfile
+    container_name: vsc-venture-mezzpro
+    volumes:
+      - extensions-data:/app/extensions
+      - workspace-data:/app/workspaces
+    networks:
+      - vsc-network
+    restart: unless-stopped
+    depends_on:
+      vsc-codeserver-base:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Bizcradle Venture Container  
+  vsc-venture-bizcradle:
+    build:
+      context: ./ventures/bizcradle
+      dockerfile: Dockerfile
+    container_name: vsc-venture-bizcradle
+    volumes:
+      - extensions-data:/app/extensions
+      - workspace-data:/app/workspaces
+    networks:
+      - vsc-network
+    restart: unless-stopped
+    depends_on:
+      vsc-codeserver-base:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Proxy Gateway Container
+  vsc-proxy-gateway:
+    build:
+      context: ./containers/proxy
+      dockerfile: Dockerfile
+    container_name: vsc-proxy-gateway
+    ports:
+      - "3000:3000"
+      - "80:3000"
+      - "443:3000"
+    networks:
+      - vsc-network
+    restart: unless-stopped
+    depends_on:
+      vsc-system-cradle:
+        condition: service_healthy
+      vsc-venture-mezzpro:
+        condition: service_healthy
+      vsc-venture-bizcradle:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  codeserver-data:
+    driver: local
+  workspace-data:
+    driver: local
+  extensions-data:
+    driver: local
+
+networks:
+  vsc-network:
+    driver: bridge

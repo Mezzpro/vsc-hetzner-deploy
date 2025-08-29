@@ -1,0 +1,30 @@
+{
+  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.startupEditor": "none",
+  "workbench.welcomePage.walkthroughs.openOnInstall": false,
+  "workbench.tips.enabled": false,
+  "workbench.panel.visible": false,
+  "workbench.activityBar.visible": false,
+  "workbench.statusBar.visible": false,
+  "workbench.view.terminal.visible": false,
+  "workbench.view.outline.visible": false,
+  "workbench.view.timeline.visible": false,
+  "terminal.integrated.showOnStartup": "never",
+  "telemetry.telemetryLevel": "off",
+  "update.showReleaseNotes": false,
+  "extensions.showRecommendationsOnlyOnDemand": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.vscode": true
+  },
+  "editor.minimap.enabled": false,
+  "editor.scrollbar.vertical": "hidden",
+  "editor.scrollbar.horizontal": "hidden",
+  "breadcrumbs.enabled": false,
+  "workbench.editor.showTabs": false
+}

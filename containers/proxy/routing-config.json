@@ -1,0 +1,23 @@
+{
+  "routes": [
+    {
+      "domain": "cradlesystems.xyz",
+      "target": "http://vsc-system-cradle:3001",
+      "workspace": "cradle"
+    },
+    {
+      "domain": "mezzpro.xyz", 
+      "target": "http://vsc-venture-mezzpro:3002",
+      "workspace": "mezzpro"
+    },
+    {
+      "domain": "bizcradle.xyz",
+      "target": "http://vsc-venture-bizcradle:3003", 
+      "workspace": "bizcradle"
+    }
+  ],
+  "codeServer": {
+    "url": "http://vsc-codeserver-base:8080",
+    "defaultWorkspace": "cradle"
+  }
+}

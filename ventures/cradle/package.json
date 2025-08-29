@@ -1,0 +1,14 @@
+{
+  "name": "vsc-system-cradle",
+  "version": "1.0.0",
+  "description": "Cradle System Container",
+  "main": "server.js",
+  "scripts": {
+    "start": "./start.sh",
+    "health": "curl -f http://localhost:3001/health"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "vsc-proxy-gateway",
+  "version": "1.0.0",
+  "description": "VSCode Proxy Gateway for Venture Routing",
+  "main": "proxy-server.js",
+  "scripts": {
+    "start": "node proxy-server.js",
+    "health": "curl -f http://localhost:3000/health"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "cors": "^2.8.5"
+  }
+}

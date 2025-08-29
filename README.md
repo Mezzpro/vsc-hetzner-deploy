@@ -1,8 +1,141 @@
-# VSC Hetzner Deploy
+# VSCode Microservice Architecture
 
-**Multi-domain VS Code workspaces on Hetzner with automatic GitHub deployment**
+Professional, clean, and scalable VSCode system with venture-specific container isolation.
 
-Deploy a single code-server instance to Hetzner that serves different themed workspaces based on the domain accessed. Perfect for managing multiple projects with distinct visual identities.
+## Architecture Overview
+
+### Container Structure
+- **vsc-codeserver-base**: Core VS Code server functionality
+- **vsc-system-cradle**: Business administration platform (includes system settings)
+- **vsc-venture-mezzpro**: Blockchain development platform
+- **vsc-venture-bizcradle**: Marketing automation platform
+- **vsc-proxy-gateway**: Intelligent request routing
+
+### Key Features
+- ✅ **Complete Extension Isolation**: Each venture runs in its own container
+- ✅ **Native VSCode Themes**: Dark Modern, Dark High Contrast, Light Modern
+- ✅ **Zero Terminal Auto-Opening**: Clean, distraction-free interface
+- ✅ **Single Configuration Source**: `ventures/ventures.json` manages all ventures
+- ✅ **Independent Updates**: Update one venture without affecting others
+- ✅ **Professional Workspace Names**: `cradle`, `mezzpro`, `bizcradle`
+
+## Quick Start
+
+### 1. Prerequisites
+- Docker and Docker Compose installed on Hetzner server
+- SSH access to server
+- Domain names pointing to server IP
+
+### 2. Deployment
+```bash
+./scripts/hetzner/deploy-app.sh
+```
+
+### 3. Test Venture Isolation
+```bash  
+./scripts/hetzner/test-ventures.sh
+```
+
+## Venture Configuration
+
+All ventures are defined in `ventures/ventures.json`:
+
+```json
+{
+  "ventures": [
+    {
+      "name": "cradle",
+      "displayName": "CradleSystem", 
+      "domain": "cradlesystems.xyz",
+      "theme": "Dark Modern"
+    },
+    {
+      "name": "mezzpro",
+      "displayName": "MezzPro",
+      "domain": "mezzpro.xyz", 
+      "theme": "Dark High Contrast"
+    },
+    {
+      "name": "bizcradle",
+      "displayName": "Bizcradle",
+      "domain": "bizcradle.xyz",
+      "theme": "Light Modern"
+    }
+  ]
+}
+```
+
+## Directory Structure
+
+```
+vsc-hetzner-deploy/
+├── ventures/
+│   ├── ventures.json              # Single source venture config
+│   ├── cradle/                    # Cradle system container
+│   │   ├── Dockerfile
+│   │   ├── extension/             # Cradle business extension
+│   │   ├── workspace/             # Cradle workspace
+│   │   └── config/                # Venture-specific config
+│   ├── mezzpro/                   # MezzPro venture container
+│   └── bizcradle/                 # Bizcradle venture container
+├── containers/
+│   ├── codeserver/                # Base VS Code server
+│   └── proxy/                     # Request routing gateway
+├── docker-compose.yml             # Multi-container orchestration
+└── scripts/hetzner/               # Deployment automation
+```
+
+## Workspace Themes
+
+### Cradle System
+- **Theme**: Dark Modern
+- **Focus**: Business administration
+- **Workspace**: `cradle/`
+
+### MezzPro Platform  
+- **Theme**: Dark High Contrast
+- **Focus**: Blockchain development
+- **Workspace**: `mezzpro/`
+
+### Bizcradle Platform
+- **Theme**: Light Modern  
+- **Focus**: Marketing automation
+- **Workspace**: `bizcradle/`
+
+## Development Workflow
+
+### Adding New Venture
+1. Add venture to `ventures/ventures.json`
+2. Create `ventures/{name}/` directory structure
+3. Build venture-specific container
+4. Deploy with `./scripts/hetzner/deploy-app.sh`
+
+### Updating Single Venture
+1. Modify venture-specific files in `ventures/{name}/`
+2. Rebuild only that venture container:
+   ```bash
+   docker-compose up --build vsc-venture-{name} -d
+   ```
+
+### Extension Updates
+- Each venture's extension is completely isolated
+- Update extension in `ventures/{name}/extension/`  
+- Only that venture container rebuilds
+
+## Access Points
+
+- **Cradle System**: https://cradlesystems.xyz
+- **MezzPro Platform**: https://mezzpro.xyz  
+- **Bizcradle Platform**: https://bizcradle.xyz
+
+## Professional Features
+
+- ✅ **Clean Interface**: No terminal auto-opening, minimal UI
+- ✅ **Native Themes**: Uses built-in VSCode themes only  
+- ✅ **Extension Isolation**: Zero cross-venture contamination
+- ✅ **Consistent Naming**: Single source of truth for all names
+- ✅ **Independent Scaling**: Scale ventures based on usage
+- ✅ **Health Monitoring**: Built-in health checks and monitoring
 
 ## 🎨 Features
 
