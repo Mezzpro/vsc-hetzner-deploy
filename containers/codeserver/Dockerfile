@@ -23,12 +23,16 @@ RUN mkdir -p \
     /home/coder/.config/code-server \
     /home/coder/workspaces
 
-# Copy base configuration
+# Copy base configuration, extension installer, and startup script
 COPY config/settings.json /home/coder/.local/share/code-server/User/settings.json
+COPY install-extensions.sh /home/coder/install-extensions.sh
+COPY start-with-extensions.sh /home/coder/start-with-extensions.sh
 
-# Set ownership
+# Set ownership and make scripts executable
 USER root
-RUN chown -R coder:coder /home/coder
+RUN chown -R coder:coder /home/coder && \
+    chmod +x /home/coder/install-extensions.sh && \
+    chmod +x /home/coder/start-with-extensions.sh
 USER coder
 
 # Expose code-server port
@@ -38,5 +42,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/healthz || exit 1
 
-# Start code-server
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "none", "--disable-telemetry"]
+# Start code-server with extension management
+CMD ["/home/coder/start-with-extensions.sh"]

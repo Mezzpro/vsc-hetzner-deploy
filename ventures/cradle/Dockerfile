@@ -1,6 +1,9 @@
 # Cradle System Container
 FROM node:20-alpine
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Create app directory
 WORKDIR /app
 

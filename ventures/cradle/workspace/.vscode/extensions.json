@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "cradle-business-extension"
+  ],
+  "unwantedRecommendations": [
+    "mezzpro-blockchain-extension",
+    "bizcradle-business-extension"
+  ]
+}
