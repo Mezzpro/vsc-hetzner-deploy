@@ -2,7 +2,6 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const routingConfig = require('./routing-config.json');
-const venturesConfig = require('../../ventures/ventures.json');
 
 const app = express();
 const port = 3000;
