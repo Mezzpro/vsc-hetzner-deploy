@@ -11,7 +11,6 @@ RUN npm install --production
 # Copy extension and workspace
 COPY extension/ ./extension/
 COPY workspace/ ./workspace/
-COPY config/ ./config/
 
 # Build extension
 WORKDIR /app/extension
