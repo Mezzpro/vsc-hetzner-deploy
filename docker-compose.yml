@@ -99,12 +99,9 @@ services:
       - vsc-network
     restart: unless-stopped
     depends_on:
-      vsc-system-cradle:
-        condition: service_healthy
-      vsc-venture-mezzpro:
-        condition: service_healthy
-      vsc-venture-bizcradle:
-        condition: service_healthy
+      - vsc-system-cradle
+      - vsc-venture-mezzpro
+      - vsc-venture-bizcradle
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
