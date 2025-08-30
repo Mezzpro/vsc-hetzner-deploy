@@ -1,221 +1,222 @@
 import * as vscode from 'vscode';
-import { ThemeManager } from './core/themeManager';
-import { MarketingTabManager } from './tabs/marketingTabManager';
-import { MarketingNavProvider } from './navigation/marketingNavProvider';
 
 export async function activate(context: vscode.ExtensionContext) {
-    console.log('🚀 BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION STARTED!');
-    console.log('📍 Extension Context Path:', context.extensionPath);
-    
-    // Extension activating silently
+    console.log('🚀 BIZCRADLE EXTENSION ACTIVATION STARTED!');
 
-    try {
-        // Check if we're in Bizcradle workspace
-        const workspaceFolders = vscode.workspace.workspaceFolders;
-        const isBizcradleWorkspace = workspaceFolders?.some(folder => 
-            folder.uri.path.includes('bizcradle') || folder.name === 'bizcradle'
-        );
+    // Check if we're in Bizcradle workspace
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    const isBizcradleWorkspace = workspaceFolders?.some(folder => 
+        folder.uri.path.includes('bizcradle') || folder.name === 'bizcradle'
+    );
 
-        if (!isBizcradleWorkspace) {
-            console.log('ℹ️ Not in Bizcradle workspace, extension will remain dormant');
-            return;
+    if (!isBizcradleWorkspace) {
+        console.log('ℹ️ Not in Bizcradle workspace, extension will remain dormant');
+        return;
+    }
+
+    console.log('✅ Bizcradle workspace detected, initializing download center...');
+
+    // Register simple download command
+    const downloadCommand = vscode.commands.registerCommand('bizcradle.downloads', () => {
+        console.log('📥 Bizcradle Downloads command executed!');
+        createDownloadTab(context);
+    });
+
+    context.subscriptions.push(downloadCommand);
+
+    // Auto-open download center
+    setTimeout(() => {
+        console.log('🚀 Auto-opening Bizcradle download center...');
+        vscode.commands.executeCommand('bizcradle.downloads');
+    }, 1000);
+
+    console.log('✅ BIZCRADLE EXTENSION ACTIVATION COMPLETED!');
+}
+
+function createDownloadTab(context: vscode.ExtensionContext): void {
+    const panel = vscode.window.createWebviewPanel(
+        'bizcradle-downloads',
+        '🚀 Bizcradle Downloads',
+        vscode.ViewColumn.One,
+        {
+            enableScripts: true,
+            retainContextWhenHidden: true
         }
+    );
 
-        console.log('✅ Bizcradle workspace detected, initializing marketing platform...');
-
-        // Initialize core managers
-        const themeManager = new ThemeManager();
-        const tabManager = new MarketingTabManager(context);
-        
-        // Configure VS Code UI for clean marketing interface
-        await configureMarketingUI();
-        
-        // Force strict UI hiding
-        await configureStrictMarketingUI();
-        
-        // Create marketing navigation
-        const marketingNavProvider = new MarketingNavProvider();
-        
-        console.log('🌳 Creating Bizcradle Marketing Navigation TreeView...');
-        const treeView = vscode.window.createTreeView('bizcradle-marketing-nav', {
-            treeDataProvider: marketingNavProvider,
-            showCollapseAll: false,
-            canSelectMany: false
-        });
-        
-        console.log('✅ Marketing Navigation TreeView created, visible:', treeView.visible);
-
-        // Register Bizcradle marketing commands
-        const disposables = [
-            // Marketing Dashboard command
-            vscode.commands.registerCommand('bizcradle.dashboard', () => {
-                console.log('📊 Marketing Dashboard command executed!');
-                tabManager.openDashboard();
-            }),
-
-            // Campaign Manager command  
-            vscode.commands.registerCommand('bizcradle.campaigns', () => {
-                console.log('📢 Campaign Manager command executed!');
-                tabManager.openCampaigns();
-            }),
-
-            // Content Studio command
-            vscode.commands.registerCommand('bizcradle.content', () => {
-                console.log('📝 Content Studio command executed!');
-                tabManager.openContent();
-            }),
-
-            // Analytics Hub command
-            vscode.commands.registerCommand('bizcradle.analytics', () => {
-                console.log('📈 Analytics Hub command executed!');
-                tabManager.openAnalytics();
-            }),
-
-            // Download Desktop command
-            vscode.commands.registerCommand('bizcradle.download', () => {
-                console.log('💻 Download Desktop command executed!');
-                tabManager.openDownload();
-            }),
-
-            // Web Portal command
-            vscode.commands.registerCommand('bizcradle.weblink', () => {
-                console.log('🔗 Open Web Portal command executed!');
-                tabManager.openWebPortal();
-            })
-        ];
-
-        context.subscriptions.push(...disposables, treeView);
-        console.log('✅ All Bizcradle commands and TreeView registered successfully!');
-
-        // Auto-open marketing dashboard
-        console.log('✅ Bizcradle workspace detected, auto-opening marketing dashboard...');
-        setTimeout(() => {
-            console.log('🚀 Auto-executing marketing dashboard command...');
-            vscode.commands.executeCommand('bizcradle.dashboard');
-        }, 1000);
-        
-        console.log('✅ BIZCRADLE MARKETING PLATFORM EXTENSION ACTIVATION COMPLETED!');
-
-    } catch (error) {
-        console.error('❌ Bizcradle extension activation failed:', error);
-        vscode.window.showErrorMessage(`Bizcradle Marketing Platform activation failed: ${error}`);
-    }
+    panel.webview.html = getDownloadsHTML();
+    
+    panel.webview.onDidReceiveMessage(
+        message => {
+            switch (message.command) {
+                case 'download':
+                    vscode.window.showInformationMessage(`Downloading: ${message.file}`);
+                    break;
+            }
+        }
+    );
 }
 
-async function configureMarketingUI(): Promise<void> {
-    console.log('🎨 Configuring VS Code UI for marketing platform...');
-    
-    try {
-        const config = vscode.workspace.getConfiguration();
+function getDownloadsHTML(): string {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bizcradle Downloads</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+                margin: 0;
+                padding: 24px;
+                background: #1e1e1e;
+                color: #ffffff;
+                line-height: 1.5;
+            }
+            .header {
+                text-align: center;
+                padding: 32px 24px;
+                border-bottom: 1px solid #333333;
+                margin-bottom: 32px;
+            }
+            .header h1 {
+                margin: 0 0 16px 0;
+                color: #ffffff;
+                font-size: 2.5rem;
+                font-weight: 600;
+            }
+            .header p {
+                margin: 0;
+                color: #cccccc;
+                font-size: 1.1rem;
+            }
+            .downloads-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 24px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .download-card {
+                background: #2d2d30;
+                border: 1px solid #3e3e42;
+                border-radius: 8px;
+                padding: 24px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                transition: all 0.2s ease;
+            }
+            .download-card:hover {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+                transform: translateY(-2px);
+                border-color: #007acc;
+            }
+            .download-card h3 {
+                margin: 0 0 16px 0;
+                color: #ffffff;
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+            .download-card p {
+                margin: 0 0 20px 0;
+                color: #cccccc;
+            }
+            .download-btn {
+                background: #007acc;
+                color: #ffffff;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                margin-right: 12px;
+                margin-bottom: 8px;
+            }
+            .download-btn:hover {
+                background: #005a9e;
+                transform: translateY(-1px);
+            }
+            .download-btn-secondary {
+                background: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #565656;
+            }
+            .download-btn-secondary:hover {
+                background: #4a4a4a;
+                border-color: #007acc;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🚀 Bizcradle Downloads</h1>
+            <p>Marketing and business growth applications</p>
+        </div>
         
-        // Hide unnecessary VS Code UI elements for clean marketing interface
-        await config.update('workbench.activityBar.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.statusBar.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.editor.showTabs', true, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.editor.tabCloseButton', 'right', vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.startupEditor', 'none', vscode.ConfigurationTarget.Workspace);
+        <div class="downloads-grid">
+            <div class="download-card">
+                <h3>📱 Marketing Apps</h3>
+                <p>Comprehensive marketing automation and campaign management tools</p>
+                <button class="download-btn" onclick="download('bizcradle-marketing-windows.exe')">
+                    💻 Windows App
+                </button>
+                <button class="download-btn" onclick="download('bizcradle-marketing-macos.dmg')">
+                    🍎 Mac App
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('bizcradle-marketing-linux.deb')">
+                    🐧 Linux App
+                </button>
+            </div>
+            
+            <div class="download-card">
+                <h3>📊 Analytics Suite</h3>
+                <p>Marketing analytics and performance tracking tools</p>
+                <button class="download-btn" onclick="download('marketing-analytics.zip')">
+                    📈 Analytics Dashboard
+                </button>
+                <button class="download-btn" onclick="download('campaign-reports.zip')">
+                    📋 Campaign Reports
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('roi-calculator.zip')">
+                    💰 ROI Calculator
+                </button>
+            </div>
+            
+            <div class="download-card">
+                <h3>🎯 Campaign Tools</h3>
+                <p>Email marketing and social media campaign utilities</p>
+                <button class="download-btn" onclick="download('email-campaign-builder.zip')">
+                    ✉️ Email Builder
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('social-media-scheduler.zip')">
+                    📱 Social Scheduler
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('content-templates.zip')">
+                    📝 Content Templates
+                </button>
+            </div>
+        </div>
         
-        // Hide outline, timeline, search
-        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.view.search.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('explorer.openEditors.visible', 0, vscode.ConfigurationTarget.Workspace);
-        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Workspace);
-        
-        // Hide outline, timeline, and terminal panel for clean interface
-        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('timeline.excludeSources', ['git-history', 'timeline-source'], vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.panel.defaultLocation', 'bottom', vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.panel.opensMaximized', 'never', vscode.ConfigurationTarget.Workspace);
-        
-        // Explorer and sidebar settings
-        await config.update('explorer.compactFolders', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.sideBar.location', 'left', vscode.ConfigurationTarget.Workspace);
-        
-        // Clean professional appearance settings
-        await config.update('workbench.tree.indent', 12, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.list.smoothScrolling', true, vscode.ConfigurationTarget.Workspace);
-        await config.update('editor.minimap.enabled', false, vscode.ConfigurationTarget.Workspace);
-        
-        // Enable multi-column editor layout support
-        await config.update('workbench.editor.enablePreview', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.editor.enablePreviewFromQuickOpen', false, vscode.ConfigurationTarget.Workspace);
-        
-        console.log('✅ VS Code UI configured for marketing platform');
-    } catch (error) {
-        console.error('❌ Failed to configure VS Code UI:', error);
-    }
-}
-
-async function configureStrictMarketingUI(): Promise<void> {
-    console.log('🔒 Applying strict marketing UI configuration...');
-    
-    try {
-        const config = vscode.workspace.getConfiguration();
-        
-        // Force hide terminal and panels completely
-        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Global);
-        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Global);
-        await config.update('workbench.view.terminal.visible', false, vscode.ConfigurationTarget.Global);
-        
-        // Hide all outline and timeline elements
-        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Global); 
-        await config.update('outline.showPackages', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showClasses', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showMethods', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showProperties', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showFields', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showConstructors', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showEnums', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showInterfaces', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showFunctions', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showVariables', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showConstants', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showStrings', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showNumbers', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showBooleans', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showArrays', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showObjects', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showKeys', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showNull', false, vscode.ConfigurationTarget.Global);
-        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Global);
-        
-        // Hide unwanted files and folders
-        await config.update('files.exclude', {
-            '**/.*': true,
-            '**/.git': true,
-            '**/.svn': true, 
-            '**/.hg': true,
-            '**/CVS': true,
-            '**/.DS_Store': true,
-            '**/node_modules': true,
-            '**/.vscode': true,
-            '**/install-gemini.sh': true
-        }, vscode.ConfigurationTarget.Global);
-        
-        // Force close any open terminal panels
-        vscode.commands.executeCommand('workbench.action.closePanel');
-        
-        // Hide specific extension views
-        vscode.commands.executeCommand('setContext', 'cradle-business-nav:visible', false);
-        vscode.commands.executeCommand('setContext', 'mezzpro-blockchain-nav:visible', false);
-        vscode.commands.executeCommand('setContext', 'bizcradle-marketing-nav:visible', true);
-        
-        // Force close outline and timeline views
-        vscode.commands.executeCommand('outline.collapse');
-        vscode.commands.executeCommand('timeline.collapse');
-        vscode.commands.executeCommand('workbench.view.explorer.openEditors.visible', false);
-        
-        console.log('✅ Strict marketing UI configuration applied');
-    } catch (error) {
-        console.error('❌ Failed to apply strict marketing UI configuration:', error);
-    }
+        <script>
+            const vscode = acquireVsCodeApi();
+            
+            function download(filename) {
+                vscode.postMessage({ 
+                    command: 'download', 
+                    file: filename 
+                });
+            }
+        </script>
+    </body>
+    </html>`;
 }
 
 export function deactivate() {
-    console.log('🚀 Bizcradle Marketing Platform Extension deactivated');
+    console.log('🚀 Bizcradle Extension deactivated');
 }

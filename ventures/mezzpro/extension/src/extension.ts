@@ -1,262 +1,245 @@
 import * as vscode from 'vscode';
-import { ThemeManager } from './core/themeManager';
-import { BlockchainTabManager } from './tabs/blockchainTabManager';
-import { BlockchainNavigationProvider, BlockchainNavigationItem } from './navigation/blockchainNavProvider';
 
 export async function activate(context: vscode.ExtensionContext) {
-    console.log('⛓️ MEZZPRO BLOCKCHAIN EXTENSION ACTIVATION STARTED!');
-    console.log('📍 Extension Context Path:', context.extensionPath);
-    
-    // Extension activating silently
+    console.log('⛓️ MEZZPRO EXTENSION ACTIVATION STARTED!');
 
-    try {
-        // Check if we're in MezzPro workspace
-        const workspaceFolders = vscode.workspace.workspaceFolders;
-        const isMezzProWorkspace = workspaceFolders?.some(folder => 
-            folder.uri.path.includes('mezzpro') || folder.name === 'mezzpro'
-        );
+    // Check if we're in MezzPro workspace
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    const isMezzProWorkspace = workspaceFolders?.some(folder => 
+        folder.uri.path.includes('mezzpro') || folder.name === 'mezzpro'
+    );
 
-        if (!isMezzProWorkspace) {
-            console.log('ℹ️ Not in MezzPro workspace, extension will remain dormant');
-            return;
+    if (!isMezzProWorkspace) {
+        console.log('ℹ️ Not in MezzPro workspace, extension will remain dormant');
+        return;
+    }
+
+    console.log('✅ MezzPro workspace detected, initializing download center...');
+
+    // Register simple download command
+    const downloadCommand = vscode.commands.registerCommand('mezzpro.downloads', () => {
+        console.log('📥 MezzPro Downloads command executed!');
+        createDownloadTab(context);
+    });
+
+    context.subscriptions.push(downloadCommand);
+
+    // Auto-open download center
+    setTimeout(() => {
+        console.log('🚀 Auto-opening MezzPro download center...');
+        vscode.commands.executeCommand('mezzpro.downloads');
+    }, 1000);
+
+    console.log('✅ MEZZPRO EXTENSION ACTIVATION COMPLETED!');
+}
+
+function createDownloadTab(context: vscode.ExtensionContext): void {
+    const panel = vscode.window.createWebviewPanel(
+        'mezzpro-downloads',
+        '⛓️ MezzPro Downloads',
+        vscode.ViewColumn.One,
+        {
+            enableScripts: true,
+            retainContextWhenHidden: true
         }
+    );
 
-        console.log('✅ MezzPro workspace detected, initializing blockchain interface...');
-
-        // Initialize core managers
-        const themeManager = new ThemeManager();
-        const tabManager = new BlockchainTabManager(context, themeManager);
-        
-        // Configure VS Code UI for blockchain interface
-        await configureBlockchainUI();
-        
-        // Force strict UI hiding
-        await configureStrictBlockchainUI();
-        
-        // Create blockchain navigation
-        const navigationItems: BlockchainNavigationItem[] = [
-            {
-                label: "⛓️ Blockchain Dashboard",
-                command: "mezzpro.dashboard",
-                icon: "pulse",
-                description: "Network status and blockchain overview"
-            },
-            {
-                label: "📊 Analytics Hub",
-                command: "mezzpro.analytics", 
-                icon: "graph",
-                description: "Transaction analytics and network metrics"
-            },
-            {
-                label: "🔗 Node Network",
-                command: "mezzpro.network",
-                icon: "server",
-                description: "Node management and validator tools"
-            },
-            {
-                label: "⚡ Smart Contracts",
-                command: "mezzpro.contracts",
-                icon: "code",
-                description: "Contract deployment and testing tools"
-            },
-            {
-                label: "💬 AI Assistant",
-                command: "mezzpro.chatbot",
-                icon: "comment",
-                description: "Blockchain-focused AI assistant"
+    panel.webview.html = getDownloadsHTML();
+    
+    panel.webview.onDidReceiveMessage(
+        message => {
+            switch (message.command) {
+                case 'download':
+                    vscode.window.showInformationMessage(`Downloading: ${message.file}`);
+                    break;
             }
-        ];
-        
-        const blockchainNavigationProvider = new BlockchainNavigationProvider(navigationItems);
-        
-        console.log('🌳 Creating Blockchain Navigation TreeView...');
-        const treeView = vscode.window.createTreeView('mezzpro-blockchain-nav', {
-            treeDataProvider: blockchainNavigationProvider,
-            showCollapseAll: false,
-            canSelectMany: false
-        });
-        
-        console.log('✅ Blockchain Navigation TreeView created, visible:', treeView.visible);
-
-        // Register MezzPro blockchain commands
-        const disposables = [
-            // Blockchain Dashboard command
-            vscode.commands.registerCommand('mezzpro.dashboard', () => {
-                console.log('⛓️ Blockchain Dashboard command executed!');
-                tabManager.createOrFocusTab('dashboard', () => 
-                    tabManager.createDashboardTab()
-                );
-            }),
-
-            // Analytics Hub command  
-            vscode.commands.registerCommand('mezzpro.analytics', () => {
-                console.log('📊 Analytics Hub command executed!');
-                tabManager.createOrFocusTab('analytics', () =>
-                    tabManager.createAnalyticsTab()
-                );
-            }),
-
-            // Node Network command
-            vscode.commands.registerCommand('mezzpro.network', () => {
-                console.log('🔗 Node Network command executed!');
-                tabManager.createOrFocusTab('network', () =>
-                    tabManager.createNetworkTab()
-                );
-            }),
-
-            // Smart Contracts command
-            vscode.commands.registerCommand('mezzpro.contracts', () => {
-                console.log('⚡ Smart Contracts command executed!');
-                tabManager.createOrFocusTab('contracts', () =>
-                    tabManager.createContractsTab()
-                );
-            }),
-
-            // AI Assistant command
-            vscode.commands.registerCommand('mezzpro.chatbot', () => {
-                console.log('💬 AI Assistant command executed!');
-                tabManager.createOrFocusTab('chatbot', () =>
-                    tabManager.createChatbotTab()
-                );
-            }),
-
-            // Blockchain Workspace layout command
-            vscode.commands.registerCommand('mezzpro.workspace', () => {
-                console.log('⛓️ Blockchain Workspace layout command executed!');
-                
-                // Create all tabs in sequence
-                tabManager.createOrFocusTab('dashboard', () => tabManager.createDashboardTab());
-                setTimeout(() => {
-                    tabManager.createOrFocusTab('analytics', () => tabManager.createAnalyticsTab());
-                }, 500);
-                setTimeout(() => {
-                    tabManager.createOrFocusTab('network', () => tabManager.createNetworkTab());
-                }, 1000);
-                setTimeout(() => {
-                    tabManager.createOrFocusTab('contracts', () => tabManager.createContractsTab());
-                }, 1500);
-            })
-        ];
-
-        context.subscriptions.push(...disposables, treeView);
-        console.log('✅ All MezzPro commands and TreeView registered successfully!');
-
-        // Auto-open blockchain dashboard
-        console.log('✅ MezzPro workspace detected, auto-opening blockchain dashboard...');
-        setTimeout(() => {
-            console.log('🚀 Auto-executing blockchain dashboard command...');
-            vscode.commands.executeCommand('mezzpro.dashboard');
-        }, 1000);
-        
-        console.log('✅ MEZZPRO BLOCKCHAIN EXTENSION ACTIVATION COMPLETED!');
-
-    } catch (error) {
-        console.error('❌ MezzPro extension activation failed:', error);
-        vscode.window.showErrorMessage(`MezzPro Blockchain Extension activation failed: ${error}`);
-    }
+        }
+    );
 }
 
-async function configureBlockchainUI(): Promise<void> {
-    console.log('🎨 Configuring VS Code UI for blockchain interface...');
-    
-    try {
-        const config = vscode.workspace.getConfiguration();
+function getDownloadsHTML(): string {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MezzPro Downloads</title>
+        <style>
+            body {
+                font-family: 'Courier New', monospace;
+                margin: 0;
+                padding: 24px;
+                background: #000000;
+                color: #00ff41;
+                line-height: 1.5;
+                background-image: 
+                    radial-gradient(circle at 25% 25%, #003300 0%, transparent 50%),
+                    radial-gradient(circle at 75% 75%, #001100 0%, transparent 50%);
+            }
+            .header {
+                text-align: center;
+                padding: 32px 24px;
+                border-bottom: 2px solid #00ff41;
+                margin-bottom: 32px;
+                box-shadow: 0 2px 10px rgba(0, 255, 65, 0.3);
+            }
+            .header h1 {
+                margin: 0 0 16px 0;
+                color: #00ff41;
+                font-size: 2.5rem;
+                font-weight: 600;
+                text-shadow: 0 0 10px #00ff41;
+                animation: matrixGlow 2s ease-in-out infinite;
+            }
+            .header p {
+                margin: 0;
+                color: #00ff41;
+                font-size: 1.1rem;
+                opacity: 0.8;
+            }
+            .downloads-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 24px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .download-card {
+                background: rgba(0, 51, 0, 0.3);
+                border: 1px solid rgba(0, 255, 65, 0.3);
+                border-radius: 8px;
+                padding: 24px;
+                box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
+                transition: all 0.2s ease;
+                backdrop-filter: blur(5px);
+            }
+            .download-card:hover {
+                box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+                transform: translateY(-2px);
+                border-color: #00ff41;
+            }
+            .download-card h3 {
+                margin: 0 0 16px 0;
+                color: #00ff41;
+                font-size: 1.25rem;
+                font-weight: 600;
+                text-shadow: 0 0 5px currentColor;
+            }
+            .download-card p {
+                margin: 0 0 20px 0;
+                color: #00ff41;
+                opacity: 0.8;
+            }
+            .download-btn {
+                background: #00ff41;
+                color: #000000;
+                border: 1px solid #00ff41;
+                padding: 12px 24px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                margin-right: 12px;
+                margin-bottom: 8px;
+                box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+                text-shadow: none;
+            }
+            .download-btn:hover {
+                background: #006600;
+                color: #00ff41;
+                transform: translateY(-1px);
+                box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+                text-shadow: 0 0 5px currentColor;
+            }
+            .download-btn-secondary {
+                background: rgba(0, 51, 0, 0.5);
+                color: #00ff41;
+                border: 1px solid rgba(0, 255, 65, 0.5);
+            }
+            .download-btn-secondary:hover {
+                background: rgba(0, 102, 0, 0.3);
+                border-color: #00ff41;
+            }
+            @keyframes matrixGlow {
+                0%, 100% { 
+                    text-shadow: 0 0 10px #00ff41; 
+                }
+                50% { 
+                    text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; 
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>⛓️ MezzPro Downloads</h1>
+            <p>Blockchain development tools and applications</p>
+        </div>
         
-        // Hide unnecessary VS Code UI elements for clean blockchain interface
-        await config.update('workbench.activityBar.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.statusBar.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.editor.showTabs', true, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.editor.tabCloseButton', 'off', vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.startupEditor', 'none', vscode.ConfigurationTarget.Workspace);
+        <div class="downloads-grid">
+            <div class="download-card">
+                <h3>🖥️ Blockchain Tools</h3>
+                <p>Development and deployment tools for blockchain projects</p>
+                <button class="download-btn" onclick="download('mezzpro-dev-suite-windows.exe')">
+                    💻 Windows Suite
+                </button>
+                <button class="download-btn" onclick="download('mezzpro-dev-suite-macos.dmg')">
+                    🍎 Mac Suite
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('mezzpro-dev-suite-linux.deb')">
+                    🐧 Linux Suite
+                </button>
+            </div>
+            
+            <div class="download-card">
+                <h3>📊 Network Analytics</h3>
+                <p>Blockchain network monitoring and analytics tools</p>
+                <button class="download-btn" onclick="download('network-monitor.zip')">
+                    📈 Network Monitor
+                </button>
+                <button class="download-btn" onclick="download('blockchain-analytics.zip')">
+                    📋 Analytics Dashboard
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('node-diagnostics.zip')">
+                    🔍 Node Diagnostics
+                </button>
+            </div>
+            
+            <div class="download-card">
+                <h3>🔐 Smart Contracts</h3>
+                <p>Smart contract development and deployment utilities</p>
+                <button class="download-btn" onclick="download('contract-compiler.zip')">
+                    ⚙️ Contract Compiler
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('contract-debugger.zip')">
+                    🐛 Contract Debugger
+                </button>
+                <button class="download-btn-secondary download-btn" onclick="download('contract-templates.zip')">
+                    📜 Contract Templates
+                </button>
+            </div>
+        </div>
         
-        // Hide outline, timeline, search
-        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.view.search.visible', false, vscode.ConfigurationTarget.Workspace);
-        await config.update('explorer.openEditors.visible', 0, vscode.ConfigurationTarget.Workspace);
-        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Workspace);
-        
-        // Explorer settings
-        await config.update('explorer.compactFolders', false, vscode.ConfigurationTarget.Workspace);
-        
-        // Clean blockchain appearance settings
-        await config.update('workbench.tree.indent', 8, vscode.ConfigurationTarget.Workspace);
-        await config.update('workbench.list.smoothScrolling', true, vscode.ConfigurationTarget.Workspace);
-        
-        console.log('✅ VS Code UI configured for blockchain interface');
-    } catch (error) {
-        console.error('❌ Failed to configure VS Code UI:', error);
-    }
-}
-
-async function configureStrictBlockchainUI(): Promise<void> {
-    console.log('🔒 Applying strict blockchain UI configuration...');
-    
-    try {
-        const config = vscode.workspace.getConfiguration();
-        
-        // Force hide terminal and panels completely
-        await config.update('workbench.panel.visible', false, vscode.ConfigurationTarget.Global);
-        await config.update('terminal.integrated.showOnStartup', 'never', vscode.ConfigurationTarget.Global);
-        await config.update('workbench.view.terminal.visible', false, vscode.ConfigurationTarget.Global);
-        
-        // Hide all outline and timeline elements
-        await config.update('outline.showFiles', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showModules', false, vscode.ConfigurationTarget.Global); 
-        await config.update('outline.showPackages', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showClasses', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showMethods', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showProperties', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showFields', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showConstructors', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showEnums', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showInterfaces', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showFunctions', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showVariables', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showConstants', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showStrings', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showNumbers', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showBooleans', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showArrays', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showObjects', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showKeys', false, vscode.ConfigurationTarget.Global);
-        await config.update('outline.showNull', false, vscode.ConfigurationTarget.Global);
-        await config.update('timeline.excludeSources', ['git-history', 'timeline-source', 'extension-timeline'], vscode.ConfigurationTarget.Global);
-        
-        // Hide unwanted files and folders
-        await config.update('files.exclude', {
-            '**/.*': true,
-            '**/.git': true,
-            '**/.svn': true, 
-            '**/.hg': true,
-            '**/CVS': true,
-            '**/.DS_Store': true,
-            '**/node_modules': true,
-            '**/.vscode': true,
-            '**/install-gemini.sh': true
-        }, vscode.ConfigurationTarget.Global);
-        
-        // Force close any open terminal panels
-        vscode.commands.executeCommand('workbench.action.closePanel');
-        
-        // Hide specific extension views
-        vscode.commands.executeCommand('setContext', 'cradle-business-nav:visible', false);
-        vscode.commands.executeCommand('setContext', 'mezzpro-blockchain-nav:visible', true);
-        vscode.commands.executeCommand('setContext', 'bizcradle-marketing-nav:visible', false);
-        
-        // Force close outline and timeline views
-        vscode.commands.executeCommand('outline.collapse');
-        vscode.commands.executeCommand('timeline.collapse');
-        vscode.commands.executeCommand('workbench.view.explorer.openEditors.visible', false);
-        
-        console.log('✅ Strict blockchain UI configuration applied');
-    } catch (error) {
-        console.error('❌ Failed to apply strict blockchain UI configuration:', error);
-    }
+        <script>
+            const vscode = acquireVsCodeApi();
+            
+            function download(filename) {
+                vscode.postMessage({ 
+                    command: 'download', 
+                    file: filename 
+                });
+            }
+        </script>
+    </body>
+    </html>`;
 }
 
 export function deactivate() {
-    console.log('⛓️ MezzPro Blockchain Extension deactivated');
+    console.log('⛓️ MezzPro Extension deactivated');
 }

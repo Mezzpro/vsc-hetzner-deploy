@@ -1,5 +1,5 @@
 {
-  "workbench.colorTheme": "Light Modern",
+  "workbench.colorTheme": "Default Dark",
   "window.title": "Bizcradle - ${activeEditorShort}",
   "workbench.startupEditor": "none",
   "workbench.welcomePage.walkthroughs.openOnInstall": false,

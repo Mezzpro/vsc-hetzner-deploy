@@ -1,9 +1,9 @@
 {
-  "name": "cradle-business-extension",
-  "displayName": "Cradle Business Suite",
-  "description": "Professional business interface for Cradle Systems with clean white/black theme",
+  "name": "cradle-downloads-extension",
+  "displayName": "CradleSystem Downloads",
+  "description": "Simple download center for CradleSystem business applications",
   "version": "1.0.0",
-  "publisher": "cradle-systems",
+  "publisher": "cradlesystem",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -15,96 +15,10 @@
   "contributes": {
     "commands": [
       {
-        "command": "cradle.dashboard",
-        "title": "Business Dashboard",
-        "category": "Cradle",
-        "icon": "$(dashboard)"
-      },
-      {
-        "command": "cradle.analytics", 
-        "title": "Analytics Center",
-        "category": "Cradle",
-        "icon": "$(graph)"
-      },
-      {
         "command": "cradle.downloads",
         "title": "Download Center", 
-        "category": "Cradle",
+        "category": "CradleSystem",
         "icon": "$(cloud-download)"
-      },
-      {
-        "command": "cradle.tools",
-        "title": "Business Tools",
-        "category": "Cradle",
-        "icon": "$(tools)"
-      },
-      {
-        "command": "cradle.chatbot",
-        "title": "Chat Assistant",
-        "category": "Cradle",
-        "icon": "$(comment)"
-      },
-      {
-        "command": "cradle.workspace",
-        "title": "Create Business Workspace",
-        "category": "Cradle",
-        "icon": "$(layout)"
-      },
-      {
-        "command": "mezzpro.dashboard",
-        "title": "Blockchain Dashboard",
-        "category": "MezzPro",
-        "icon": "$(pulse)"
-      },
-      {
-        "command": "mezzpro.analytics", 
-        "title": "Analytics Hub",
-        "category": "MezzPro",
-        "icon": "$(graph)"
-      },
-      {
-        "command": "mezzpro.network",
-        "title": "Node Network", 
-        "category": "MezzPro",
-        "icon": "$(server)"
-      },
-      {
-        "command": "mezzpro.contracts",
-        "title": "Smart Contracts",
-        "category": "MezzPro",
-        "icon": "$(code)"
-      },
-      {
-        "command": "mezzpro.chatbot",
-        "title": "AI Assistant",
-        "category": "MezzPro",
-        "icon": "$(comment)"
-      }
-    ],
-    "views": {
-      "explorer": [
-        {
-          "id": "cradle-business-nav",
-          "name": "Business Navigation",
-          "when": "workspaceFolderCount != 0"
-        }
-      ]
-    },
-    "keybindings": [
-      {
-        "command": "cradle.dashboard",
-        "key": "ctrl+shift+d",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "cradle.analytics",
-        "key": "ctrl+shift+a",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "cradle.chatbot",
-        "key": "ctrl+shift+c",
-        "when": "editorTextFocus"
       }
     ]
   },

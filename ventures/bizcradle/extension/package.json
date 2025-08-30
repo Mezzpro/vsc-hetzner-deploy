@@ -1,9 +1,9 @@
 {
-    "name": "bizcradle-business-extension",
-    "displayName": "Bizcradle Marketing Platform",
-    "description": "Digital marketing and content creation automated platform for Bizcradle",
+    "name": "bizcradle-downloads-extension",
+    "displayName": "Bizcradle Downloads",
+    "description": "Simple download center for Bizcradle marketing applications",
     "version": "1.0.0",
-    "publisher": "bizcradle-systems",
+    "publisher": "bizcradle",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -17,54 +17,14 @@
     "contributes": {
         "commands": [
             {
-                "command": "bizcradle.dashboard",
-                "title": "📊 Marketing Dashboard",
-                "category": "Bizcradle"
-            },
-            {
-                "command": "bizcradle.campaigns",
-                "title": "📢 Campaign Manager",
-                "category": "Bizcradle"
-            },
-            {
-                "command": "bizcradle.content",
-                "title": "📝 Content Studio",
-                "category": "Bizcradle"
-            },
-            {
-                "command": "bizcradle.analytics",
-                "title": "📈 Analytics Hub",
-                "category": "Bizcradle"
-            },
-            {
-                "command": "bizcradle.download",
-                "title": "💻 Download Desktop",
-                "category": "Bizcradle"
-            },
-            {
-                "command": "bizcradle.weblink",
-                "title": "🔗 Open Web Portal",
-                "category": "Bizcradle"
-            }
-        ],
-        "views": {
-            "explorer": [
-                {
-                    "id": "bizcradle-marketing-nav",
-                    "name": "🚀 Bizcradle Platform",
-                    "when": "true"
-                }
-            ]
-        },
-        "viewsWelcome": [
-            {
-                "view": "bizcradle-marketing-nav",
-                "contents": "Welcome to Bizcradle Marketing Platform!\n[📊 Open Dashboard](command:bizcradle.dashboard)"
+                "command": "bizcradle.downloads",
+                "title": "Download Center",
+                "category": "Bizcradle",
+                "icon": "$(cloud-download)"
             }
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./"
     },
