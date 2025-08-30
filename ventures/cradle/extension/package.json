@@ -16,9 +16,8 @@
     "commands": [
       {
         "command": "cradle.downloads",
-        "title": "Download Center", 
-        "category": "CradleSystem",
-        "icon": "$(cloud-download)"
+        "title": "Downloads",
+        "category": "CradleSystem"
       }
     ]
   },
