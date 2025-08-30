@@ -45,9 +45,9 @@ sleep 5
 
 # Start VS Code Server with explicit config
 echo "🌐 Starting VS Code Server..."
+export PASSWORD="${PASSWORD}"
 exec code-server \
   --bind-addr "0.0.0.0:8080" \
   --auth "password" \
-  --password "${PASSWORD}" \
   --disable-telemetry \
   --disable-update-check
