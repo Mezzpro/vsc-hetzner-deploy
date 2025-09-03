@@ -1,21 +1,132 @@
 import * as vscode from 'vscode';
 
+// TreeView Data Provider for Cradle Downloads
+class CradleDownloadsProvider implements vscode.TreeDataProvider<DownloadItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<DownloadItem | undefined | null | void> = new vscode.EventEmitter<DownloadItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<DownloadItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+    private selectedItems: Set<string> = new Set();
+
+    getTreeItem(element: DownloadItem): vscode.TreeItem {
+        return element;
+    }
+
+    getChildren(element?: DownloadItem): Thenable<DownloadItem[]> {
+        if (!element) {
+            // Root categories
+            return Promise.resolve([
+                new DownloadItem('Desktop Applications', '🖥️', vscode.TreeItemCollapsibleState.Expanded, 'category'),
+                new DownloadItem('Business Tools', '🛠️', vscode.TreeItemCollapsibleState.Expanded, 'category')
+            ]);
+        } else {
+            // Items within categories
+            if (element.label === 'Desktop Applications') {
+                return Promise.resolve([
+                    new DownloadItem('Windows App', '💻', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-windows.exe'),
+                    new DownloadItem('Mac App', '🍎', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-mac.dmg'),
+                    new DownloadItem('Linux App', '🐧', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-linux.deb')
+                ]);
+            } else if (element.label === 'Business Tools') {
+                return Promise.resolve([
+                    new DownloadItem('Business Suite', '📊', vscode.TreeItemCollapsibleState.None, 'download', 'business-suite.zip'),
+                    new DownloadItem('Reports Package', '📋', vscode.TreeItemCollapsibleState.None, 'download', 'reports.zip')
+                ]);
+            }
+        }
+        return Promise.resolve([]);
+    }
+
+    refresh(): void {
+        this._onDidChangeTreeData.fire();
+    }
+
+    toggleSelection(item: DownloadItem) {
+        if (item.fileName) {
+            if (this.selectedItems.has(item.fileName)) {
+                this.selectedItems.delete(item.fileName);
+                item.contextValue = 'download';
+            } else {
+                this.selectedItems.add(item.fileName);
+                item.contextValue = 'download-selected';
+            }
+            this.refresh();
+        }
+    }
+
+    getSelectedItems(): string[] {
+        return Array.from(this.selectedItems);
+    }
+}
+
+class DownloadItem extends vscode.TreeItem {
+    constructor(
+        public readonly label: string,
+        public readonly icon: string,
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+        public contextValue: string,
+        public readonly fileName?: string
+    ) {
+        super(label, collapsibleState);
+        this.tooltip = `${this.label}`;
+        this.description = fileName ? '' : undefined;
+        
+        if (fileName) {
+            this.command = {
+                command: 'cradle.downloadItem',
+                title: 'Download',
+                arguments: [fileName]
+            };
+        }
+    }
+}
+
 export function activate(context: vscode.ExtensionContext) {
     console.log('=== CRADLE EXTENSION DEBUG ===');
     console.log('Extension ID:', context.extension.id);
     console.log('Extension Path:', context.extensionPath);
+    
+    // Check if we're in Cradle workspace FIRST
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    const isCradleWorkspace = workspaceFolders?.some(folder => 
+        folder.name === 'cradle' || folder.uri.path.includes('/cradle') || folder.uri.path.includes('\\cradle')
+    );
+
+    if (!isCradleWorkspace) {
+        console.log('ℹ️ Not in Cradle workspace, extension will remain dormant');
+        return;
+    }
+
+    console.log('✅ Cradle workspace detected, initializing extension...');
     console.log('Global State Keys:', context.globalState.keys());
     console.log('Workspace State Keys:', context.workspaceState.keys());
     
     try {
-        // Register download command
+        // Create TreeView provider
+        const downloadsProvider = new CradleDownloadsProvider();
+        const treeView = vscode.window.createTreeView('cradleDownloads', {
+            treeDataProvider: downloadsProvider,
+            showCollapseAll: true
+        });
+        context.subscriptions.push(treeView);
+        console.log('✅ TreeView registered successfully');
+        // Register download commands
         const downloadCommand = vscode.commands.registerCommand('cradle.downloads', () => {
             console.log('📥 Cradle Downloads command triggered');
-            showDownloadCenter();
+            showDownloadCenter(downloadsProvider);
         });
 
-        context.subscriptions.push(downloadCommand);
-        console.log('✅ Command registered successfully');
+        const downloadItemCommand = vscode.commands.registerCommand('cradle.downloadItem', (fileName: string) => {
+            console.log('📥 Download item triggered:', fileName);
+            vscode.window.showInformationMessage(`📥 Downloading: ${fileName}`);
+        });
+
+        const toggleSelectionCommand = vscode.commands.registerCommand('cradle.toggleSelection', (item: DownloadItem) => {
+            console.log('🔄 Toggle selection:', item.label);
+            downloadsProvider.toggleSelection(item);
+        });
+
+        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand);
+        console.log('✅ Commands registered successfully');
 
         // Auto-show download center after short delay
         setTimeout(() => {
@@ -30,8 +141,11 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
-function showDownloadCenter() {
+function showDownloadCenter(provider?: CradleDownloadsProvider) {
     console.log('📱 Creating download center panel...');
+    
+    const selectedItems = provider?.getSelectedItems() || [];
+    const selectedItemsText = selectedItems.length > 0 ? `Selected: ${selectedItems.join(', ')}` : 'No items selected';
     
     const panel = vscode.window.createWebviewPanel(
         'cradle-downloads',
@@ -73,6 +187,10 @@ function showDownloadCenter() {
 </head>
 <body>
     <h1>🏢 CradleSystem Downloads</h1>
+    <div class="selection-info" style="background: #e3f2fd; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+        <p><strong>Selection Status:</strong> ${selectedItemsText}</p>
+        <p><em>Use the sidebar TreeView to select/deselect items</em></p>
+    </div>
     <div class="download-item">
         <h3>Desktop Applications</h3>
         <button onclick="download('cradle-windows.exe')">Windows App</button>

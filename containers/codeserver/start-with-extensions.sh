@@ -35,9 +35,8 @@ sudo chmod -R 755 /home/coder/.local/
 echo "🔧 Installing venture extensions..."
 /home/coder/install-extensions.sh
 
-# Fix extensions.json format for VS Code
-echo "🔧 Fixing extensions.json format..."
-echo "[]" > /home/coder/.local/share/code-server/extensions/extensions.json
+# Extensions.json is already created by install-extensions.sh with proper registry entries
+echo "✅ Extensions.json preserved with registry entries"
 
 # Wait a moment for extensions to be ready
 echo "⏳ Waiting for extensions to initialize..."

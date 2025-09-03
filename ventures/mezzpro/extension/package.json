@@ -13,12 +13,31 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "mezzproDownloads",
+          "name": "MezzPro Downloads",
+          "when": "resourceExtname"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "mezzpro.downloads",
         "title": "Download Center",
         "category": "MezzPro",
         "icon": "$(cloud-download)"
+      },
+      {
+        "command": "mezzpro.downloadItem",
+        "title": "Download Item",
+        "category": "MezzPro"
+      },
+      {
+        "command": "mezzpro.toggleSelection",
+        "title": "Toggle Selection",
+        "category": "MezzPro"
       }
     ]
   },

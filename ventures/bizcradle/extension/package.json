@@ -15,12 +15,31 @@
         "*"
     ],
     "contributes": {
+        "views": {
+            "explorer": [
+                {
+                    "id": "bizcradleDownloads",
+                    "name": "BizCradle Downloads",
+                    "when": "resourceExtname"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "bizcradle.downloads",
                 "title": "Download Center",
                 "category": "Bizcradle",
                 "icon": "$(cloud-download)"
+            },
+            {
+                "command": "bizcradle.downloadItem",
+                "title": "Download Item",
+                "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.toggleSelection",
+                "title": "Toggle Selection",
+                "category": "Bizcradle"
             }
         ]
     },

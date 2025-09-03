@@ -13,10 +13,29 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "cradleDownloads",
+          "name": "Cradle Downloads",
+          "when": "resourceExtname"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "cradle.downloads",
         "title": "Downloads",
+        "category": "CradleSystem"
+      },
+      {
+        "command": "cradle.downloadItem",
+        "title": "Download Item",
+        "category": "CradleSystem"
+      },
+      {
+        "command": "cradle.toggleSelection",
+        "title": "Toggle Selection",
         "category": "CradleSystem"
       }
     ]
