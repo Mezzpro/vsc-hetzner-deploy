@@ -103,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
     try {
         // Create TreeView provider
         const downloadsProvider = new MezzproDownloadsProvider();
-        const treeView = vscode.window.createTreeView('mezzproDownloads', {
+        const treeView = vscode.window.createTreeView('mezzproDownloadsView', {
             treeDataProvider: downloadsProvider,
             showCollapseAll: true
         });

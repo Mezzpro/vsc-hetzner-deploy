@@ -13,12 +13,21 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "views": {
-      "explorer": [
+    "viewsContainers": {
+      "activitybar": [
         {
           "id": "cradleDownloads",
-          "name": "Cradle Downloads",
-          "when": "resourceExtname"
+          "title": "Downloads",
+          "icon": "$(cloud-download)"
+        }
+      ]
+    },
+    "views": {
+      "cradleDownloads": [
+        {
+          "id": "cradleDownloadsView",
+          "name": "Downloads",
+          "when": "true"
         }
       ]
     },

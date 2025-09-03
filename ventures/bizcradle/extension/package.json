@@ -15,12 +15,21 @@
         "*"
     ],
     "contributes": {
-        "views": {
-            "explorer": [
+        "viewsContainers": {
+            "activitybar": [
                 {
                     "id": "bizcradleDownloads",
-                    "name": "BizCradle Downloads",
-                    "when": "resourceExtname"
+                    "title": "Downloads",
+                    "icon": "$(cloud-download)"
+                }
+            ]
+        },
+        "views": {
+            "bizcradleDownloads": [
+                {
+                    "id": "bizcradleDownloadsView",
+                    "name": "Downloads",
+                    "when": "true"
                 }
             ]
         },

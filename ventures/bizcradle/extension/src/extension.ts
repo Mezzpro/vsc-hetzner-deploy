@@ -103,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
     try {
         // Create TreeView provider
         const downloadsProvider = new BizcradleDownloadsProvider();
-        const treeView = vscode.window.createTreeView('bizcradleDownloads', {
+        const treeView = vscode.window.createTreeView('bizcradleDownloadsView', {
             treeDataProvider: downloadsProvider,
             showCollapseAll: true
         });

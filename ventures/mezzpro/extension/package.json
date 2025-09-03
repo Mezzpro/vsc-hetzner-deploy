@@ -13,12 +13,21 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "views": {
-      "explorer": [
+    "viewsContainers": {
+      "activitybar": [
         {
           "id": "mezzproDownloads",
-          "name": "MezzPro Downloads",
-          "when": "resourceExtname"
+          "title": "Downloads",
+          "icon": "$(cloud-download)"
+        }
+      ]
+    },
+    "views": {
+      "mezzproDownloads": [
+        {
+          "id": "mezzproDownloadsView",
+          "name": "Downloads",
+          "when": "true"
         }
       ]
     },
