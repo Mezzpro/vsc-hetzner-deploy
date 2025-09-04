@@ -31,7 +31,7 @@
   "outline.showObjects": false,
   "outline.showKeys": false,
   "outline.showNull": false,
-  "timeline.showView": false
+  "timeline.showView": false,
   "workbench.view.explorer.openEditors.visible": false,
   "explorer.openEditors.visible": 0,
   "terminal.integrated.showOnStartup": "never",

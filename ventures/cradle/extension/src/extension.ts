@@ -22,7 +22,7 @@ class CradleDownloadsProvider implements vscode.TreeDataProvider<DownloadItem> {
             // Items within categories
             if (element.label === 'Desktop Applications') {
                 return Promise.resolve([
-                    new DownloadItem('Windows App', '💻', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-windows.exe'),
+                    new DownloadItem('Windows App', '💻', vscode.TreeItemCollapsibleState.None, 'download', 'CradleSystemsInstaller-v1.0.0.exe'),
                     new DownloadItem('Mac App', '🍎', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-mac.dmg'),
                     new DownloadItem('Linux App', '🐧', vscode.TreeItemCollapsibleState.None, 'download', 'cradle-linux.deb')
                 ]);
@@ -174,26 +174,29 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         button { 
-            background: #007acc; 
-            color: white; 
-            border: none; 
-            padding: 8px 16px; 
-            border-radius: 3px; 
+            background: #000000; 
+            color: #FFFFFF; 
+            border: 2px solid #000000; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
             cursor: pointer; 
-            margin: 5px;
+            margin: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
-        button:hover { background: #005a9e; }
+        button:hover { 
+            background: #FFFFFF; 
+            color: #000000; 
+            border: 2px solid #000000;
+        }
     </style>
 </head>
 <body>
     <h1>🏢 CradleSystem Downloads</h1>
-    <div class="selection-info" style="background: #e3f2fd; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
-        <p><strong>Selection Status:</strong> ${selectedItemsText}</p>
-        <p><em>Use the sidebar TreeView to select/deselect items</em></p>
-    </div>
     <div class="download-item">
         <h3>Desktop Applications</h3>
-        <button onclick="download('cradle-windows.exe')">Windows App</button>
+        <button onclick="download('CradleSystemsInstaller-v1.0.0.exe')">Windows App</button>
         <button onclick="download('cradle-mac.dmg')">Mac App</button>
         <button onclick="download('cradle-linux.deb')">Linux App</button>
     </div>
@@ -214,8 +217,12 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
 
     panel.webview.onDidReceiveMessage(message => {
         if (message.command === 'download') {
-            vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
             console.log('📥 Download requested:', message.file);
+            
+            // Trigger actual download via browser
+            const downloadUrl = `http://localhost:3001/downloads/${message.file}`;
+            vscode.env.openExternal(vscode.Uri.parse(downloadUrl));
+            vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
         }
     });
 
