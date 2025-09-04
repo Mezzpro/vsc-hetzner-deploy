@@ -207,10 +207,30 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
     </div>
     <script>
         const vscode = acquireVsCodeApi();
+        
         function download(file) {
             console.log('Download requested:', file);
             vscode.postMessage({ command: 'download', file: file });
         }
+        
+        // Handle download directly in webview
+        window.addEventListener('message', event => {
+            const message = event.data;
+            if (message.command === 'startDownload') {
+                console.log('Starting direct download:', message.file);
+                
+                // Create a temporary anchor element to trigger download
+                const link = document.createElement('a');
+                link.href = message.downloadUrl;
+                link.download = message.file;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log('Download triggered for:', message.file);
+            }
+        });
     </script>
 </body>
 </html>`;
@@ -218,11 +238,14 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
     panel.webview.onDidReceiveMessage(message => {
         if (message.command === 'download') {
             console.log('📥 Download requested:', message.file);
-            
-            // Trigger actual download via browser
-            const downloadUrl = `http://localhost:3001/downloads/${message.file}`;
-            vscode.env.openExternal(vscode.Uri.parse(downloadUrl));
             vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
+            
+            // Send download command back to webview to handle directly
+            panel.webview.postMessage({
+                command: 'startDownload',
+                file: message.file,
+                downloadUrl: `http://localhost:3001/downloads/${message.file}`
+            });
         }
     });
 
