@@ -96,6 +96,52 @@ const vscodeProxy = createProxyMiddleware({
   }
 });
 
+// Simple download page
+app.get('/download', (req, res) => {
+  console.log('📄 Download page requested');
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Download Cradle Systems Installer</title>
+      <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .download-btn { 
+          display: inline-block; 
+          background: #000; 
+          color: white; 
+          padding: 15px 30px; 
+          text-decoration: none; 
+          border-radius: 5px; 
+          font-size: 18px; 
+          font-weight: bold;
+          transition: background 0.3s;
+        }
+        .download-btn:hover { background: #333; }
+        .info { color: #666; margin-top: 20px; font-size: 14px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>🏢 Cradle Systems Installer</h1>
+        <p>Click the button below to download the Cradle Systems installer for Windows.</p>
+        <a href="/downloads/CradleSystemsInstaller-v1.0.0.exe" class="download-btn" download>
+          💻 Download Windows Installer
+        </a>
+        <div class="info">
+          File: CradleSystemsInstaller-v1.0.0.exe<br>
+          Size: ~1.8 MB<br>
+          Compatible with Windows 10/11
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
 // Direct downloads - serve installer files (bypass auth)
 app.get('/downloads/*', (req, res) => {
   const filename = req.path.split('/downloads/')[1];

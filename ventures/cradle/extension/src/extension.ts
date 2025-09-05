@@ -225,7 +225,8 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
     panel.webview.onDidReceiveMessage(message => {
         if (message.command === 'download') {
             console.log('📥 Download requested:', message.file);
-            downloadFile(message.file);
+            // Redirect to simple download page
+            vscode.env.openExternal(vscode.Uri.parse('https://cradlesystems.xyz/download'));
         }
     });
 
