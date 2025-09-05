@@ -96,12 +96,12 @@ const vscodeProxy = createProxyMiddleware({
   }
 });
 
-// Direct downloads proxy - handle before general routing
-app.use('/proxy/:port/downloads/*', (req, res) => {
+// Direct downloads proxy - handle before general routing (bypass auth)
+app.get('/proxy/:port/downloads/*', (req, res) => {
   const port = req.params.port;
-  const downloadPath = req.path.replace(`/proxy/${port}`, '');
+  const filename = req.path.split('/downloads/')[1];
   
-  console.log(`📥 Direct download proxy: ${req.path} → port ${port}${downloadPath}`);
+  console.log(`📥 Direct download request: ${filename} via port ${port}`);
   
   // Map ports to venture containers
   const portMap = {
@@ -112,10 +112,11 @@ app.use('/proxy/:port/downloads/*', (req, res) => {
   
   const containerName = portMap[port];
   if (!containerName) {
+    console.log(`❌ Unknown port: ${port}`);
     return res.status(404).json({ error: 'Service not found' });
   }
   
-  // Create download proxy
+  // Create direct download proxy (bypasses authentication)
   const downloadProxy = createProxyMiddleware({
     target: `http://${containerName}:${port}`,
     changeOrigin: true,
@@ -123,7 +124,16 @@ app.use('/proxy/:port/downloads/*', (req, res) => {
       [`^/proxy/${port}`]: ''
     },
     onProxyReq: (proxyReq, req, res) => {
-      console.log(`📦 Proxying download: ${req.url} → ${containerName}:${port}`);
+      console.log(`📦 Proxying download: ${filename} → ${containerName}:${port}/downloads/${filename}`);
+    },
+    onProxyRes: (proxyRes, req, res) => {
+      console.log(`✅ Download response: ${proxyRes.statusCode} for ${filename}`);
+    },
+    onError: (err, req, res) => {
+      console.error('❌ Download proxy error:', err.message);
+      if (res && !res.headersSent) {
+        res.status(500).json({ error: 'Download failed' });
+      }
     }
   });
   
