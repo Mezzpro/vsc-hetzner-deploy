@@ -1,4 +1,8 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as os from 'os';
+import * as fs from 'fs';
+import * as http from 'http';
 
 // TreeView Data Provider for Cradle Downloads
 class CradleDownloadsProvider implements vscode.TreeDataProvider<DownloadItem> {
@@ -213,24 +217,7 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
             vscode.postMessage({ command: 'download', file: file });
         }
         
-        // Handle download directly in webview
-        window.addEventListener('message', event => {
-            const message = event.data;
-            if (message.command === 'startDownload') {
-                console.log('Starting direct download:', message.file);
-                
-                // Create a temporary anchor element to trigger download
-                const link = document.createElement('a');
-                link.href = message.downloadUrl;
-                link.download = message.file;
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                console.log('Download triggered for:', message.file);
-            }
-        });
+        // No webview download handling needed - handled by extension host
     </script>
 </body>
 </html>`;
@@ -238,18 +225,49 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
     panel.webview.onDidReceiveMessage(message => {
         if (message.command === 'download') {
             console.log('📥 Download requested:', message.file);
-            vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
-            
-            // Send download command back to webview to handle directly
-            panel.webview.postMessage({
-                command: 'startDownload',
-                file: message.file,
-                downloadUrl: `/proxy/3001/downloads/${message.file}`
-            });
+            downloadFile(message.file);
         }
     });
 
     console.log('✅ Download center created successfully');
+}
+
+function downloadFile(filename: string) {
+    console.log(`🔽 Starting download: ${filename}`);
+    vscode.window.showInformationMessage(`📥 Downloading ${filename}...`);
+    
+    // Get user's Downloads folder
+    const downloadsPath = path.join(os.homedir(), 'Downloads', filename);
+    
+    // Create download URL (internal container network)
+    const downloadUrl = `http://vsc-system-cradle:3001/downloads/${filename}`;
+    
+    // Create file write stream
+    const fileStream = fs.createWriteStream(downloadsPath);
+    
+    // Download file
+    http.get(downloadUrl, (response) => {
+        if (response.statusCode === 200) {
+            response.pipe(fileStream);
+            
+            fileStream.on('finish', () => {
+                fileStream.close();
+                console.log(`✅ Download completed: ${downloadsPath}`);
+                vscode.window.showInformationMessage(`✅ ${filename} downloaded to Downloads folder!`);
+            });
+            
+            fileStream.on('error', (err) => {
+                console.error(`❌ Download error: ${err.message}`);
+                vscode.window.showErrorMessage(`❌ Download failed: ${err.message}`);
+            });
+        } else {
+            console.error(`❌ Download failed: HTTP ${response.statusCode}`);
+            vscode.window.showErrorMessage(`❌ Download failed: Server returned ${response.statusCode}`);
+        }
+    }).on('error', (err) => {
+        console.error(`❌ Download request failed: ${err.message}`);
+        vscode.window.showErrorMessage(`❌ Download failed: ${err.message}`);
+    });
 }
 
 export function deactivate() {
