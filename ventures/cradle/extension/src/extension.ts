@@ -244,7 +244,7 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
             panel.webview.postMessage({
                 command: 'startDownload',
                 file: message.file,
-                downloadUrl: `http://localhost:3001/downloads/${message.file}`
+                downloadUrl: `/proxy/3001/downloads/${message.file}`
             });
         }
     });

@@ -96,6 +96,40 @@ const vscodeProxy = createProxyMiddleware({
   }
 });
 
+// Direct downloads proxy - handle before general routing
+app.use('/proxy/:port/downloads/*', (req, res) => {
+  const port = req.params.port;
+  const downloadPath = req.path.replace(`/proxy/${port}`, '');
+  
+  console.log(`📥 Direct download proxy: ${req.path} → port ${port}${downloadPath}`);
+  
+  // Map ports to venture containers
+  const portMap = {
+    '3001': 'vsc-system-cradle',
+    '3002': 'vsc-venture-mezzpro', 
+    '3003': 'vsc-venture-bizcradle'
+  };
+  
+  const containerName = portMap[port];
+  if (!containerName) {
+    return res.status(404).json({ error: 'Service not found' });
+  }
+  
+  // Create download proxy
+  const downloadProxy = createProxyMiddleware({
+    target: `http://${containerName}:${port}`,
+    changeOrigin: true,
+    pathRewrite: {
+      [`^/proxy/${port}`]: ''
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      console.log(`📦 Proxying download: ${req.url} → ${containerName}:${port}`);
+    }
+  });
+  
+  downloadProxy(req, res);
+});
+
 // Proxy middleware for venture routing
 app.use('/', (req, res, next) => {
   const host = req.headers.host;
