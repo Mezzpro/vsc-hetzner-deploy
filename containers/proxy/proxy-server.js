@@ -96,41 +96,24 @@ const vscodeProxy = createProxyMiddleware({
   }
 });
 
-// Direct downloads proxy - handle before general routing (bypass auth)
-app.get('/proxy/:port/downloads/*', (req, res) => {
-  const port = req.params.port;
+// Direct downloads - serve installer files (bypass auth)
+app.get('/downloads/*', (req, res) => {
   const filename = req.path.split('/downloads/')[1];
   
-  console.log(`📥 Direct download request: ${filename} via port ${port}`);
+  console.log(`📥 Direct download request: ${filename}`);
   
-  // Map ports to venture containers
-  const portMap = {
-    '3001': 'vsc-system-cradle',
-    '3002': 'vsc-venture-mezzpro', 
-    '3003': 'vsc-venture-bizcradle'
-  };
-  
-  const containerName = portMap[port];
-  if (!containerName) {
-    console.log(`❌ Unknown port: ${port}`);
-    return res.status(404).json({ error: 'Service not found' });
-  }
-  
-  // Create direct download proxy (bypasses authentication)
+  // Route to cradle container for installer files
   const downloadProxy = createProxyMiddleware({
-    target: `http://${containerName}:${port}`,
+    target: 'http://vsc-system-cradle:3001',
     changeOrigin: true,
-    pathRewrite: {
-      [`^/proxy/${port}`]: ''
-    },
     onProxyReq: (proxyReq, req, res) => {
-      console.log(`📦 Proxying download: ${filename} → ${containerName}:${port}/downloads/${filename}`);
+      console.log(`📦 Downloading: ${filename} from cradle container`);
     },
     onProxyRes: (proxyRes, req, res) => {
       console.log(`✅ Download response: ${proxyRes.statusCode} for ${filename}`);
     },
     onError: (err, req, res) => {
-      console.error('❌ Download proxy error:', err.message);
+      console.error('❌ Download error:', err.message);
       if (res && !res.headersSent) {
         res.status(500).json({ error: 'Download failed' });
       }
