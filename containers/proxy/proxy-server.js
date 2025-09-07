@@ -3,275 +3,12 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const routingConfig = require('./routing-config.json');
 const http = require('http');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
-
-// Function to load version data
-function loadVersionData(venture) {
-  try {
-    const filePath = path.join(__dirname, 'version-data', `${venture}-versions.json`);
-    if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    }
-  } catch (error) {
-    console.error(`Error loading version data for ${venture}:`, error);
-  }
-  
-  // Fallback to basic version info
-  return {
-    venture: venture,
-    latest: {
-      version: "1.0.0",
-      releaseDate: "2025-09-07",
-      filename: `${venture}-Setup-v1.0.0.exe`,
-      size: "1.7 MB",
-      highlights: ["Initial release"]
-    },
-    previousVersions: []
-  };
-}
-
-// Function to generate enhanced download HTML
-function generateDownloadHTML(venture, versionData, themeColors) {
-  const latest = versionData.latest;
-  const previousVersions = versionData.previousVersions || [];
-  
-  // Generate highlights HTML
-  const highlightsHTML = latest.highlights.map(highlight => 
-    `<li>• ${highlight}</li>`
-  ).join('');
-  
-  // Generate previous versions HTML
-  const previousVersionsHTML = previousVersions.map(version => `
-    <div class="version-item">
-      <div class="version-header">
-        <span class="version-number">v${version.version}</span>
-        <span class="version-date">(${version.releaseDate})</span>
-      </div>
-      <div class="version-changes">
-        ${version.changes ? version.changes.map(change => `• ${change}`).join('<br>') : ''}
-      </div>
-      <a href="/downloads/${venture}/${version.filename}" class="download-btn secondary" download>
-        ⬇️ Download v${version.version}
-      </a>
-    </div>
-  `).join('');
-  
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Download ${venture.charAt(0).toUpperCase() + venture.slice(1)} - Enhanced Version</title>
-      <style>
-        /* Auto dark/light theme detection */
-        @media (prefers-color-scheme: light) {
-          body { 
-            background: #f8f8f8; 
-            color: #333;
-          }
-          .container { 
-            background: #ffffff; 
-            border: 1px solid #e1e4e8;
-            box-shadow: 0 4px 20px ${themeColors.shadowLight};
-          }
-          p, .description { color: #586069; }
-          .info, .version-item { 
-            background: #f6f8fa;
-            color: #586069;
-            border: 1px solid #e1e4e8;
-          }
-          .version-header { color: #24292e; }
-        }
-        
-        @media (prefers-color-scheme: dark) {
-          body { 
-            background: #0d1117; 
-            color: #c9d1d9;
-          }
-          .container { 
-            background: #161b22; 
-            border: 1px solid #30363d;
-            box-shadow: 0 4px 20px ${themeColors.shadowDark};
-          }
-          p, .description { color: #8b949e; }
-          .info, .version-item { 
-            background: #21262d;
-            color: #8b949e;
-            border: 1px solid #30363d;
-          }
-          .version-header { color: #f0f6fc; }
-        }
-
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; 
-          text-align: center; 
-          padding: 20px; 
-          margin: 0;
-          min-height: 100vh;
-        }
-        .container { 
-          max-width: 600px; 
-          margin: 0 auto; 
-          padding: 30px; 
-          border-radius: 8px; 
-        }
-        h1 { 
-          color: ${themeColors.primary}; 
-          margin-bottom: 20px; 
-          font-size: 28px;
-        }
-        
-        /* Latest Version Section */
-        .latest-section {
-          background: ${themeColors.primary}15;
-          border: 2px solid ${themeColors.primary}30;
-          border-radius: 8px;
-          padding: 20px;
-          margin-bottom: 30px;
-        }
-        .latest-badge {
-          background: ${themeColors.primary};
-          color: white;
-          padding: 4px 12px;
-          border-radius: 4px;
-          font-size: 12px;
-          font-weight: bold;
-          margin-bottom: 10px;
-          display: inline-block;
-        }
-        .version-title {
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 10px;
-        }
-        .highlights {
-          text-align: left;
-          max-width: 500px;
-          margin: 15px auto;
-        }
-        .highlights ul {
-          list-style: none;
-          padding: 0;
-        }
-        .highlights li {
-          margin: 8px 0;
-          padding-left: 20px;
-        }
-        
-        /* Download Buttons */
-        .download-btn { 
-          display: inline-block; 
-          background: ${themeColors.primary}; 
-          color: #ffffff; 
-          padding: 15px 30px; 
-          text-decoration: none; 
-          border-radius: 6px; 
-          font-size: 18px; 
-          font-weight: bold;
-          transition: background 0.3s ease;
-          margin: 10px;
-          border: 1px solid ${themeColors.primary};
-        }
-        .download-btn:hover { 
-          background: ${themeColors.primaryHover}; 
-          border-color: ${themeColors.primaryHover};
-        }
-        .download-btn.secondary {
-          background: transparent;
-          color: ${themeColors.primary};
-          font-size: 14px;
-          padding: 10px 20px;
-        }
-        .download-btn.secondary:hover {
-          background: ${themeColors.primary};
-          color: white;
-        }
-        
-        /* Version History */
-        .version-history {
-          margin-top: 40px;
-          text-align: left;
-        }
-        .version-history h3 {
-          color: ${themeColors.primary};
-          margin-bottom: 20px;
-        }
-        .version-item {
-          padding: 15px;
-          margin: 10px 0;
-          border-radius: 6px;
-          border-left: 4px solid ${themeColors.primary};
-        }
-        .version-header {
-          font-weight: bold;
-          margin-bottom: 8px;
-        }
-        .version-number {
-          font-size: 16px;
-        }
-        .version-date {
-          font-size: 12px;
-          opacity: 0.8;
-          margin-left: 10px;
-        }
-        .version-changes {
-          font-size: 14px;
-          margin: 10px 0;
-          line-height: 1.4;
-        }
-        
-        .info { 
-          margin-top: 20px; 
-          font-size: 14px; 
-          padding: 15px;
-          border-radius: 6px;
-          line-height: 1.4;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>${venture === 'bizcradle' ? '🚀' : venture === 'mezzpro' ? '⛓️' : '🏢'} ${venture.charAt(0).toUpperCase() + venture.slice(1)} Downloads</h1>
-        
-        <!-- Latest Version Section -->
-        <div class="latest-section">
-          <div class="latest-badge">LATEST VERSION</div>
-          <div class="version-title">v${latest.version}</div>
-          <p class="description">Released: ${latest.releaseDate}</p>
-          
-          <a href="/downloads/${venture}/${latest.filename}" class="download-btn" download>
-            💻 Download Latest Version
-          </a>
-          
-          <div class="highlights">
-            <strong>✨ What's included in v${latest.version}:</strong>
-            <ul>${highlightsHTML}</ul>
-          </div>
-        </div>
-        
-        <div class="info">
-          <strong>File:</strong> ${latest.filename}<br>
-          <strong>Size:</strong> ${latest.size}<br>
-          <strong>Compatible:</strong> Windows 10/11
-        </div>
-        
-        ${previousVersions.length > 0 ? `
-        <div class="version-history">
-          <h3>📋 Previous Versions</h3>
-          ${previousVersionsHTML}
-        </div>
-        ` : ''}
-      </div>
-    </body>
-    </html>
-  `;
-}
 
 // Health check
 app.get('/health', (req, res) => {
@@ -374,15 +111,46 @@ app.get('/download', (req, res) => {
     res.redirect('/download-mezzpro');
   } else {
     // Default CradleSystems download page
-    const versionData = loadVersionData('cradlesystems');
-    const themeColors = {
-      primary: '#007acc',
-      primaryHover: '#005a9e',
-      shadowLight: 'rgba(0, 122, 204, 0.15)',
-      shadowDark: 'rgba(0, 122, 204, 0.25)'
-    };
-    
-    res.send(generateDownloadHTML('cradlesystems', versionData, themeColors));
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Download Cradle Systems Installer</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+          .container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+          h1 { color: #333; margin-bottom: 30px; }
+          .download-btn { 
+            display: inline-block; 
+            background: #000; 
+            color: white; 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-size: 18px; 
+            font-weight: bold;
+            transition: background 0.3s;
+          }
+          .download-btn:hover { background: #333; }
+          .info { color: #666; margin-top: 20px; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>🏢 Cradle Systems Installer</h1>
+          <p>Click the button below to download the Cradle Systems installer for Windows.</p>
+          <a href="/downloads/CradleSystemsInstaller-v1.0.0.exe" class="download-btn" download>
+            💻 Download Windows Installer
+          </a>
+          <div class="info">
+            File: CradleSystemsInstaller-v1.0.0.exe<br>
+            Size: ~1.8 MB<br>
+            Compatible with Windows 10/11
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
   }
 });
 
@@ -390,16 +158,8 @@ app.get('/download', (req, res) => {
 app.get('/download-bizcradle', (req, res) => {
   console.log('📄 BizCradle download page requested');
   
-  const versionData = loadVersionData('bizcradle');
-  const themeColors = {
-    primary: '#FF8C00',
-    primaryHover: '#e67e00',
-    shadowLight: 'rgba(255, 140, 0, 0.15)',
-    shadowDark: 'rgba(255, 140, 0, 0.25)'
-  };
-  
-  res.send(generateDownloadHTML('bizcradle', versionData, themeColors));
-});
+  res.send(`
+    <!DOCTYPE html>
     <html>
     <head>
       <title>Download BizCradle - Business Management Platform</title>
@@ -513,15 +273,71 @@ app.get('/download-bizcradle', (req, res) => {
 app.get('/download-mezzpro', (req, res) => {
   console.log('📄 MezzPro download page requested');
   
-  const versionData = loadVersionData('mezzpro');
-  const themeColors = {
-    primary: '#8B5CF6',
-    primaryHover: '#7c3aed',
-    shadowLight: 'rgba(139, 92, 246, 0.15)',
-    shadowDark: 'rgba(139, 92, 246, 0.25)'
-  };
-  
-  res.send(generateDownloadHTML('mezzpro', versionData, themeColors));
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Download MezzPro - Blockchain Development Platform</title>
+      <style>
+        body { 
+          font-family: Arial, sans-serif; 
+          text-align: center; 
+          padding: 50px; 
+          background: #f8f9fa; 
+          color: #333; 
+        }
+        .container { 
+          max-width: 500px; 
+          margin: 0 auto; 
+          background: white; 
+          padding: 40px; 
+          border-radius: 10px; 
+          box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+          border: 2px solid #8B5CF6;
+        }
+        h1 { color: #8B5CF6; margin-bottom: 30px; }
+        p { color: #555; font-size: 16px; line-height: 1.5; }
+        .download-btn { 
+          display: inline-block; 
+          background: #8B5CF6; 
+          color: white; 
+          padding: 15px 30px; 
+          text-decoration: none; 
+          border-radius: 5px; 
+          font-size: 18px; 
+          font-weight: bold;
+          transition: background 0.3s;
+          margin-top: 20px;
+        }
+        .download-btn:hover { background: #7c3aed; }
+        .info { 
+          color: #666; 
+          margin-top: 20px; 
+          font-size: 14px; 
+          background: #f5f3ff;
+          padding: 15px;
+          border-radius: 5px;
+          border-left: 4px solid #8B5CF6;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>⛓️ MezzPro Desktop</h1>
+        <p>Advanced blockchain development platform for Windows. Download the installer to get started.</p>
+        <a href="/downloads/mezzpro/MezzPro-Setup-v1.0.0.exe" class="download-btn" download>
+          💻 Download MezzPro for Windows
+        </a>
+        <div class="info">
+          File: MezzPro-Setup-v1.0.0.exe<br>
+          Size: ~1.8 MB<br>
+          Compatible with Windows 10/11<br>
+          Blockchain Development Platform
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
 });
 
 // Direct downloads - serve installer files (bypass auth)
