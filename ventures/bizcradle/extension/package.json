@@ -49,6 +49,12 @@
                 "command": "bizcradle.toggleSelection",
                 "title": "Toggle Selection",
                 "category": "Bizcradle"
+            },
+            {
+                "command": "bizcradle.selectTheme",
+                "title": "Select Theme",
+                "category": "Bizcradle",
+                "icon": "$(color-mode)"
             }
         ]
     },

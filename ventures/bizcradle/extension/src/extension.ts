@@ -126,8 +126,81 @@ export function activate(context: vscode.ExtensionContext) {
             downloadsProvider.toggleSelection(item);
         });
 
-        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand);
-        console.log('✅ Commands registered successfully');
+        // Theme selector status bar button
+        const themeButton = vscode.window.createStatusBarItem(
+            vscode.StatusBarAlignment.Right,
+            100 // High priority to appear on the right
+        );
+        
+        // Get current theme for display
+        const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme') || 'Default Dark Modern';
+        const themeEmoji = currentTheme.toString().includes('Light') ? '☀️' : '🌙';
+        
+        themeButton.text = `$(color-mode) ${themeEmoji}`;
+        themeButton.tooltip = 'Select BizCradle Theme';
+        themeButton.command = 'bizcradle.selectTheme';
+        themeButton.show();
+
+        // Theme selection command
+        const selectThemeCommand = vscode.commands.registerCommand('bizcradle.selectTheme', async () => {
+            console.log('🎨 Theme selector triggered');
+            
+            const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme');
+            
+            // Curated business-focused themes for BizCradle
+            const themes = [
+                { 
+                    label: '☀️ Light Modern', 
+                    value: 'Default Light Modern',
+                    description: 'Clean light theme for business focus'
+                },
+                { 
+                    label: '🌙 Dark Modern', 
+                    value: 'Default Dark Modern',
+                    description: 'Professional dark theme (default)'
+                },
+                { 
+                    label: '🎨 Dark (Visual Studio)', 
+                    value: 'Visual Studio Dark',
+                    description: 'Classic Visual Studio dark theme'
+                }
+            ];
+            
+            // Mark current theme
+            themes.forEach(theme => {
+                if (theme.value === currentTheme) {
+                    theme.label = `$(check) ${theme.label}`;
+                }
+            });
+            
+            const selected = await vscode.window.showQuickPick(themes, {
+                placeHolder: 'Select theme for BizCradle workspace',
+                matchOnDescription: true
+            });
+            
+            if (selected && selected.value !== currentTheme) {
+                try {
+                    await vscode.workspace.getConfiguration('workbench').update(
+                        'colorTheme', 
+                        selected.value, 
+                        vscode.ConfigurationTarget.Workspace
+                    );
+                    
+                    // Update button display
+                    const newEmoji = selected.value.includes('Light') ? '☀️' : '🌙';
+                    themeButton.text = `$(color-mode) ${newEmoji}`;
+                    
+                    console.log(`✅ Theme changed to: ${selected.value}`);
+                    vscode.window.showInformationMessage(`🎨 Theme changed to ${selected.label.replace('$(check) ', '')}`);
+                } catch (error) {
+                    console.error('❌ Failed to change theme:', error);
+                    vscode.window.showErrorMessage('Failed to change theme');
+                }
+            }
+        });
+
+        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand, selectThemeCommand, themeButton);
+        console.log('✅ Commands and theme selector registered successfully');
 
         // Auto-show download center after short delay
         setTimeout(() => {
