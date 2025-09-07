@@ -162,22 +162,23 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
     <title>MezzPro Downloads</title>
     <style>
         body { 
-            font-family: 'Courier New', monospace; 
+            font-family: Arial, sans-serif; 
             padding: 20px; 
-            background: #000; 
-            color: #00ff41;
+            background: #f8f9fa; 
+            color: #333;
         }
-        h1 { color: #00ff41; text-align: center; text-shadow: 0 0 10px #00ff41; }
+        h1 { color: #8B5CF6; text-align: center; }
         .download-item { 
-            background: rgba(0, 51, 0, 0.3); 
+            background: white; 
             margin: 10px 0; 
             padding: 15px; 
             border-radius: 5px; 
-            border: 1px solid rgba(0, 255, 65, 0.3);
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 2px 4px rgba(139, 92, 246, 0.1);
         }
         button { 
-            background: #00ff41; 
-            color: #000; 
+            background: #8B5CF6; 
+            color: #ffffff; 
             border: none; 
             padding: 8px 16px; 
             border-radius: 3px; 
@@ -185,16 +186,23 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
             margin: 5px;
             font-weight: bold;
         }
-        button:hover { 
-            background: #006600; 
-            color: #00ff41; 
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        button:hover { background: #7c3aed; }
+        .desktop-download { 
+            background: #8B5CF6; 
+            font-size: 16px; 
+            font-weight: bold; 
+            padding: 12px 24px; 
+            margin: 20px auto; 
+            display: block; 
+            width: fit-content;
         }
+        .desktop-download:hover { background: #7c3aed; }
     </style>
 </head>
 <body>
     <h1>⛓️ MezzPro Downloads</h1>
-    <div class="selection-info" style="background: rgba(0, 255, 65, 0.1); padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid rgba(0, 255, 65, 0.2);">
+    <button class="desktop-download" onclick="downloadDesktop()">💻 Download Desktop Version</button>
+    <div class="selection-info" style="background: #f5f3ff; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #e9d5ff;">
         <p><strong>Selection Status:</strong> ${selectedItemsText}</p>
         <p><em>Use the sidebar TreeView to select/deselect items</em></p>
     </div>
@@ -215,6 +223,10 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
             console.log('Download requested:', file);
             vscode.postMessage({ command: 'download', file: file });
         }
+        function downloadDesktop() {
+            console.log('Desktop version download requested');
+            vscode.postMessage({ command: 'downloadDesktop' });
+        }
     </script>
 </body>
 </html>`;
@@ -223,6 +235,9 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
         if (message.command === 'download') {
             vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
             console.log('📥 Download requested:', message.file);
+        } else if (message.command === 'downloadDesktop') {
+            console.log('🖥️ Desktop download requested, opening download page');
+            vscode.env.openExternal(vscode.Uri.parse('https://vscode.coder.ventures/download-mezzpro'));
         }
     });
 

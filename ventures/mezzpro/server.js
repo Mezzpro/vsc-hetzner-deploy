@@ -39,6 +39,27 @@ app.get('/workspace', (req, res) => {
   });
 });
 
+// Installer download endpoints
+app.use('/downloads/mezzpro', express.static('/app/installers', {
+  setHeaders: (res, path, stat) => {
+    res.set('Content-Disposition', 'attachment');
+    res.set('Content-Type', 'application/octet-stream');
+    console.log(`📥 Serving installer file: ${path}`);
+  }
+}));
+
+// Installer info endpoint
+app.get('/installer/info', (req, res) => {
+  res.json({
+    name: 'MezzPro',
+    version: '1.0.0',
+    filename: 'MezzPro-Setup-v1.0.0.exe',
+    size: '1.8 MB',
+    platform: 'Windows',
+    description: 'Blockchain Development Platform Desktop Application'
+  });
+});
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`⛓️ MezzPro Venture Container running on port ${port}`);
 });

@@ -31,7 +31,7 @@
   "outline.showObjects": false,
   "outline.showKeys": false,
   "outline.showNull": false,
-  "timeline.showView": false
+  "timeline.showView": false,
   "workbench.view.explorer.openEditors.visible": false,
   "explorer.openEditors.visible": 0,
   "terminal.integrated.showOnStartup": "never",
@@ -52,5 +52,25 @@
   "editor.scrollbar.horizontal": "hidden",
   "breadcrumbs.enabled": false,
   "workbench.editor.showTabs": false,
-  "workbench.sideBar.location": "left"
+  "workbench.sideBar.location": "left",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#0F172A",
+    "activityBar.foreground": "#F8FAFC",
+    "sideBar.background": "#1E293B",
+    "sideBar.foreground": "#F8FAFC",
+    "editor.background": "#0F172A",
+    "editor.foreground": "#F8FAFC",
+    "panel.background": "#1E293B",
+    "statusBar.background": "#334155",
+    "statusBar.foreground": "#F8FAFC",
+    "titleBar.activeBackground": "#1E293B",
+    "titleBar.activeForeground": "#F8FAFC",
+    "titleBar.inactiveBackground": "#0F172A",
+    "titleBar.inactiveForeground": "#94A3B8",
+    "titleBar.border": "#334155",
+    "tab.activeBackground": "#1E293B",
+    "tab.activeForeground": "#F8FAFC",
+    "tab.inactiveBackground": "#0F172A",
+    "tab.inactiveForeground": "#94A3B8"
+  }
 }

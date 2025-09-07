@@ -176,7 +176,7 @@ function showDownloadCenter(provider?: BizcradleDownloadsProvider) {
             border: 1px solid #3e3e42;
         }
         button { 
-            background: #007acc; 
+            background: #FF8C00; 
             color: #ffffff; 
             border: none; 
             padding: 8px 16px; 
@@ -184,13 +184,24 @@ function showDownloadCenter(provider?: BizcradleDownloadsProvider) {
             cursor: pointer; 
             margin: 5px;
         }
-        button:hover { background: #005a9e; }
-        .secondary { background: #3c3c3c; border: 1px solid #565656; }
-        .secondary:hover { background: #4a4a4a; }
+        button:hover { background: #e67e00; }
+        .desktop-download { 
+            background: #FF8C00; 
+            font-size: 16px; 
+            font-weight: bold; 
+            padding: 12px 24px; 
+            margin: 20px auto; 
+            display: block; 
+            width: fit-content;
+        }
+        .desktop-download:hover { background: #e67e00; }
+        .secondary { background: #FF8C00; border: 1px solid #e67e00; opacity: 0.8; }
+        .secondary:hover { background: #e67e00; opacity: 1; }
     </style>
 </head>
 <body>
     <h1>🚀 Bizcradle Downloads</h1>
+    <button class="desktop-download" onclick="downloadDesktop()">💻 Download Desktop Version</button>
     <div class="selection-info" style="background: #2d2d30; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #3e3e42;">
         <p><strong>Selection Status:</strong> ${selectedItemsText}</p>
         <p><em>Use the sidebar TreeView to select/deselect items</em></p>
@@ -212,6 +223,10 @@ function showDownloadCenter(provider?: BizcradleDownloadsProvider) {
             console.log('Download requested:', file);
             vscode.postMessage({ command: 'download', file: file });
         }
+        function downloadDesktop() {
+            console.log('Desktop version download requested');
+            vscode.postMessage({ command: 'downloadDesktop' });
+        }
     </script>
 </body>
 </html>`;
@@ -220,6 +235,9 @@ function showDownloadCenter(provider?: BizcradleDownloadsProvider) {
         if (message.command === 'download') {
             vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
             console.log('📥 Download requested:', message.file);
+        } else if (message.command === 'downloadDesktop') {
+            console.log('🖥️ Desktop download requested, opening download page');
+            vscode.env.openExternal(vscode.Uri.parse('https://vscode.coder.ventures/download-bizcradle'));
         }
     });
 

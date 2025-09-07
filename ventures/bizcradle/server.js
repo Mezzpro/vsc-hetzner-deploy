@@ -39,6 +39,27 @@ app.get('/workspace', (req, res) => {
   });
 });
 
+// Installer download endpoints
+app.use('/downloads/bizcradle', express.static('/app/installers', {
+  setHeaders: (res, path, stat) => {
+    res.set('Content-Disposition', 'attachment');
+    res.set('Content-Type', 'application/octet-stream');
+    console.log(`📥 Serving installer file: ${path}`);
+  }
+}));
+
+// Installer info endpoint
+app.get('/installer/info', (req, res) => {
+  res.json({
+    name: 'BizCradle',
+    version: '1.0.0',
+    filename: 'BizCradle-Setup-v1.0.0.exe',
+    size: '1.7 MB',
+    platform: 'Windows',
+    description: 'Business Management Platform Desktop Application'
+  });
+});
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 Bizcradle Venture Container running on port ${port}`);
 });

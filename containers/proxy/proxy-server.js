@@ -142,18 +142,172 @@ app.get('/download', (req, res) => {
   `);
 });
 
+// BizCradle download page - Dark theme with orange branding
+app.get('/download-bizcradle', (req, res) => {
+  console.log('📄 BizCradle download page requested');
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Download BizCradle - Business Management Platform</title>
+      <style>
+        body { 
+          font-family: Arial, sans-serif; 
+          text-align: center; 
+          padding: 50px; 
+          background: #1a1a1a; 
+          color: #fff; 
+        }
+        .container { 
+          max-width: 500px; 
+          margin: 0 auto; 
+          background: #2d2d2d; 
+          padding: 40px; 
+          border-radius: 10px; 
+          box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+          border: 2px solid #FF8C00;
+        }
+        h1 { color: #FF8C00; margin-bottom: 30px; }
+        p { color: #cccccc; font-size: 16px; line-height: 1.5; }
+        .download-btn { 
+          display: inline-block; 
+          background: #FF8C00; 
+          color: white; 
+          padding: 15px 30px; 
+          text-decoration: none; 
+          border-radius: 5px; 
+          font-size: 18px; 
+          font-weight: bold;
+          transition: background 0.3s;
+          margin-top: 20px;
+        }
+        .download-btn:hover { background: #e67e00; }
+        .info { 
+          color: #999; 
+          margin-top: 20px; 
+          font-size: 14px; 
+          background: #333;
+          padding: 15px;
+          border-radius: 5px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>🏢 BizCradle Desktop</h1>
+        <p>Professional business management platform for Windows. Click below to download the installer.</p>
+        <a href="/downloads/bizcradle/BizCradle-Setup-v1.0.0.exe" class="download-btn" download>
+          💻 Download BizCradle for Windows
+        </a>
+        <div class="info">
+          File: BizCradle-Setup-v1.0.0.exe<br>
+          Size: ~1.7 MB<br>
+          Compatible with Windows 10/11<br>
+          Business Management Platform
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
+// MezzPro download page - Light theme with purple branding
+app.get('/download-mezzpro', (req, res) => {
+  console.log('📄 MezzPro download page requested');
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Download MezzPro - Blockchain Development Platform</title>
+      <style>
+        body { 
+          font-family: Arial, sans-serif; 
+          text-align: center; 
+          padding: 50px; 
+          background: #f8f9fa; 
+          color: #333; 
+        }
+        .container { 
+          max-width: 500px; 
+          margin: 0 auto; 
+          background: white; 
+          padding: 40px; 
+          border-radius: 10px; 
+          box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+          border: 2px solid #8B5CF6;
+        }
+        h1 { color: #8B5CF6; margin-bottom: 30px; }
+        p { color: #555; font-size: 16px; line-height: 1.5; }
+        .download-btn { 
+          display: inline-block; 
+          background: #8B5CF6; 
+          color: white; 
+          padding: 15px 30px; 
+          text-decoration: none; 
+          border-radius: 5px; 
+          font-size: 18px; 
+          font-weight: bold;
+          transition: background 0.3s;
+          margin-top: 20px;
+        }
+        .download-btn:hover { background: #7c3aed; }
+        .info { 
+          color: #666; 
+          margin-top: 20px; 
+          font-size: 14px; 
+          background: #f5f3ff;
+          padding: 15px;
+          border-radius: 5px;
+          border-left: 4px solid #8B5CF6;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>⛓️ MezzPro Desktop</h1>
+        <p>Advanced blockchain development platform for Windows. Download the installer to get started.</p>
+        <a href="/downloads/mezzpro/MezzPro-Setup-v1.0.0.exe" class="download-btn" download>
+          💻 Download MezzPro for Windows
+        </a>
+        <div class="info">
+          File: MezzPro-Setup-v1.0.0.exe<br>
+          Size: ~1.8 MB<br>
+          Compatible with Windows 10/11<br>
+          Blockchain Development Platform
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
 // Direct downloads - serve installer files (bypass auth)
 app.get('/downloads/*', (req, res) => {
   const filename = req.path.split('/downloads/')[1];
   
   console.log(`📥 Direct download request: ${filename}`);
   
-  // Route to cradle container for installer files
+  // Determine target container based on path
+  let targetContainer = 'http://vsc-system-cradle:3001'; // default
+  
+  if (filename.startsWith('bizcradle/')) {
+    targetContainer = 'http://vsc-venture-bizcradle:3003';
+    console.log(`🏢 Routing to BizCradle container: ${filename}`);
+  } else if (filename.startsWith('mezzpro/')) {
+    targetContainer = 'http://vsc-venture-mezzpro:3002';
+    console.log(`⛓️ Routing to MezzPro container: ${filename}`);
+  } else {
+    console.log(`🏢 Routing to CradleSystems container: ${filename}`);
+  }
+  
+  // Create proxy for the appropriate container
   const downloadProxy = createProxyMiddleware({
-    target: 'http://vsc-system-cradle:3001',
+    target: targetContainer,
     changeOrigin: true,
     onProxyReq: (proxyReq, req, res) => {
-      console.log(`📦 Downloading: ${filename} from cradle container`);
+      console.log(`📦 Downloading: ${filename} from ${targetContainer}`);
     },
     onProxyRes: (proxyRes, req, res) => {
       console.log(`✅ Download response: ${proxyRes.statusCode} for ${filename}`);
