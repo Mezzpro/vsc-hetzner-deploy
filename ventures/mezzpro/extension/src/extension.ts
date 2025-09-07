@@ -187,25 +187,10 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
             font-weight: bold;
         }
         button:hover { background: #7c3aed; }
-        .desktop-download { 
-            background: #8B5CF6; 
-            font-size: 16px; 
-            font-weight: bold; 
-            padding: 12px 24px; 
-            margin: 20px auto; 
-            display: block; 
-            width: fit-content;
-        }
-        .desktop-download:hover { background: #7c3aed; }
     </style>
 </head>
 <body>
     <h1>⛓️ MezzPro Downloads</h1>
-    <button class="desktop-download" onclick="downloadDesktop()">💻 Download Desktop Version</button>
-    <div class="selection-info" style="background: #f5f3ff; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #e9d5ff;">
-        <p><strong>Selection Status:</strong> ${selectedItemsText}</p>
-        <p><em>Use the sidebar TreeView to select/deselect items</em></p>
-    </div>
     <div class="download-item">
         <h3>Blockchain Tools</h3>
         <button onclick="download('mezzpro-dev-suite-windows.exe')">Windows Suite</button>
@@ -223,21 +208,15 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
             console.log('Download requested:', file);
             vscode.postMessage({ command: 'download', file: file });
         }
-        function downloadDesktop() {
-            console.log('Desktop version download requested');
-            vscode.postMessage({ command: 'downloadDesktop' });
-        }
     </script>
 </body>
 </html>`;
 
     panel.webview.onDidReceiveMessage(message => {
         if (message.command === 'download') {
-            vscode.window.showInformationMessage(`📥 Downloading: ${message.file}`);
             console.log('📥 Download requested:', message.file);
-        } else if (message.command === 'downloadDesktop') {
-            console.log('🖥️ Desktop download requested, opening download page');
-            vscode.env.openExternal(vscode.Uri.parse('https://vscode.coder.ventures/download-mezzpro'));
+            // Redirect to MezzPro download page
+            vscode.env.openExternal(vscode.Uri.parse('https://mezzpro.xyz/download'));
         }
     });
 

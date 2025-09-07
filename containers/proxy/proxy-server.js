@@ -96,50 +96,62 @@ const vscodeProxy = createProxyMiddleware({
   }
 });
 
-// Simple download page
+// Domain-aware download page
 app.get('/download', (req, res) => {
-  console.log('📄 Download page requested');
+  const host = req.headers.host;
+  const route = getRouteForHost(host) || routingConfig.routes[0];
   
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Download Cradle Systems Installer</title>
-      <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; margin-bottom: 30px; }
-        .download-btn { 
-          display: inline-block; 
-          background: #000; 
-          color: white; 
-          padding: 15px 30px; 
-          text-decoration: none; 
-          border-radius: 5px; 
-          font-size: 18px; 
-          font-weight: bold;
-          transition: background 0.3s;
-        }
-        .download-btn:hover { background: #333; }
-        .info { color: #666; margin-top: 20px; font-size: 14px; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>🏢 Cradle Systems Installer</h1>
-        <p>Click the button below to download the Cradle Systems installer for Windows.</p>
-        <a href="/downloads/CradleSystemsInstaller-v1.0.0.exe" class="download-btn" download>
-          💻 Download Windows Installer
-        </a>
-        <div class="info">
-          File: CradleSystemsInstaller-v1.0.0.exe<br>
-          Size: ~1.8 MB<br>
-          Compatible with Windows 10/11
+  console.log(`📄 Download page requested for ${host} → ${route.workspace}`);
+  
+  if (route.workspace === 'bizcradle') {
+    // Redirect to specific BizCradle download page
+    res.redirect('/download-bizcradle');
+  } else if (route.workspace === 'mezzpro') {
+    // Redirect to specific MezzPro download page  
+    res.redirect('/download-mezzpro');
+  } else {
+    // Default CradleSystems download page
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Download Cradle Systems Installer</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+          .container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+          h1 { color: #333; margin-bottom: 30px; }
+          .download-btn { 
+            display: inline-block; 
+            background: #000; 
+            color: white; 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-size: 18px; 
+            font-weight: bold;
+            transition: background 0.3s;
+          }
+          .download-btn:hover { background: #333; }
+          .info { color: #666; margin-top: 20px; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>🏢 Cradle Systems Installer</h1>
+          <p>Click the button below to download the Cradle Systems installer for Windows.</p>
+          <a href="/downloads/CradleSystemsInstaller-v1.0.0.exe" class="download-btn" download>
+            💻 Download Windows Installer
+          </a>
+          <div class="info">
+            File: CradleSystemsInstaller-v1.0.0.exe<br>
+            Size: ~1.8 MB<br>
+            Compatible with Windows 10/11
+          </div>
         </div>
-      </div>
-    </body>
-    </html>
-  `);
+      </body>
+      </html>
+    `);
+  }
 });
 
 // BizCradle download page - Dark theme with orange branding
