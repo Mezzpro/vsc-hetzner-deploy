@@ -126,8 +126,96 @@ export function activate(context: vscode.ExtensionContext) {
             downloadsProvider.toggleSelection(item);
         });
 
-        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand);
-        console.log('✅ Commands registered successfully');
+        // Theme selector status bar button for MezzPro
+        const themeButton = vscode.window.createStatusBarItem(
+            vscode.StatusBarAlignment.Right,
+            100 // High priority to appear on the right
+        );
+        
+        // Get current theme for display
+        const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme') || 'Default Dark Modern';
+        const themeEmoji = currentTheme.toString().includes('Light') ? '☀️' : '🌙';
+        
+        themeButton.text = `$(color-mode) ${themeEmoji}`;
+        themeButton.tooltip = 'Select MezzPro Theme';
+        themeButton.command = 'mezzpro.selectTheme';
+        themeButton.show();
+
+        // Theme selection command with blockchain-focused themes
+        const selectThemeCommand = vscode.commands.registerCommand('mezzpro.selectTheme', async () => {
+            console.log('🎨 MezzPro theme selector triggered');
+            
+            const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme');
+            
+            // Curated blockchain/tech-focused themes for MezzPro
+            const themes = [
+                { 
+                    label: '🌙 Dark Modern', 
+                    value: 'Default Dark Modern',
+                    description: 'Professional dark theme (default)'
+                },
+                { 
+                    label: '☀️ Light Modern', 
+                    value: 'Default Light Modern',
+                    description: 'Clean light theme for development'
+                },
+                { 
+                    label: '🔵 Default Dark+', 
+                    value: 'Default Dark+',
+                    description: 'Blue-tinted dark theme'
+                },
+                { 
+                    label: '💙 Default Light+', 
+                    value: 'Default Light+',
+                    description: 'Blue-tinted light theme'
+                },
+                { 
+                    label: '🌌 Abyss', 
+                    value: 'Abyss',
+                    description: 'Deep space dark theme'
+                },
+                { 
+                    label: '🎯 Monokai', 
+                    value: 'Monokai',
+                    description: 'Vibrant syntax highlighting'
+                }
+            ];
+            
+            // Mark current theme
+            themes.forEach(theme => {
+                if (theme.value === currentTheme) {
+                    theme.label = `$(check) ${theme.label}`;
+                }
+            });
+            
+            const selected = await vscode.window.showQuickPick(themes, {
+                placeHolder: 'Select theme for MezzPro workspace',
+                matchOnDescription: true
+            });
+            
+            if (selected && selected.value !== currentTheme) {
+                try {
+                    await vscode.workspace.getConfiguration('workbench').update(
+                        'colorTheme', 
+                        selected.value, 
+                        vscode.ConfigurationTarget.Workspace
+                    );
+                    
+                    // Update button display
+                    const newEmoji = selected.value.includes('Light') ? '☀️' : '🌙';
+                    themeButton.text = `$(color-mode) ${newEmoji}`;
+                    
+                    console.log(`✅ MezzPro theme changed to: ${selected.value}`);
+                    vscode.window.showInformationMessage(`🎨 Theme changed to ${selected.label.replace('$(check) ', '')}`);
+                } catch (error) {
+                    console.error('❌ Failed to change MezzPro theme:', error);
+                    vscode.window.showErrorMessage('Failed to change theme');
+                }
+            }
+        });
+
+        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand, selectThemeCommand, themeButton);
+        console.log('✅ Commands and theme selector registered successfully');
 
         // Auto-show download center after short delay
         setTimeout(() => {
@@ -162,31 +250,37 @@ function showDownloadCenter(provider?: MezzproDownloadsProvider) {
     <title>MezzPro Downloads</title>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: var(--vscode-font-family); 
             padding: 20px; 
-            background: #f8f9fa; 
-            color: #333;
+            background: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
         }
-        h1 { color: #8B5CF6; text-align: center; }
+        h1 { 
+            color: var(--vscode-editor-foreground); 
+            text-align: center; 
+        }
         .download-item { 
-            background: white; 
+            background: var(--vscode-panel-background); 
             margin: 10px 0; 
             padding: 15px; 
-            border-radius: 5px; 
-            border: 1px solid #E5E7EB;
-            box-shadow: 0 2px 4px rgba(139, 92, 246, 0.1);
+            border-radius: 4px; 
+            border: 1px solid var(--vscode-panel-border);
         }
         button { 
-            background: #8B5CF6; 
-            color: #ffffff; 
-            border: none; 
+            background: #8B5CF6 !important; 
+            color: #ffffff !important; 
+            border: 1px solid #8B5CF6; 
             padding: 8px 16px; 
-            border-radius: 3px; 
+            border-radius: 2px; 
             cursor: pointer; 
             margin: 5px;
             font-weight: bold;
+            transition: background 0.2s ease;
         }
-        button:hover { background: #7c3aed; }
+        button:hover { 
+            background: #7c3aed !important; 
+            border-color: #7c3aed;
+        }
     </style>
 </head>
 <body>

@@ -129,8 +129,111 @@ export function activate(context: vscode.ExtensionContext) {
             downloadsProvider.toggleSelection(item);
         });
 
-        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand);
-        console.log('✅ Commands registered successfully');
+        // Theme selector status bar button for CradleSystems  
+        const themeButton = vscode.window.createStatusBarItem(
+            vscode.StatusBarAlignment.Right,
+            100 // High priority to appear on the right
+        );
+        
+        // Get current theme for display
+        const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme') || 'Default Dark Modern';
+        const themeEmoji = currentTheme.toString().includes('Light') ? '☀️' : '🌙';
+        
+        themeButton.text = `$(color-mode) ${themeEmoji}`;
+        themeButton.tooltip = 'Select CradleSystems Theme';
+        themeButton.command = 'cradle.selectTheme';
+        themeButton.show();
+
+        // Theme selection command with comprehensive developer themes
+        const selectThemeCommand = vscode.commands.registerCommand('cradle.selectTheme', async () => {
+            console.log('🎨 CradleSystems theme selector triggered');
+            
+            const currentTheme = vscode.workspace.getConfiguration('workbench').get('colorTheme');
+            
+            // Comprehensive developer-focused themes for CradleSystems
+            const themes = [
+                { 
+                    label: '🌙 Dark Modern', 
+                    value: 'Default Dark Modern',
+                    description: 'Professional dark theme (default)'
+                },
+                { 
+                    label: '☀️ Light Modern', 
+                    value: 'Default Light Modern',
+                    description: 'Clean light theme for development'
+                },
+                { 
+                    label: '🔴 Red', 
+                    value: 'Red',
+                    description: 'Dark theme with red accents'
+                },
+                { 
+                    label: '🔵 Default Dark+', 
+                    value: 'Default Dark+',
+                    description: 'Blue-tinted dark theme'
+                },
+                { 
+                    label: '💙 Default Light+', 
+                    value: 'Default Light+',
+                    description: 'Blue-tinted light theme'
+                },
+                { 
+                    label: '🌌 Abyss', 
+                    value: 'Abyss',
+                    description: 'Deep space dark theme'
+                },
+                { 
+                    label: '🌅 Solarized Light', 
+                    value: 'Solarized Light',
+                    description: 'Warm tones light theme'
+                },
+                { 
+                    label: '🌊 Solarized Dark', 
+                    value: 'Solarized Dark',
+                    description: 'Warm tones dark theme'
+                },
+                { 
+                    label: '🎯 Monokai', 
+                    value: 'Monokai',
+                    description: 'Vibrant syntax highlighting'
+                }
+            ];
+            
+            // Mark current theme
+            themes.forEach(theme => {
+                if (theme.value === currentTheme) {
+                    theme.label = `$(check) ${theme.label}`;
+                }
+            });
+            
+            const selected = await vscode.window.showQuickPick(themes, {
+                placeHolder: 'Select theme for CradleSystems workspace',
+                matchOnDescription: true
+            });
+            
+            if (selected && selected.value !== currentTheme) {
+                try {
+                    await vscode.workspace.getConfiguration('workbench').update(
+                        'colorTheme', 
+                        selected.value, 
+                        vscode.ConfigurationTarget.Workspace
+                    );
+                    
+                    // Update button display
+                    const newEmoji = selected.value.includes('Light') ? '☀️' : '🌙';
+                    themeButton.text = `$(color-mode) ${newEmoji}`;
+                    
+                    console.log(`✅ CradleSystems theme changed to: ${selected.value}`);
+                    vscode.window.showInformationMessage(`🎨 Theme changed to ${selected.label.replace('$(check) ', '')}`);
+                } catch (error) {
+                    console.error('❌ Failed to change CradleSystems theme:', error);
+                    vscode.window.showErrorMessage('Failed to change theme');
+                }
+            }
+        });
+
+        context.subscriptions.push(downloadCommand, downloadItemCommand, toggleSelectionCommand, selectThemeCommand, themeButton);
+        console.log('✅ Commands and theme selector registered successfully');
 
         // Auto-show download center after short delay
         setTimeout(() => {

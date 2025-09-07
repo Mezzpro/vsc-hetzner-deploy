@@ -47,6 +47,12 @@
         "command": "mezzpro.toggleSelection",
         "title": "Toggle Selection",
         "category": "MezzPro"
+      },
+      {
+        "command": "mezzpro.selectTheme",
+        "title": "Select Theme",
+        "category": "MezzPro",
+        "icon": "$(color-mode)"
       }
     ]
   },

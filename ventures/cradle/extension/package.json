@@ -46,6 +46,12 @@
         "command": "cradle.toggleSelection",
         "title": "Toggle Selection",
         "category": "CradleSystem"
+      },
+      {
+        "command": "cradle.selectTheme",
+        "title": "Select Theme", 
+        "category": "CradleSystem",
+        "icon": "$(color-mode)"
       }
     ]
   },
