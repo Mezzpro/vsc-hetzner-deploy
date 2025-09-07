@@ -165,34 +165,36 @@ function showDownloadCenter(provider?: CradleDownloadsProvider) {
     <title>CradleSystem Downloads</title>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: var(--vscode-font-family); 
             padding: 20px; 
-            background: #f5f5f5; 
+            background: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
         }
-        h1 { color: #333; text-align: center; }
+        h1 { 
+            color: var(--vscode-editor-foreground); 
+            text-align: center; 
+        }
         .download-item { 
-            background: white; 
+            background: var(--vscode-panel-background); 
             margin: 10px 0; 
             padding: 15px; 
-            border-radius: 5px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 4px; 
+            border: 1px solid var(--vscode-panel-border);
         }
         button { 
-            background: #000000; 
-            color: #FFFFFF; 
-            border: 2px solid #000000; 
+            background: var(--vscode-button-background); 
+            color: var(--vscode-button-foreground); 
+            border: 1px solid var(--vscode-button-background); 
             padding: 10px 20px; 
-            border-radius: 5px; 
+            border-radius: 2px; 
             cursor: pointer; 
             margin: 8px;
             font-weight: bold;
             font-size: 14px;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease;
         }
         button:hover { 
-            background: #FFFFFF; 
-            color: #000000; 
-            border: 2px solid #000000;
+            background: var(--vscode-button-hoverBackground); 
         }
     </style>
 </head>

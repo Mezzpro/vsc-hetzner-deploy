@@ -162,31 +162,46 @@ function showDownloadCenter(provider?: BizcradleDownloadsProvider) {
     <title>Bizcradle Downloads</title>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: var(--vscode-font-family); 
             padding: 20px; 
-            background: #1e1e1e; 
-            color: #ffffff;
+            background: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
         }
-        h1 { color: #ffffff; text-align: center; }
+        h1 { 
+            color: var(--vscode-editor-foreground); 
+            text-align: center; 
+        }
         .download-item { 
-            background: #2d2d30; 
+            background: var(--vscode-panel-background); 
             margin: 10px 0; 
             padding: 15px; 
-            border-radius: 5px; 
-            border: 1px solid #3e3e42;
+            border-radius: 4px; 
+            border: 1px solid var(--vscode-panel-border);
         }
         button { 
-            background: #FF8C00; 
-            color: #ffffff; 
-            border: none; 
+            background: #FF8C00 !important; 
+            color: #ffffff !important; 
+            border: 1px solid #FF8C00; 
             padding: 8px 16px; 
-            border-radius: 3px; 
+            border-radius: 2px; 
             cursor: pointer; 
             margin: 5px;
+            font-weight: bold;
+            transition: background 0.2s ease;
         }
-        button:hover { background: #e67e00; }
-        .secondary { background: #FF8C00; border: 1px solid #e67e00; opacity: 0.8; }
-        .secondary:hover { background: #e67e00; opacity: 1; }
+        button:hover { 
+            background: #e67e00 !important; 
+            border-color: #e67e00;
+        }
+        .secondary { 
+            background: #FF8C00 !important; 
+            border: 1px solid #e67e00; 
+            opacity: 0.9; 
+        }
+        .secondary:hover { 
+            background: #e67e00 !important; 
+            opacity: 1; 
+        }
     </style>
 </head>
 <body>

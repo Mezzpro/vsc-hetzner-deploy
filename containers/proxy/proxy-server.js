@@ -164,44 +164,89 @@ app.get('/download-bizcradle', (req, res) => {
     <head>
       <title>Download BizCradle - Business Management Platform</title>
       <style>
+        /* Auto dark/light theme detection */
+        @media (prefers-color-scheme: light) {
+          body { 
+            background: #f8f8f8; 
+            color: #333;
+          }
+          .container { 
+            background: #ffffff; 
+            border: 1px solid #e1e4e8;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.15);
+          }
+          p { color: #586069; }
+          .info { 
+            background: #f6f8fa;
+            color: #586069;
+            border: 1px solid #e1e4e8;
+          }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+          body { 
+            background: #0d1117; 
+            color: #c9d1d9;
+          }
+          .container { 
+            background: #161b22; 
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.25);
+          }
+          p { color: #8b949e; }
+          .info { 
+            background: #21262d;
+            color: #8b949e;
+            border: 1px solid #30363d;
+          }
+        }
+
         body { 
-          font-family: Arial, sans-serif; 
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; 
           text-align: center; 
           padding: 50px; 
-          background: #1a1a1a; 
-          color: #fff; 
+          margin: 0;
+          min-height: 100vh;
         }
         .container { 
           max-width: 500px; 
           margin: 0 auto; 
-          background: #2d2d2d; 
           padding: 40px; 
-          border-radius: 10px; 
-          box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
-          border: 2px solid #FF8C00;
+          border-radius: 8px; 
         }
-        h1 { color: #FF8C00; margin-bottom: 30px; }
-        p { color: #cccccc; font-size: 16px; line-height: 1.5; }
+        h1 { 
+          color: #FF8C00; 
+          margin-bottom: 30px; 
+          font-size: 28px;
+        }
+        p { 
+          font-size: 16px; 
+          line-height: 1.5; 
+          margin-bottom: 20px;
+        }
         .download-btn { 
           display: inline-block; 
           background: #FF8C00; 
-          color: white; 
+          color: #ffffff; 
           padding: 15px 30px; 
           text-decoration: none; 
-          border-radius: 5px; 
+          border-radius: 6px; 
           font-size: 18px; 
           font-weight: bold;
-          transition: background 0.3s;
+          transition: background 0.3s ease;
           margin-top: 20px;
+          border: 1px solid #FF8C00;
         }
-        .download-btn:hover { background: #e67e00; }
+        .download-btn:hover { 
+          background: #e67e00; 
+          border-color: #e67e00;
+        }
         .info { 
-          color: #999; 
           margin-top: 20px; 
           font-size: 14px; 
-          background: #333;
           padding: 15px;
-          border-radius: 5px;
+          border-radius: 6px;
+          line-height: 1.4;
         }
       </style>
     </head>
